@@ -16,7 +16,7 @@ jobs:
       - name: Download ALM Plugins
         run: |
           mkdir ./publish/plugins
-          Invoke-WebRequest -Uri "https://github.com/architdate/PKHeX-Plugins/releases/latest/download/AutoLegalityMod.zip" -OutFile "alm.zip"
+          Invoke-WebRequest -Uri "https://github.com/architdate/PKHeX-Plugins/releases/download/23.09.25/PKHeX-Plugins.zip" -OutFile "alm.zip"
           Expand-Archive -Path "alm.zip" -DestinationPath "./publish/plugins" -Force
         shell: pwsh
       - name: Get version

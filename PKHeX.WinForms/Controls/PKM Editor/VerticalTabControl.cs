@@ -30,7 +30,7 @@ public class VerticalTabControl : TabControl
         using var flags = new StringFormat();
         flags.Alignment = StringAlignment.Center;
         flags.LineAlignment = StringAlignment.Center;
-        using var text = new SolidBrush(ForeColor);
+        using var text = new SolidBrush(Color.White);
         var tab = TabPages[index];
         graphics.DrawString(tab.Text, Font, text, bounds, flags);
         base.OnDrawItem(e);
@@ -38,13 +38,18 @@ public class VerticalTabControl : TabControl
 
     protected static void DrawBackground(DrawItemEventArgs e, Rectangle bounds, Graphics graphics)
     {
+        // PKM-Universe Red Theme
+        var darkRed = Color.FromArgb(139, 0, 0);
+        var maroon = Color.FromArgb(128, 0, 32);
+
         if (e.State != DrawItemState.Selected)
         {
-            e.DrawBackground();
+            using var bgBrush = new SolidBrush(darkRed);
+            graphics.FillRectangle(bgBrush, bounds);
             return;
         }
 
-        var (c1, c2) = (SystemColors.ControlLightLight, SystemColors.ScrollBar);
+        var (c1, c2) = (Color.FromArgb(180, 40, 40), maroon);
         using var brush = new LinearGradientBrush(bounds, c1, c2, 90f);
         graphics.FillRectangle(brush, bounds);
     }
