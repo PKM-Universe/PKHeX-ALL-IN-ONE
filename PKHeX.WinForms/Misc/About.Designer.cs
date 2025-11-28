@@ -34,6 +34,10 @@ namespace PKHeX.WinForms
             RTB_Shortcuts = new System.Windows.Forms.RichTextBox();
             Tab_Changelog = new System.Windows.Forms.TabPage();
             RTB_Changelog = new System.Windows.Forms.RichTextBox();
+            LL_Discord = new System.Windows.Forms.LinkLabel();
+            LL_Kofi = new System.Windows.Forms.LinkLabel();
+            LL_GitHub = new System.Windows.Forms.LinkLabel();
+            L_PKMUniverse = new System.Windows.Forms.Label();
             TC_About.SuspendLayout();
             Tab_Shortcuts.SuspendLayout();
             Tab_Changelog.SuspendLayout();
@@ -107,19 +111,68 @@ namespace PKHeX.WinForms
             RTB_Changelog.TabIndex = 2;
             RTB_Changelog.Text = "";
             RTB_Changelog.WordWrap = false;
-            // 
+            //
+            // L_PKMUniverse
+            //
+            L_PKMUniverse.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            L_PKMUniverse.AutoSize = true;
+            L_PKMUniverse.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            L_PKMUniverse.ForeColor = System.Drawing.Color.FromArgb(139, 0, 0);
+            L_PKMUniverse.Location = new System.Drawing.Point(12, 435);
+            L_PKMUniverse.Name = "L_PKMUniverse";
+            L_PKMUniverse.Size = new System.Drawing.Size(90, 15);
+            L_PKMUniverse.TabIndex = 6;
+            L_PKMUniverse.Text = "PKM-Universe";
+            //
+            // LL_Discord
+            //
+            LL_Discord.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            LL_Discord.AutoSize = true;
+            LL_Discord.Location = new System.Drawing.Point(110, 435);
+            LL_Discord.Name = "LL_Discord";
+            LL_Discord.Size = new System.Drawing.Size(46, 15);
+            LL_Discord.TabIndex = 7;
+            LL_Discord.TabStop = true;
+            LL_Discord.Text = "Discord";
+            //
+            // LL_Kofi
+            //
+            LL_Kofi.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            LL_Kofi.AutoSize = true;
+            LL_Kofi.Location = new System.Drawing.Point(165, 435);
+            LL_Kofi.Name = "LL_Kofi";
+            LL_Kofi.Size = new System.Drawing.Size(35, 15);
+            LL_Kofi.TabIndex = 8;
+            LL_Kofi.TabStop = true;
+            LL_Kofi.Text = "Ko-fi";
+            //
+            // LL_GitHub
+            //
+            LL_GitHub.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            LL_GitHub.AutoSize = true;
+            LL_GitHub.Location = new System.Drawing.Point(210, 435);
+            LL_GitHub.Name = "LL_GitHub";
+            LL_GitHub.Size = new System.Drawing.Size(44, 15);
+            LL_GitHub.TabIndex = 9;
+            LL_GitHub.TabStop = true;
+            LL_GitHub.Text = "GitHub";
+            //
             // About
-            // 
+            //
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
-            ClientSize = new System.Drawing.Size(576, 429);
+            ClientSize = new System.Drawing.Size(576, 460);
+            Controls.Add(L_PKMUniverse);
+            Controls.Add(LL_Discord);
+            Controls.Add(LL_Kofi);
+            Controls.Add(LL_GitHub);
             Controls.Add(L_Thanks);
             Controls.Add(TC_About);
             Icon = Properties.Resources.Icon;
             Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             MaximizeBox = false;
-            MaximumSize = new System.Drawing.Size(1059, 813);
+            MaximumSize = new System.Drawing.Size(1059, 850);
             MinimizeBox = false;
-            MinimumSize = new System.Drawing.Size(592, 467);
+            MinimumSize = new System.Drawing.Size(592, 500);
             Name = "About";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             Text = "About PKM-Universe";
@@ -127,6 +180,7 @@ namespace PKHeX.WinForms
             Tab_Shortcuts.ResumeLayout(false);
             Tab_Changelog.ResumeLayout(false);
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -136,5 +190,9 @@ namespace PKHeX.WinForms
         private System.Windows.Forms.RichTextBox RTB_Shortcuts;
         private System.Windows.Forms.TabPage Tab_Changelog;
         private System.Windows.Forms.RichTextBox RTB_Changelog;
+        private System.Windows.Forms.Label L_PKMUniverse;
+        private System.Windows.Forms.LinkLabel LL_Discord;
+        private System.Windows.Forms.LinkLabel LL_Kofi;
+        private System.Windows.Forms.LinkLabel LL_GitHub;
     }
 }

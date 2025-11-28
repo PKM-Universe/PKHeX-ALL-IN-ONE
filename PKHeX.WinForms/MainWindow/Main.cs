@@ -806,9 +806,9 @@ public partial class Main : Form
         string version = $"d-{date:yyyyMMdd}";
 #else
         var v = Program.CurrentVersion;
-        string version = $"{2000+v.Major:00}{v.Minor:00}{v.Build:00}";
+        string version = $"{2000+v.Major:00}.{v.Minor:00}.{v.Build:00}";
 #endif
-        return $"PKH{(HaX ? "a" : "e")}X ({version})";
+        return $"PKM-Universe v{version}";
     }
 
     private static string GetProgramTitle(SaveFile sav)
