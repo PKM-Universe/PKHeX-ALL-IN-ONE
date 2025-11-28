@@ -1,8 +1,8 @@
 <div align="center">
 
-# PKHeX ALL-IN-ONE
+![PKM-Universe Banner](banner.svg)
 
-### By PKM-Universe
+# PKHeX ALL-IN-ONE
 
 [![Build Status](https://img.shields.io/github/actions/workflow/status/PKM-Universe/PKHeX-ALL-IN-ONE/build.yml?style=for-the-badge&logo=github)](https://github.com/PKM-Universe/PKHeX-ALL-IN-ONE/actions)
 [![Latest Release](https://img.shields.io/github/v/release/PKM-Universe/PKHeX-ALL-IN-ONE?style=for-the-badge&logo=pokemon&color=red)](https://github.com/PKM-Universe/PKHeX-ALL-IN-ONE/releases/latest)

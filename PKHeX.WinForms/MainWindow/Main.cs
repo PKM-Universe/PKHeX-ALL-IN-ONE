@@ -72,7 +72,7 @@ public partial class Main : Form
     public static string CryPath => Settings.LocalResources.GetCryPath();
     private static string TemplatePath => Settings.LocalResources.GetTemplatePath();
     private static string TrainerPath => Settings.LocalResources.GetTrainerPath();
-    private const string ThreadPath = "https://projectpokemon.org/pkhex/";
+    private const string ThreadPath = "https://github.com/PKM-Universe/PKHeX-ALL-IN-ONE/releases/latest";
 
     public static PKHeXSettings Settings => Program.Settings;
 
