@@ -11,7 +11,25 @@ jobs:
       - run: dotnet restore PKHeX.sln
       - run: dotnet build PKHeX.sln --configuration Release --no-restore
       - run: dotnet publish PKHeX.WinForms/PKHeX.WinForms.csproj -c Release -o ./publish
+      - name: Get version
+        id: version
+        run: |
+          $date = Get-Date -Format "yy.MM.dd"
+          echo "VERSION=$date" >> $env:GITHUB_OUTPUT
+        shell: pwsh
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.version.outputs.VERSION }}
+          name: PKM-Universe v${{ steps.version.outputs.VERSION }}
+          files: ./publish/*
+          body: |
+            PKM-Universe PKHeX Build
+
+            Download PKHeX.exe below to get started!
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/upload-artifact@v4
         with:
-          name: PKHeX-ALL-IN-ONE
+          name: PKM-Universe
           path: ./publish/
