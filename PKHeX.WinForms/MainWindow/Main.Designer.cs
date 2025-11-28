@@ -59,6 +59,21 @@ namespace PKHeX.WinForms
             Menu_Redo = new System.Windows.Forms.ToolStripMenuItem();
             Menu_Settings = new System.Windows.Forms.ToolStripMenuItem();
             Menu_About = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKMUniverse = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_RecentFiles = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_BackupManager = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_BatchPresets = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_Preset_MaxIVs = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_Preset_Shiny = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_Preset_LegalizeAll = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_Preset_MaxEVs = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_Templates = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_RandomTeam = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_Discord = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_Kofi = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_Website = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_CheckUpdate = new System.Windows.Forms.ToolStripMenuItem();
+            L_PortableMode = new System.Windows.Forms.ToolStripLabel();
             L_UpdateAvailable = new System.Windows.Forms.LinkLabel();
             toolTip = new System.Windows.Forms.ToolTip(components);
             splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -85,7 +100,7 @@ namespace PKHeX.WinForms
             menuStrip1.AccessibleDescription = "Main Window Menustrip";
             menuStrip1.AccessibleName = "Main Window Menustrip";
             menuStrip1.BackColor = System.Drawing.Color.Transparent;
-            menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_File, Menu_Tools, Menu_Options });
+            menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_File, Menu_Tools, Menu_Options, Menu_PKMUniverse });
             menuStrip1.Location = new System.Drawing.Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
@@ -346,7 +361,112 @@ namespace PKHeX.WinForms
             Menu_About.Size = new System.Drawing.Size(164, 22);
             Menu_About.Text = "About &PKM-Universe";
             Menu_About.Click += MainMenuAbout;
-            // 
+            //
+            // Menu_PKMUniverse
+            //
+            Menu_PKMUniverse.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_RecentFiles, Menu_PKM_BackupManager, Menu_PKM_BatchPresets, Menu_PKM_Templates, Menu_PKM_RandomTeam, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_Discord, Menu_PKM_Kofi, Menu_PKM_Website, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_CheckUpdate, L_PortableMode });
+            Menu_PKMUniverse.Name = "Menu_PKMUniverse";
+            Menu_PKMUniverse.Size = new System.Drawing.Size(95, 20);
+            Menu_PKMUniverse.Text = "PKM-Universe";
+            Menu_PKMUniverse.ForeColor = System.Drawing.Color.FromArgb(139, 0, 0);
+            //
+            // Menu_PKM_RecentFiles
+            //
+            Menu_PKM_RecentFiles.Name = "Menu_PKM_RecentFiles";
+            Menu_PKM_RecentFiles.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_RecentFiles.Text = "Recent Files";
+            //
+            // Menu_PKM_BackupManager
+            //
+            Menu_PKM_BackupManager.Name = "Menu_PKM_BackupManager";
+            Menu_PKM_BackupManager.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_BackupManager.Text = "Backup Manager";
+            Menu_PKM_BackupManager.Click += Menu_PKM_BackupManager_Click;
+            //
+            // Menu_PKM_BatchPresets
+            //
+            Menu_PKM_BatchPresets.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_Preset_MaxIVs, Menu_PKM_Preset_Shiny, Menu_PKM_Preset_MaxEVs, Menu_PKM_Preset_LegalizeAll });
+            Menu_PKM_BatchPresets.Name = "Menu_PKM_BatchPresets";
+            Menu_PKM_BatchPresets.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_BatchPresets.Text = "Batch Presets";
+            //
+            // Menu_PKM_Preset_MaxIVs
+            //
+            Menu_PKM_Preset_MaxIVs.Name = "Menu_PKM_Preset_MaxIVs";
+            Menu_PKM_Preset_MaxIVs.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_Preset_MaxIVs.Text = "Max IVs (All Box)";
+            Menu_PKM_Preset_MaxIVs.Click += Menu_PKM_Preset_MaxIVs_Click;
+            //
+            // Menu_PKM_Preset_Shiny
+            //
+            Menu_PKM_Preset_Shiny.Name = "Menu_PKM_Preset_Shiny";
+            Menu_PKM_Preset_Shiny.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_Preset_Shiny.Text = "Make Shiny (All Box)";
+            Menu_PKM_Preset_Shiny.Click += Menu_PKM_Preset_Shiny_Click;
+            //
+            // Menu_PKM_Preset_MaxEVs
+            //
+            Menu_PKM_Preset_MaxEVs.Name = "Menu_PKM_Preset_MaxEVs";
+            Menu_PKM_Preset_MaxEVs.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_Preset_MaxEVs.Text = "Max EVs (All Box)";
+            Menu_PKM_Preset_MaxEVs.Click += Menu_PKM_Preset_MaxEVs_Click;
+            //
+            // Menu_PKM_Preset_LegalizeAll
+            //
+            Menu_PKM_Preset_LegalizeAll.Name = "Menu_PKM_Preset_LegalizeAll";
+            Menu_PKM_Preset_LegalizeAll.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_Preset_LegalizeAll.Text = "Legalize (All Box)";
+            Menu_PKM_Preset_LegalizeAll.Click += Menu_PKM_Preset_LegalizeAll_Click;
+            //
+            // Menu_PKM_Templates
+            //
+            Menu_PKM_Templates.Name = "Menu_PKM_Templates";
+            Menu_PKM_Templates.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_Templates.Text = "Pokemon Templates";
+            Menu_PKM_Templates.Click += Menu_PKM_Templates_Click;
+            //
+            // Menu_PKM_RandomTeam
+            //
+            Menu_PKM_RandomTeam.Name = "Menu_PKM_RandomTeam";
+            Menu_PKM_RandomTeam.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_RandomTeam.Text = "Generate Random Team";
+            Menu_PKM_RandomTeam.Click += Menu_PKM_RandomTeam_Click;
+            //
+            // Menu_PKM_Discord
+            //
+            Menu_PKM_Discord.Name = "Menu_PKM_Discord";
+            Menu_PKM_Discord.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_Discord.Text = "Join Discord";
+            Menu_PKM_Discord.Click += Menu_PKM_Discord_Click;
+            //
+            // Menu_PKM_Kofi
+            //
+            Menu_PKM_Kofi.Name = "Menu_PKM_Kofi";
+            Menu_PKM_Kofi.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_Kofi.Text = "Support on Ko-fi";
+            Menu_PKM_Kofi.Click += Menu_PKM_Kofi_Click;
+            //
+            // Menu_PKM_Website
+            //
+            Menu_PKM_Website.Name = "Menu_PKM_Website";
+            Menu_PKM_Website.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_Website.Text = "Visit Website";
+            Menu_PKM_Website.Click += Menu_PKM_Website_Click;
+            //
+            // Menu_PKM_CheckUpdate
+            //
+            Menu_PKM_CheckUpdate.Name = "Menu_PKM_CheckUpdate";
+            Menu_PKM_CheckUpdate.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_CheckUpdate.Text = "Check for Updates";
+            Menu_PKM_CheckUpdate.Click += Menu_PKM_CheckUpdate_Click;
+            //
+            // L_PortableMode
+            //
+            L_PortableMode.Name = "L_PortableMode";
+            L_PortableMode.Size = new System.Drawing.Size(180, 22);
+            L_PortableMode.Text = "Portable Mode: Active";
+            L_PortableMode.ForeColor = System.Drawing.Color.Green;
+            //
             // L_UpdateAvailable
             // 
             L_UpdateAvailable.AccessibleDescription = "If an update is available, link label can be clicked to open new download link.";
@@ -546,6 +666,21 @@ namespace PKHeX.WinForms
         private System.Windows.Forms.SplitContainer splitContainer2;
         private PKHeX.WinForms.Controls.SelectablePictureBox dragout;
         private System.Windows.Forms.PictureBox PB_Legal;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKMUniverse;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_RecentFiles;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_BackupManager;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_BatchPresets;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_Preset_MaxIVs;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_Preset_Shiny;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_Preset_LegalizeAll;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_Preset_MaxEVs;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_Templates;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_RandomTeam;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_Discord;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_Kofi;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_Website;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_CheckUpdate;
+        private System.Windows.Forms.ToolStripLabel L_PortableMode;
     }
 }
 

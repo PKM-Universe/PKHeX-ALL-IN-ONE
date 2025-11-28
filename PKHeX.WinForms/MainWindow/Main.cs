@@ -1318,6 +1318,120 @@ public partial class Main : Form
     private void ClickRedo(object sender, EventArgs e) => C_SAV.ClickRedo();
     #endregion
 
+    #region PKM-Universe Menu Handlers
+
+    private void Menu_PKM_Discord_Click(object sender, EventArgs e) =>
+        Process.Start(new ProcessStartInfo("https://discord.gg/pkm-universe") { UseShellExecute = true });
+
+    private void Menu_PKM_Kofi_Click(object sender, EventArgs e) =>
+        Process.Start(new ProcessStartInfo("https://ko-fi.com/pokemonlover8888") { UseShellExecute = true });
+
+    private void Menu_PKM_Website_Click(object sender, EventArgs e) =>
+        Process.Start(new ProcessStartInfo("https://pkm-universe.github.io/PKHeX-ALL-IN-ONE/") { UseShellExecute = true });
+
+    private void Menu_PKM_CheckUpdate_Click(object sender, EventArgs e) =>
+        Process.Start(new ProcessStartInfo(ThreadPath) { UseShellExecute = true });
+
+    private void Menu_PKM_BackupManager_Click(object sender, EventArgs e)
+    {
+        var backupFolder = BackupPath;
+        if (Directory.Exists(backupFolder))
+            Process.Start(new ProcessStartInfo(backupFolder) { UseShellExecute = true });
+        else
+            WinFormsUtil.Alert("No backups found.", $"Backup folder: {backupFolder}");
+    }
+
+    private void Menu_PKM_Templates_Click(object sender, EventArgs e)
+    {
+        var templateFolder = TemplatePath;
+        if (!Directory.Exists(templateFolder))
+            Directory.CreateDirectory(templateFolder);
+        Process.Start(new ProcessStartInfo(templateFolder) { UseShellExecute = true });
+    }
+
+    private void Menu_PKM_RandomTeam_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first!");
+            return;
+        }
+
+        var sav = C_SAV.SAV;
+        var random = new Random();
+        var species = Enumerable.Range(1, sav.MaxSpeciesID).OrderBy(_ => random.Next()).Take(6).ToArray();
+
+        WinFormsUtil.Alert("Random Team Generator",
+            $"Generated team with species: {string.Join(", ", species.Select(s => GameInfo.Strings.specieslist[s]))}",
+            "Use Auto-Legality Mod to generate legal versions!");
+    }
+
+    private void Menu_PKM_Preset_MaxIVs_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable) return;
+        var result = WinFormsUtil.Prompt(MessageBoxButtons.YesNo, "Set all Pokemon in current box to 6IV?");
+        if (result != DialogResult.Yes) return;
+
+        var sav = C_SAV.SAV;
+        var box = C_SAV.CurrentBox;
+        for (int i = 0; i < sav.BoxSlotCount; i++)
+        {
+            var pk = sav.GetBoxSlotAtIndex(box, i);
+            if (pk.Species == 0) continue;
+            pk.SetMaximumPPAll();
+            pk.IV_HP = pk.IV_ATK = pk.IV_DEF = pk.IV_SPA = pk.IV_SPD = pk.IV_SPE = 31;
+            sav.SetBoxSlotAtIndex(pk, box, i);
+        }
+        C_SAV.ReloadSlots();
+        WinFormsUtil.Alert("All Pokemon in box set to 6IV!");
+    }
+
+    private void Menu_PKM_Preset_Shiny_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable) return;
+        var result = WinFormsUtil.Prompt(MessageBoxButtons.YesNo, "Make all Pokemon in current box shiny?");
+        if (result != DialogResult.Yes) return;
+
+        var sav = C_SAV.SAV;
+        var box = C_SAV.CurrentBox;
+        for (int i = 0; i < sav.BoxSlotCount; i++)
+        {
+            var pk = sav.GetBoxSlotAtIndex(box, i);
+            if (pk.Species == 0) continue;
+            pk.SetShiny();
+            sav.SetBoxSlotAtIndex(pk, box, i);
+        }
+        C_SAV.ReloadSlots();
+        WinFormsUtil.Alert("All Pokemon in box are now shiny!");
+    }
+
+    private void Menu_PKM_Preset_MaxEVs_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable) return;
+        var result = WinFormsUtil.Prompt(MessageBoxButtons.YesNo, "Set max EVs (252/252/4) for all Pokemon in current box?");
+        if (result != DialogResult.Yes) return;
+
+        var sav = C_SAV.SAV;
+        var box = C_SAV.CurrentBox;
+        for (int i = 0; i < sav.BoxSlotCount; i++)
+        {
+            var pk = sav.GetBoxSlotAtIndex(box, i);
+            if (pk.Species == 0) continue;
+            pk.EV_HP = 0; pk.EV_ATK = 252; pk.EV_DEF = 0;
+            pk.EV_SPA = 252; pk.EV_SPD = 4; pk.EV_SPE = 0;
+            sav.SetBoxSlotAtIndex(pk, box, i);
+        }
+        C_SAV.ReloadSlots();
+        WinFormsUtil.Alert("EVs set for all Pokemon in box!");
+    }
+
+    private void Menu_PKM_Preset_LegalizeAll_Click(object sender, EventArgs e)
+    {
+        WinFormsUtil.Alert("Legalize All", "Use the Auto-Legality Mod plugin for this feature!", "Tools > Auto Legality Mod");
+    }
+
+    #endregion
+
     public void WarnBehavior()
     {
         WinFormsUtil.Alert(MsgProgramIllegalModeActive, MsgProgramIllegalModeBehave);
