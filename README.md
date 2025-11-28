@@ -8,10 +8,12 @@
 [![Latest Release](https://img.shields.io/github/v/release/PKM-Universe/PKHeX-ALL-IN-ONE?style=for-the-badge&logo=pokemon&color=red)](https://github.com/PKM-Universe/PKHeX-ALL-IN-ONE/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/PKM-Universe/PKHeX-ALL-IN-ONE/total?style=for-the-badge&logo=download&color=green)](https://github.com/PKM-Universe/PKHeX-ALL-IN-ONE/releases)
 [![License](https://img.shields.io/github/license/PKM-Universe/PKHeX-ALL-IN-ONE?style=for-the-badge)](LICENSE)
+[![Discord](https://img.shields.io/badge/Discord-Join%20Us-7289DA?style=for-the-badge&logo=discord)](https://discord.gg/pkm-universe)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-Support%20Us-FF5E5B?style=for-the-badge&logo=ko-fi)](https://ko-fi.com/pokemonlover8888)
 
 **A customized Pokémon save editor with enhanced features, plugins, and custom theme.**
 
-[Download](https://github.com/PKM-Universe/PKHeX-ALL-IN-ONE/releases/latest) • [Wiki](https://github.com/PKM-Universe/PKHeX-ALL-IN-ONE/wiki) • [Report Bug](https://github.com/PKM-Universe/PKHeX-ALL-IN-ONE/issues/new?template=bug_report.md) • [Request Feature](https://github.com/PKM-Universe/PKHeX-ALL-IN-ONE/issues/new?template=feature_request.md)
+[Download](https://github.com/PKM-Universe/PKHeX-ALL-IN-ONE/releases/latest) • [Discord](https://discord.gg/pkm-universe) • [Ko-fi](https://ko-fi.com/pokemonlover8888) • [Wiki](https://github.com/PKM-Universe/PKHeX-ALL-IN-ONE/wiki) • [Report Bug](https://github.com/PKM-Universe/PKHeX-ALL-IN-ONE/issues/new?template=bug_report.md)
 
 </div>
 
