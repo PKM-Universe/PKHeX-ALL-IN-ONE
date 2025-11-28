@@ -1,22 +1,25 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
-title: ''
+name: Feature Request
+about: Suggest an idea for PKHeX ALL-IN-ONE
+title: '[FEATURE] '
 labels: enhancement
 assignees: ''
-
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+## ?? Feature Description
+A clear description of the feature you'd like.
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+## ?? Problem it Solves
+What problem does this feature solve? Why is it needed?
 
-Note: Requesting new editing features that *require research* are not Feature Requests. This is only for improving interactions and/or leveraging the current code in new/interesting ways.
+## ?? Proposed Solution
+How do you think this should work?
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+## ?? Alternatives Considered
+Any alternative solutions or features you've considered?
 
-**Additional context**
+## ?? Mockups/Examples
+If applicable, add mockups or examples from other tools.
+
+## ?? Additional Context
 Add any other context or screenshots about the feature request here.

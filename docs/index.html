@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PKM-Universe PKHeX</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(90deg, #ff6b6b, #ffd93d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            font-size: 1.3rem;
+            color: #a0a0a0;
+            margin-bottom: 30px;
+        }
+        .download-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            background: linear-gradient(90deg, #8b0000, #b22222);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin: 10px;
+        }
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(139, 0, 0, 0.4);
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 50px 0;
+        }
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        .feature-card h3 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        .feature-card p {
+            color: #b0b0b0;
+            line-height: 1.6;
+        }
+        .games-section {
+            text-align: center;
+            padding: 50px 0;
+        }
+        .games-section h2 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #ffd93d;
+        }
+        .games-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        .game-badge {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        footer {
+            text-align: center;
+            padding: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 50px;
+        }
+        footer a {
+            color: #ff6b6b;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>PKM-Universe PKHeX</h1>
+            <p class="subtitle">The Ultimate Pokémon Save Editor with Plugins & Custom Theme</p>
+            <a href="https://github.com/PKM-Universe/PKHeX-ALL-IN-ONE/releases/latest" class="download-btn">⬇️ Download Latest</a>
+            <a href="https://github.com/PKM-Universe/PKHeX-ALL-IN-ONE" class="download-btn" style="background: linear-gradient(90deg, #333, #555);">⭐ GitHub</a>
+        </header>
+
+        <section class="features">
+            <div class="feature-card">
+                <h3>🎨 Custom Red Theme</h3>
+                <p>Beautiful dark red interface designed by PKM-Universe for a sleek, modern look.</p>
+            </div>
+            <div class="feature-card">
+                <h3>⚡ Auto-Legality Mod</h3>
+                <p>Make any Pokémon legal with a single click. Import from Showdown and auto-legalize!</p>
+            </div>
+            <div class="feature-card">
+                <h3>📦 Batch Editor</h3>
+                <p>Edit multiple Pokémon at once with powerful batch commands.</p>
+            </div>
+            <div class="feature-card">
+                <h3>📚 Living Dex Generator</h3>
+                <p>Generate a complete Living Dex automatically.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🔍 Seed Finders</h3>
+                <p>Find seeds for Scarlet/Violet, Sword/Shield, and Legends Z-A.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🎁 Mystery Gifts</h3>
+                <p>Access complete database of all event Pokémon and Mystery Gifts.</p>
+            </div>
+        </section>
+
+        <section class="games-section">
+            <h2>🎮 Supported Games</h2>
+            <div class="games-grid">
+                <span class="game-badge">Scarlet & Violet</span>
+                <span class="game-badge">Legends Z-A</span>
+                <span class="game-badge">Sword & Shield</span>
+                <span class="game-badge">BDSP</span>
+                <span class="game-badge">Legends Arceus</span>
+                <span class="game-badge">Let's Go</span>
+                <span class="game-badge">Sun & Moon</span>
+                <span class="game-badge">X & Y</span>
+                <span class="game-badge">ORAS</span>
+                <span class="game-badge">And More!</span>
+            </div>
+        </section>
+
+        <footer>
+            <p>Made with ❤️ by <a href="https://github.com/PKM-Universe">PKM-Universe</a></p>
+            <p style="margin-top: 10px; color: #666;">Based on <a href="https://github.com/kwsch/PKHeX">PKHeX</a> by kwsch</p>
+        </footer>
+    </div>
+</body>
+</html>

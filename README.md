@@ -1,54 +1,88 @@
+<div align="center">
+
 # PKHeX ALL-IN-ONE
-  ### By PKM-Universe
 
-  A customized Pokémon save editor with enhanced features and custom theme.
+### By PKM-Universe
 
-  ![PKHeX Custom Theme](pkhex3.png)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/PKM-Universe/PKHeX-ALL-IN-ONE/build.yml?style=for-the-badge&logo=github)](https://github.com/PKM-Universe/PKHeX-ALL-IN-ONE/actions)
+[![Latest Release](https://img.shields.io/github/v/release/PKM-Universe/PKHeX-ALL-IN-ONE?style=for-the-badge&logo=pokemon&color=red)](https://github.com/PKM-Universe/PKHeX-ALL-IN-ONE/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/PKM-Universe/PKHeX-ALL-IN-ONE/total?style=for-the-badge&logo=download&color=green)](https://github.com/PKM-Universe/PKHeX-ALL-IN-ONE/releases)
+[![License](https://img.shields.io/github/license/PKM-Universe/PKHeX-ALL-IN-ONE?style=for-the-badge)](LICENSE)
 
-  ---
+**A customized Pokémon save editor with enhanced features, plugins, and custom theme.**
 
-  ## Features
+[Download](https://github.com/PKM-Universe/PKHeX-ALL-IN-ONE/releases/latest) • [Wiki](https://github.com/PKM-Universe/PKHeX-ALL-IN-ONE/wiki) • [Report Bug](https://github.com/PKM-Universe/PKHeX-ALL-IN-ONE/issues/new?template=bug_report.md) • [Request Feature](https://github.com/PKM-Universe/PKHeX-ALL-IN-ONE/issues/new?template=feature_request.md)
 
-  - **Custom Red Theme** - Sleek, modern interface
-  - **Auto-Legality Mod** - Automatically make Pokémon legal
-  - **Batch Editor** - Edit multiple Pokémon at once
-  - **Showdown Import/Export** - Compatible with Pokémon Showdown sets
-  - **Mystery Gift Database** - Access event Pokémon
-  - **Encounter Database** - Find wild encounters
+</div>
 
-  ![Tools Menu](pkhex2.png)
+---
 
-  ---
+![PKHeX Custom Theme](pkhex3.png)
 
-  ## Supported Games
+## ✨ Features
 
-  - Pokémon Scarlet & Violet
-  - Pokémon Legends: Arceus
-  - Pokémon Brilliant Diamond & Shining Pearl
-  - Pokémon Sword & Shield
-  - Pokémon Let's Go Pikachu & Eevee
-  - And all previous generations!
+| Feature | Description |
+|---------|-------------|
+| 🎨 **Custom Red Theme** | Sleek, modern interface with PKM-Universe branding |
+| ⚡ **Auto-Legality Mod** | Automatically make any Pokémon legal with one click |
+| 📦 **Batch Editor** | Edit multiple Pokémon at once |
+| 🔄 **Showdown Import/Export** | Full Pokémon Showdown compatibility |
+| 🎁 **Mystery Gift Database** | Access all event Pokémon |
+| 🗺️ **Encounter Database** | Find wild encounter data |
+| 📚 **Living Dex Generator** | Build your complete Pokédex |
+| 🔍 **Seed Finders** | Find seeds for SV, SWSH, and more |
 
-  ---
+![Tools Menu](pkhex2.png)
 
-  ## Settings
+---
 
-  ![Settings](pkhex1.png)
+## 🎮 Supported Games
 
-  ---
+| Generation | Games |
+|------------|-------|
+| Gen 9 | Scarlet & Violet, Legends Z-A |
+| Gen 8 | Sword & Shield, BDSP, Legends Arceus |
+| Gen 7 | Sun & Moon, Ultra Sun & Ultra Moon, Let's Go |
+| Gen 6 | X & Y, ORAS |
+| Gen 5 | Black & White, B2W2 |
+| Gen 4 | Diamond & Pearl, Platinum, HGSS |
+| Gen 3 | Ruby & Sapphire, Emerald, FRLG |
+| Gen 1-2 | Red, Blue, Yellow, Gold, Silver, Crystal |
 
-  ## Build Requirements
+---
 
-  - .NET 9.0
-  - Visual Studio 2022 or later
+## 📥 Installation
 
-  ---
+1. Download the latest release from [Releases](https://github.com/PKM-Universe/PKHeX-ALL-IN-ONE/releases/latest)
+2. Extract the ZIP file
+3. Run `PKHeX.exe`
+4. Plugins are included in the `plugins` folder!
 
-  ## Credits
+---
 
-  - Original PKHeX by [kwsch](https://github.com/kwsch/PKHeX)
-  - Customizations by PKM-Universe
+## ⚙️ Settings
 
-  ---
+![Settings](pkhex1.png)
 
-  **PKM-Universe**
+---
+
+## 🔧 Build Requirements
+
+- .NET 9.0
+- Visual Studio 2022 or later
+
+---
+
+## 🤝 Credits
+
+- Original PKHeX by [kwsch](https://github.com/kwsch/PKHeX)
+- Auto-Legality Mod by [architdate](https://github.com/architdate/PKHeX-Plugins)
+- Customizations by **PKM-Universe**
+
+---
+
+<div align="center">
+
+### Made with ❤️ by PKM-Universe
+
+</div>

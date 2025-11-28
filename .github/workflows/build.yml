@@ -7,47 +7,115 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
       - run: dotnet restore PKHeX.sln
       - run: dotnet build PKHeX.sln --configuration Release --no-restore
       - run: dotnet publish PKHeX.WinForms/PKHeX.WinForms.csproj -c Release -o ./publish
-      - name: Download Plugins
+
+      - name: Download All Plugins
         run: |
           mkdir ./publish/plugins
           $plugins = @(
             "AutoModPlugins.dll",
-            "PKHeX.Core.AutoMod.dll",
-            "PKHeX.Core.Enhancements.dll",
-            "PKHeX.Core.Injection.dll"
+            "PKHeX.Plugin.LivingDex.dll",
+            "PLZASeedFinderPlugin.dll",
+            "SVSeedFinderPlugin.dll",
+            "SWSHSeedFinderPlugin.dll",
+            "SpindaPatternPlugin.dll"
           )
           foreach ($plugin in $plugins) {
             $url = "https://raw.githubusercontent.com/hexbyt3/PKHeXth/master/PKHeX.WinForms/MainWindow/Plugins/$plugin"
             Invoke-WebRequest -Uri $url -OutFile "./publish/plugins/$plugin"
+            Write-Host "Downloaded: $plugin"
           }
         shell: pwsh
-      - name: Get version
+
+      - name: Get Version with Revision
         id: version
         run: |
           $date = Get-Date -Format "yy.MM.dd"
-          echo "VERSION=$date" >> $env:GITHUB_OUTPUT
+          $baseTag = "v$date"
+
+          # Get existing tags for today
+          $existingTags = git tag -l "$baseTag*" 2>$null
+
+          if ($existingTags) {
+            # Find highest revision
+            $maxRev = 0
+            foreach ($tag in $existingTags) {
+              if ($tag -match "rev\.(\d+)") {
+                $rev = [int]$matches[1]
+                if ($rev -gt $maxRev) { $maxRev = $rev }
+              }
+            }
+            $newRev = $maxRev + 1
+            $version = "$date-rev.$newRev"
+          } else {
+            $version = $date
+          }
+
+          echo "VERSION=$version" >> $env:GITHUB_OUTPUT
+          echo "Version: $version"
         shell: pwsh
+
+      - name: Generate Changelog
+        id: changelog
+        run: |
+          $lastTag = git describe --tags --abbrev=0 2>$null
+          if ($lastTag) {
+            $changes = git log "$lastTag..HEAD" --pretty=format:"- %s" 2>$null
+          } else {
+            $changes = git log -10 --pretty=format:"- %s" 2>$null
+          }
+
+          if (-not $changes) { $changes = "- Initial release" }
+
+          # Write to file for multiline output
+          $changes | Out-File -FilePath changelog.txt -Encoding utf8
+          echo "Generated changelog"
+        shell: pwsh
+
+      - name: Create ZIP Package
+        run: |
+          Compress-Archive -Path ./publish/* -DestinationPath ./PKM-Universe-v${{ steps.version.outputs.VERSION }}.zip
+        shell: pwsh
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ steps.version.outputs.VERSION }}
           name: PKM-Universe v${{ steps.version.outputs.VERSION }}
-          files: ./publish/*
+          files: |
+            ./PKM-Universe-v${{ steps.version.outputs.VERSION }}.zip
+            ./publish/PKHeX.exe
+            ./publish/PKHeX.Core.dll
           body: |
-            PKM-Universe PKHeX Build
+            # 🎮 PKM-Universe PKHeX Build v${{ steps.version.outputs.VERSION }}
 
-            Includes Auto-Legality Mod and other plugins!
+            ## ✨ What's Included
+            - PKHeX Save Editor with Custom Red Theme
+            - Auto-Legality Mod Plugin
+            - Living Dex Generator
+            - Seed Finder Plugins (SV, SWSH)
+            - Batch Editor & More!
 
-            Download PKHeX.exe below to get started!
+            ## 📥 Downloads
+            - **PKM-Universe.zip** - Full package with all plugins
+            - **PKHeX.exe** - Standalone executable
+
+            ## 📋 Changes
+            See commit history for recent changes.
+
+            ---
+            Made with ❤️ by PKM-Universe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - uses: actions/upload-artifact@v4
         with:
-          name: PKM-Universe
+          name: PKM-Universe-v${{ steps.version.outputs.VERSION }}
           path: ./publish/
