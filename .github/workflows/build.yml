@@ -13,6 +13,12 @@ jobs:
       - run: dotnet restore PKHeX.sln
       - run: dotnet build PKHeX.sln --configuration Release --no-restore
       - run: dotnet publish PKHeX.WinForms/PKHeX.WinForms.csproj -c Release -o ./publish
+      - name: Download ALM Plugins
+        run: |
+          mkdir ./publish/plugins
+          Invoke-WebRequest -Uri "https://github.com/architdate/PKHeX-Plugins/releases/latest/download/AutoLegalityMod.zip" -OutFile "alm.zip"
+          Expand-Archive -Path "alm.zip" -DestinationPath "./publish/plugins" -Force
+        shell: pwsh
       - name: Get version
         id: version
         run: |
@@ -27,6 +33,8 @@ jobs:
           files: ./publish/*
           body: |
             PKM-Universe PKHeX Build
+
+            Includes Auto-Legality Mod plugin!
 
             Download PKHeX.exe below to get started!
         env:
