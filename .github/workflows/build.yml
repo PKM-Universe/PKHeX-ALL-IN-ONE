@@ -104,6 +104,9 @@ jobs:
 
       - name: Create Installer Script
         run: |
+          # Copy icon to publish folder
+          Copy-Item "PKHeX.WinForms/Resources/icon.ico" "./publish/icon.ico"
+
           $script = @"
           [Setup]
           AppName=PKM-Universe
@@ -117,7 +120,7 @@ jobs:
           Compression=lzma2
           SolidCompression=yes
           WizardStyle=modern
-          SetupIconFile=publish\PKM-Universe.exe
+          SetupIconFile=publish\icon.ico
           UninstallDisplayIcon={app}\PKM-Universe.exe
 
           [Languages]
