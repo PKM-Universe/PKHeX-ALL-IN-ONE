@@ -102,6 +102,49 @@ jobs:
           Compress-Archive -Path ./publish/* -DestinationPath ./PKM-Universe-v${{ steps.version.outputs.VERSION }}.zip
         shell: pwsh
 
+      - name: Create Installer Script
+        run: |
+          $script = @"
+          [Setup]
+          AppName=PKM-Universe
+          AppVersion=${{ steps.version.outputs.VERSION }}
+          AppPublisher=PKM-Universe
+          AppPublisherURL=https://github.com/PKM-Universe
+          DefaultDirName={autopf}\PKM-Universe
+          DefaultGroupName=PKM-Universe
+          OutputDir=.
+          OutputBaseFilename=PKM-Universe-Setup-v${{ steps.version.outputs.VERSION }}
+          Compression=lzma2
+          SolidCompression=yes
+          WizardStyle=modern
+          SetupIconFile=publish\PKM-Universe.exe
+          UninstallDisplayIcon={app}\PKM-Universe.exe
+
+          [Languages]
+          Name: "english"; MessagesFile: "compiler:Default.isl"
+
+          [Tasks]
+          Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
+
+          [Files]
+          Source: "publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
+
+          [Icons]
+          Name: "{group}\PKM-Universe"; Filename: "{app}\PKM-Universe.exe"
+          Name: "{autodesktop}\PKM-Universe"; Filename: "{app}\PKM-Universe.exe"; Tasks: desktopicon
+
+          [Run]
+          Filename: "{app}\PKM-Universe.exe"; Description: "Launch PKM-Universe"; Flags: nowait postinstall skipifsilent
+          "@
+          $script | Out-File -FilePath installer.iss -Encoding utf8
+        shell: pwsh
+
+      - name: Build Installer
+        run: |
+          choco install innosetup -y
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
+        shell: pwsh
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
@@ -109,28 +152,37 @@ jobs:
           name: PKM-Universe v${{ steps.version.outputs.VERSION }}
           files: |
             ./PKM-Universe-v${{ steps.version.outputs.VERSION }}.zip
+            ./PKM-Universe-Setup-v${{ steps.version.outputs.VERSION }}.exe
             ./publish/PKM-Universe.exe
             ./publish/PKHeX.Core.dll
           body: |
-            ## Plugin Updates
-            - Updated plugin resources
-            - PKM-Universe.exe has been updated
-            - PKHeX.Core.dll has been updated
+            ## PKM-Universe v${{ steps.version.outputs.VERSION }}
 
-            This is a PKM-Universe release with all plugins included.
+            ### 🆕 What's New
+            - Custom PKM-Universe branding
+            - Enhanced splash screen
+            - Discord/Ko-fi links in About dialog
+            - Version displayed in title bar
 
-            ## ✨ What's Included
-            - Custom Red Theme
-            - Auto-Legality Mod Plugin
-            - Living Dex Generator
-            - Seed Finder Plugins (SV, SWSH, PLZA)
-            - Spinda Pattern Plugin
-            - Batch Editor & More!
+            ### ✨ Features Included
+            - 🎨 Custom Red Theme
+            - ⚡ Auto-Legality Mod Plugin
+            - 📚 Living Dex Generator
+            - 🔍 Seed Finder Plugins (SV, SWSH, PLZA)
+            - 🌀 Spinda Pattern Plugin
+            - 📝 Batch Editor & More!
 
-            ## 📥 Assets
-            - **PKM-Universe.zip** - Full package with all plugins
-            - **PKM-Universe.exe** - Main executable
-            - **PKHeX.Core.dll** - Core library
+            ### 📥 Download Options
+            | File | Description |
+            |------|-------------|
+            | **PKM-Universe-Setup.exe** | Windows Installer (Recommended) |
+            | **PKM-Universe.zip** | Portable version with all plugins |
+            | **PKM-Universe.exe** | Standalone executable |
+
+            ### 🔗 Links
+            - [Discord](https://discord.gg/pkm-universe)
+            - [Ko-fi](https://ko-fi.com/pokemonlover8888)
+            - [Website](https://pkm-universe.github.io/PKHeX-ALL-IN-ONE/)
 
             ---
             Made with ❤️ by PKM-Universe
