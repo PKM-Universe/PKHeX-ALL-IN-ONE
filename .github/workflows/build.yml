@@ -94,21 +94,25 @@ jobs:
             ./publish/PKHeX.exe
             ./publish/PKHeX.Core.dll
           body: |
-            # 🎮 PKM-Universe PKHeX Build v${{ steps.version.outputs.VERSION }}
+            ## Plugin Updates
+            - Updated plugin resources
+            - PKHeX.exe has been updated
+            - PKHeX.Core.dll has been updated
+
+            This is a PKM-Universe release with all plugins included.
 
             ## ✨ What's Included
-            - PKHeX Save Editor with Custom Red Theme
+            - Custom Red Theme
             - Auto-Legality Mod Plugin
             - Living Dex Generator
-            - Seed Finder Plugins (SV, SWSH)
+            - Seed Finder Plugins (SV, SWSH, PLZA)
+            - Spinda Pattern Plugin
             - Batch Editor & More!
 
-            ## 📥 Downloads
+            ## 📥 Assets
             - **PKM-Universe.zip** - Full package with all plugins
-            - **PKHeX.exe** - Standalone executable
-
-            ## 📋 Changes
-            See commit history for recent changes.
+            - **PKHeX.exe** - Main executable
+            - **PKHeX.Core.dll** - Core library
 
             ---
             Made with ❤️ by PKM-Universe
