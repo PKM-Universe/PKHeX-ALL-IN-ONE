@@ -19,18 +19,36 @@ jobs:
       - name: Download All Plugins
         run: |
           mkdir ./publish/plugins
-          $plugins = @(
+
+          # Download from hexbyt3 PKHeXth (AutoMod, LivingDex, Spinda)
+          $hexbyt3Plugins = @(
             "AutoModPlugins.dll",
             "PKHeX.Plugin.LivingDex.dll",
-            "PLZASeedFinderPlugin.dll",
-            "SVSeedFinderPlugin.dll",
-            "SWSHSeedFinderPlugin.dll",
             "SpindaPatternPlugin.dll"
           )
-          foreach ($plugin in $plugins) {
+          foreach ($plugin in $hexbyt3Plugins) {
             $url = "https://raw.githubusercontent.com/hexbyt3/PKHeXth/master/PKHeX.WinForms/MainWindow/Plugins/$plugin"
             Invoke-WebRequest -Uri $url -OutFile "./publish/plugins/$plugin"
-            Write-Host "Downloaded: $plugin"
+            Write-Host "Downloaded from hexbyt3: $plugin"
+          }
+
+          # Download Seed Finders from PKM-Universe (our own repo!)
+          $seedFinderPlugins = @(
+            "PLZASeedFinderPlugin.dll",
+            "SVSeedFinderPlugin.dll",
+            "SWSHSeedFinderPlugin.dll"
+          )
+
+          # Get latest release from PKM-Universe Seed Finder repo
+          $releaseUrl = "https://api.github.com/repos/PKM-Universe/-PKM-Universe-Seed-Finder/releases/latest"
+          $release = Invoke-RestMethod -Uri $releaseUrl -Headers @{"Accept"="application/vnd.github.v3+json"}
+
+          foreach ($plugin in $seedFinderPlugins) {
+            $asset = $release.assets | Where-Object { $_.name -eq $plugin }
+            if ($asset) {
+              Invoke-WebRequest -Uri $asset.browser_download_url -OutFile "./publish/plugins/$plugin"
+              Write-Host "Downloaded from PKM-Universe: $plugin"
+            }
           }
         shell: pwsh
 
