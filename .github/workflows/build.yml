@@ -104,37 +104,35 @@ jobs:
 
       - name: Create Installer Script
         run: |
-          $script = @"
-          [Setup]
-          AppName=PKM-Universe
-          AppVersion=${{ steps.version.outputs.VERSION }}
-          AppPublisher=PKM-Universe
-          AppPublisherURL=https://github.com/PKM-Universe
-          DefaultDirName={autopf}\PKM-Universe
-          DefaultGroupName=PKM-Universe
-          OutputDir=.
-          OutputBaseFilename=PKM-Universe-Setup-v${{ steps.version.outputs.VERSION }}
-          Compression=lzma2
-          SolidCompression=yes
-          WizardStyle=modern
+          @"
+[Setup]
+AppName=PKM-Universe
+AppVersion=${{ steps.version.outputs.VERSION }}
+AppPublisher=PKM-Universe
+AppPublisherURL=https://github.com/PKM-Universe
+DefaultDirName={autopf}\PKM-Universe
+DefaultGroupName=PKM-Universe
+OutputDir=.
+OutputBaseFilename=PKM-Universe-Setup-v${{ steps.version.outputs.VERSION }}
+Compression=lzma2
+SolidCompression=yes
 
-          [Languages]
-          Name: "english"; MessagesFile: "compiler:Default.isl"
+[Languages]
+Name: "english"; MessagesFile: "compiler:Default.isl"
 
-          [Tasks]
-          Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
+[Tasks]
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
 
-          [Files]
-          Source: "publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
+[Files]
+Source: "publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 
-          [Icons]
-          Name: "{group}\PKM-Universe"; Filename: "{app}\PKM-Universe.exe"
-          Name: "{autodesktop}\PKM-Universe"; Filename: "{app}\PKM-Universe.exe"; Tasks: desktopicon
+[Icons]
+Name: "{group}\PKM-Universe"; Filename: "{app}\PKM-Universe.exe"
+Name: "{autodesktop}\PKM-Universe"; Filename: "{app}\PKM-Universe.exe"; Tasks: desktopicon
 
-          [Run]
-          Filename: "{app}\PKM-Universe.exe"; Description: "Launch PKM-Universe"; Flags: nowait postinstall skipifsilent
-          "@
-          $script | Out-File -FilePath installer.iss -Encoding utf8
+[Run]
+Filename: "{app}\PKM-Universe.exe"; Description: "Launch PKM-Universe"; Flags: nowait postinstall skipifsilent
+"@ | Out-File -FilePath installer.iss -Encoding ASCII
         shell: pwsh
 
       - name: Build Installer
