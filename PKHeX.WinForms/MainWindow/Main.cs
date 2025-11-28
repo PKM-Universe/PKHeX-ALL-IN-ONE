@@ -1378,7 +1378,7 @@ public partial class Main : Form
         {
             var pk = sav.GetBoxSlotAtIndex(box, i);
             if (pk.Species == 0) continue;
-            pk.SetMaximumPPAll();
+            pk.HealPP();
             pk.IV_HP = pk.IV_ATK = pk.IV_DEF = pk.IV_SPA = pk.IV_SPD = pk.IV_SPE = 31;
             sav.SetBoxSlotAtIndex(pk, box, i);
         }
