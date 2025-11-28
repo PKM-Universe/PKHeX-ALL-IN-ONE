@@ -1,5 +1,7 @@
 name: PKHeX-Build
 on: [push, workflow_dispatch]
+permissions:
+  contents: write
 jobs:
   build:
     runs-on: windows-latest
