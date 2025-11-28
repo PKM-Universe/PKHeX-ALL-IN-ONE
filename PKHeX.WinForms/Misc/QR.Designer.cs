@@ -178,7 +178,7 @@ namespace PKHeX.WinForms
             MinimizeBox = false;
             Name = "QR";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "PKHeX QR Code (Click QR to Copy Image)";
+            Text = "PKM-Universe QR Code (Click QR to Copy Image)";
             ((ISupportInitialize)PB_QR).EndInit();
             ((ISupportInitialize)NUD_Box).EndInit();
             ((ISupportInitialize)NUD_Slot).EndInit();

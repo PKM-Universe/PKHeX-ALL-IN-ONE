@@ -122,7 +122,7 @@ namespace PKHeX.WinForms
             MinimumSize = new System.Drawing.Size(592, 467);
             Name = "About";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            Text = "About";
+            Text = "About PKM-Universe";
             TC_About.ResumeLayout(false);
             Tab_Shortcuts.ResumeLayout(false);
             Tab_Changelog.ResumeLayout(false);

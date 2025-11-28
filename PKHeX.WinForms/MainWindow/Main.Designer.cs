@@ -344,7 +344,7 @@ namespace PKHeX.WinForms
             Menu_About.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P;
             Menu_About.ShowShortcutKeys = false;
             Menu_About.Size = new System.Drawing.Size(164, 22);
-            Menu_About.Text = "About &PKHeX";
+            Menu_About.Text = "About &PKM-Universe";
             Menu_About.Click += MainMenuAbout;
             // 
             // L_UpdateAvailable
@@ -488,7 +488,7 @@ namespace PKHeX.WinForms
             MaximizeBox = false;
             Name = "Main";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            Text = "PKHeX";
+            Text = "PKM-Universe";
             FormClosing += Main_FormClosing;
             DragDrop += Main_DragDrop;
             menuStrip1.ResumeLayout(false);

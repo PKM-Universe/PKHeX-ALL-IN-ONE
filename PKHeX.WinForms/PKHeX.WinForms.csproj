@@ -12,9 +12,10 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>PKHeX</PackageId>
-    <AssemblyName>PKHeX</AssemblyName>
-    <Description>Pokémon Save Editor</Description>
+    <PackageId>PKM-Universe</PackageId>
+    <AssemblyName>PKM-Universe</AssemblyName>
+    <Product>PKM-Universe</Product>
+    <Description>PKM-Universe - Pokemon Save Editor with Plugins</Description>
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
     <StartupObject>PKHeX.WinForms.Program</StartupObject>
     <RootNamespace>PKHeX.WinForms</RootNamespace>

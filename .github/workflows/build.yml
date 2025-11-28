@@ -109,12 +109,12 @@ jobs:
           name: PKM-Universe v${{ steps.version.outputs.VERSION }}
           files: |
             ./PKM-Universe-v${{ steps.version.outputs.VERSION }}.zip
-            ./publish/PKHeX.exe
+            ./publish/PKM-Universe.exe
             ./publish/PKHeX.Core.dll
           body: |
             ## Plugin Updates
             - Updated plugin resources
-            - PKHeX.exe has been updated
+            - PKM-Universe.exe has been updated
             - PKHeX.Core.dll has been updated
 
             This is a PKM-Universe release with all plugins included.
@@ -129,7 +129,7 @@ jobs:
 
             ## 📥 Assets
             - **PKM-Universe.zip** - Full package with all plugins
-            - **PKHeX.exe** - Main executable
+            - **PKM-Universe.exe** - Main executable
             - **PKHeX.Core.dll** - Core library
 
             ---
