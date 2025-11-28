@@ -13,6 +13,20 @@ jobs:
       - run: dotnet restore PKHeX.sln
       - run: dotnet build PKHeX.sln --configuration Release --no-restore
       - run: dotnet publish PKHeX.WinForms/PKHeX.WinForms.csproj -c Release -o ./publish
+      - name: Download Plugins
+        run: |
+          mkdir ./publish/plugins
+          $plugins = @(
+            "AutoModPlugins.dll",
+            "PKHeX.Core.AutoMod.dll",
+            "PKHeX.Core.Enhancements.dll",
+            "PKHeX.Core.Injection.dll"
+          )
+          foreach ($plugin in $plugins) {
+            $url = "https://raw.githubusercontent.com/hexbyt3/PKHeXth/master/PKHeX.WinForms/MainWindow/Plugins/$plugin"
+            Invoke-WebRequest -Uri $url -OutFile "./publish/plugins/$plugin"
+          }
+        shell: pwsh
       - name: Get version
         id: version
         run: |
@@ -27,6 +41,8 @@ jobs:
           files: ./publish/*
           body: |
             PKM-Universe PKHeX Build
+
+            Includes Auto-Legality Mod and other plugins!
 
             Download PKHeX.exe below to get started!
         env:
