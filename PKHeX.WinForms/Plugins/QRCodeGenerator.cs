@@ -119,7 +119,7 @@ public class QRCodeGenerator
         var result = new Dictionary<int, Bitmap>();
         var pokemon = SAV.GetBoxData(box);
 
-        for (int i = 0; i < pokemon.Count; i++)
+        for (int i = 0; i < pokemon.Length; i++)
         {
             if (pokemon[i].Species > 0)
             {
@@ -185,7 +185,7 @@ public class QRCodeGenerator
             var set = new ShowdownSet(qrData);
             if (set.Species > 0)
             {
-                var pk = EntityBlank.GetBlank(SAV.Context);
+                var pk = SAV.BlankPKM;
                 pk.Species = set.Species;
                 pk.Form = set.Form;
                 pk.CurrentLevel = set.Level;

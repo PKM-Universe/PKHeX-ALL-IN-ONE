@@ -143,7 +143,7 @@ public class LivingDexTracker
         {
             if (!Progress.OwnedSpecies.Contains(species))
             {
-                var speciesName = SpeciesName.GetSpeciesName(species, 2);
+                var speciesName = SpeciesName.GetSpeciesName((ushort)species, 2);
                 missing.Add(new MissingPokemon
                 {
                     Species = species,
@@ -156,7 +156,7 @@ public class LivingDexTracker
             else if (!Progress.ShinySpecies.Contains(species))
             {
                 // Has regular but not shiny
-                var speciesName = SpeciesName.GetSpeciesName(species, 2);
+                var speciesName = SpeciesName.GetSpeciesName((ushort)species, 2);
                 missing.Add(new MissingPokemon
                 {
                     Species = species,
@@ -183,7 +183,7 @@ public class LivingDexTracker
         {
             if (!Progress.ShinySpecies.Contains(species))
             {
-                var speciesName = SpeciesName.GetSpeciesName(species, 2);
+                var speciesName = SpeciesName.GetSpeciesName((ushort)species, 2);
                 missing.Add(new MissingPokemon
                 {
                     Species = species,
@@ -253,7 +253,7 @@ public class LivingDexTracker
 
         for (int species = 1; species <= 1025; species++)
         {
-            var name = SpeciesName.GetSpeciesName(species, 2);
+            var name = SpeciesName.GetSpeciesName((ushort)species, 2);
             var gen = GetGeneration(species);
             var owned = Progress.OwnedSpecies.Contains(species) ? "Yes" : "No";
             var shiny = Progress.ShinySpecies.Contains(species) ? "Yes" : "No";
@@ -504,3 +504,4 @@ public class SuggestedPokemon
     public string Method { get; set; } = "";
     public int Difficulty { get; set; }
 }
+

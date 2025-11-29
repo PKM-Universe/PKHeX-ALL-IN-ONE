@@ -48,7 +48,7 @@ public class QuickTemplatesPlugin
     /// </summary>
     public PKM? ApplyTemplate(PokemonTemplate template)
     {
-        var pk = EntityBlank.GetBlank(SAV.Context);
+        var pk = SAV.BlankPKM;
 
         pk.Species = template.Species;
         pk.Form = template.Form;
@@ -65,7 +65,7 @@ public class QuickTemplatesPlugin
         pk.Move2 = template.Move2;
         pk.Move3 = template.Move3;
         pk.Move4 = template.Move4;
-        pk.SetMaximumPPCurrent();
+        pk.SetMaximumPPCurrent(new Moveset(pk.Move1, pk.Move2, pk.Move3, pk.Move4));
 
         // Set IVs
         pk.IV_HP = template.IVs[0];
@@ -102,7 +102,7 @@ public class QuickTemplatesPlugin
         pk.Language = SAV.Language;
         pk.MetDate = DateOnly.FromDateTime(DateTime.Now);
 
-        pk.ResetCalculatedValues();
+        pk.RefreshChecksum();
 
         return EntityConverter.ConvertToType(pk, SAV.PKMType, out _);
     }

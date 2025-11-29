@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using PKHeX.Core;
@@ -144,7 +144,7 @@ public static class EventDatabase
             new() { Species = 889, Name = "Zamazenta", EventName = "Shiny Zamazenta", OT = "Arthur", TID = 211022, Generation = 8, Year = 2021, Shiny = true, Level = 100, Region = "World" },
             new() { Species = 892, Name = "Urshifu", EventName = "Kubfu", OT = "Isle of Armor", TID = 0, Generation = 8, Year = 2020, Shiny = false, Level = 10, Region = "World" },
             new() { Species = 898, Name = "Calyrex", EventName = "Crown Tundra", OT = "Crown", TID = 0, Generation = 8, Year = 2020, Shiny = false, Level = 80, Region = "World" },
-            new() { Species = 151, Name = "Mew", EventName = "Get Challenge Mew", OT = "ゲッチャ", TID = 220Pokemon, Generation = 8, Year = 2022, Shiny = false, Level = 5, Region = "Japan" }
+            new() { Species = 151, Name = "Mew", EventName = "Get Challenge Mew", OT = "ゲッチャ", TID = 220601, Generation = 8, Year = 2022, Shiny = false, Level = 5, Region = "Japan" }
         };
     }
 
@@ -155,10 +155,10 @@ public static class EventDatabase
             new() { Species = 1024, Name = "Terapagos", EventName = "Indigo Disk", OT = "Player", TID = 0, Generation = 9, Year = 2023, Shiny = false, Level = 85, Region = "World" },
             new() { Species = 1025, Name = "Pecharunt", EventName = "Epilogue", OT = "Player", TID = 0, Generation = 9, Year = 2024, Shiny = false, Level = 88, Region = "World" },
             new() { Species = 1017, Name = "Ogerpon", EventName = "Teal Mask", OT = "Player", TID = 0, Generation = 9, Year = 2023, Shiny = false, Level = 70, Region = "World" },
-            new() { Species = 151, Name = "Mew", EventName = "Get Mew", OT = "ゲット", TID = 240Pokemon, Generation = 9, Year = 2024, Shiny = false, Level = 5, Region = "Japan" },
-            new() { Species = 25, Name = "Pikachu", EventName = "Flying Tera Pikachu", OT = "POKEMON", TID = 230Pokemon, Generation = 9, Year = 2023, Shiny = false, Level = 25, Region = "World" },
-            new() { Species = 448, Name = "Lucario", EventName = "WCS Lucario", OT = "WCS", TID = 230Pokemon, Generation = 9, Year = 2023, Shiny = false, Level = 75, Region = "World" },
-            new() { Species = 384, Name = "Rayquaza", EventName = "Victory Road Rayquaza", OT = "Victory", TID = 231Pokemon, Generation = 9, Year = 2023, Shiny = true, Level = 100, Region = "World" }
+            new() { Species = 151, Name = "Mew", EventName = "Get Mew", OT = "ゲット", TID = 240601, Generation = 9, Year = 2024, Shiny = false, Level = 5, Region = "Japan" },
+            new() { Species = 25, Name = "Pikachu", EventName = "Flying Tera Pikachu", OT = "POKE", TID = 230601, Generation = 9, Year = 2023, Shiny = false, Level = 25, Region = "World" },
+            new() { Species = 448, Name = "Lucario", EventName = "WCS Lucario", OT = "WCS", TID = 230601, Generation = 9, Year = 2023, Shiny = false, Level = 75, Region = "World" },
+            new() { Species = 384, Name = "Rayquaza", EventName = "Victory Road Rayquaza", OT = "Victory", TID = 231601, Generation = 9, Year = 2023, Shiny = true, Level = 100, Region = "World" }
         };
     }
 }
@@ -178,3 +178,6 @@ public class EventPokemon
 
     public string DisplayName => $"{EventName} ({Year})";
 }
+
+
+

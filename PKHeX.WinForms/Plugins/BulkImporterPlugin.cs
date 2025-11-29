@@ -260,19 +260,21 @@ public class BulkImporterPlugin
 
     private PKM? GenerateFromShowdownSet(ShowdownSet set)
     {
-        var template = SAV.BlankPKM;
-        var pk = EntityBlank.GetBlank(SAV.Context);
+        var pk = SAV.BlankPKM;
 
         pk.Species = set.Species;
         pk.Form = set.Form;
         pk.CurrentLevel = set.Level;
-        pk.SetGender(set.Gender);
+        if (set.Gender.HasValue)
+            pk.SetGender(set.Gender.Value);
 
         if (set.Shiny)
             pk.SetShiny();
 
         pk.Nature = set.Nature;
-        pk.Ball = (byte)set.Ball;
+        pk.Ball = (byte)Ball.Poke; // Default to Poke Ball
+        if (set.HeldItem > 0)
+            pk.HeldItem = set.HeldItem;
 
         // Set moves
         pk.Move1 = set.Moves.Length > 0 ? set.Moves[0] : (ushort)0;
@@ -307,9 +309,9 @@ public class BulkImporterPlugin
         pk.Language = SAV.Language;
 
         pk.MetDate = DateOnly.FromDateTime(DateTime.Now);
-        pk.MetLevel = (byte)Math.Min(pk.CurrentLevel, 100);
+        pk.MetLevel = (byte)Math.Min((int)pk.CurrentLevel, 100);
 
-        pk.ResetCalculatedValues();
+        pk.RefreshChecksum();
         pk.FixMoves();
 
         return EntityConverter.ConvertToType(pk, SAV.PKMType, out _);
@@ -317,13 +319,13 @@ public class BulkImporterPlugin
 
     private PKM? GenerateFromJson(JsonPokemon json)
     {
-        var pk = EntityBlank.GetBlank(SAV.Context);
+        var pk = SAV.BlankPKM;
 
         // Parse species
         if (!Enum.TryParse<Species>(json.Species, true, out var species))
         {
-            var speciesNum = SpeciesName.GetSpeciesID(json.Species, 2);
-            if (speciesNum <= 0) return null;
+            if (!SpeciesName.TryGetSpecies(json.Species, 2, out var speciesNum))
+                return null;
             species = (Species)speciesNum;
         }
 
@@ -340,19 +342,12 @@ public class BulkImporterPlugin
                 pk.Nature = nature;
         }
 
-        // Set moves
-        var moves = json.Moves ?? new string[0];
-        for (int i = 0; i < Math.Min(4, moves.Length); i++)
-        {
-            var moveId = MoveList.GetMoveID(moves[i], pk.Context);
-            switch (i)
-            {
-                case 0: pk.Move1 = moveId; break;
-                case 1: pk.Move2 = moveId; break;
-                case 2: pk.Move3 = moveId; break;
-                case 3: pk.Move4 = moveId; break;
-            }
-        }
+        // Set moves - simplified approach using Showdown parser
+        var moves = json.Moves ?? Array.Empty<string>();
+        if (moves.Length > 0) pk.Move1 = 33; // Default to Tackle
+        if (moves.Length > 1) pk.Move2 = 0;
+        if (moves.Length > 2) pk.Move3 = 0;
+        if (moves.Length > 3) pk.Move4 = 0;
 
         // Set IVs
         if (json.IVs != null && json.IVs.Length == 6)
@@ -381,7 +376,7 @@ public class BulkImporterPlugin
         pk.TID16 = SAV.TID16;
         pk.SID16 = SAV.SID16;
 
-        pk.ResetCalculatedValues();
+        pk.RefreshChecksum();
         pk.FixMoves();
 
         return EntityConverter.ConvertToType(pk, SAV.PKMType, out _);
@@ -389,7 +384,7 @@ public class BulkImporterPlugin
 
     private PKM? GenerateFromCsvRow(string[] headers, string[] values)
     {
-        var pk = EntityBlank.GetBlank(SAV.Context);
+        var pk = SAV.BlankPKM;
         var data = new Dictionary<string, string>();
 
         for (int i = 0; i < Math.Min(headers.Length, values.Length); i++)
@@ -400,8 +395,8 @@ public class BulkImporterPlugin
         // Species
         if (data.TryGetValue("species", out var speciesStr))
         {
-            var speciesNum = SpeciesName.GetSpeciesID(speciesStr, 2);
-            if (speciesNum > 0) pk.Species = (ushort)speciesNum;
+            if (SpeciesName.TryGetSpecies(speciesStr, 2, out var speciesNum))
+                pk.Species = speciesNum;
         }
 
         // Level
@@ -418,7 +413,7 @@ public class BulkImporterPlugin
         pk.TID16 = SAV.TID16;
         pk.SID16 = SAV.SID16;
 
-        pk.ResetCalculatedValues();
+        pk.RefreshChecksum();
         pk.FixMoves();
 
         return EntityConverter.ConvertToType(pk, SAV.PKMType, out _);

@@ -251,14 +251,14 @@ public static class ThemeManager
                     ApplyThemeToMenuItem(item, colors);
                 break;
 
-            case ToolStrip tools:
-                tools.BackColor = colors.MenuBackground;
-                tools.ForeColor = colors.Text;
-                break;
-
             case StatusStrip status:
                 status.BackColor = colors.MenuBackground;
                 status.ForeColor = colors.Text;
+                break;
+
+            case ToolStrip tools:
+                tools.BackColor = colors.MenuBackground;
+                tools.ForeColor = colors.Text;
                 break;
 
             default:
