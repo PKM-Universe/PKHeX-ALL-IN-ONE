@@ -1430,6 +1430,144 @@ public partial class Main : Form
         WinFormsUtil.Alert("Legalize All", "Use the Auto-Legality Mod plugin for this feature!", "Tools > Auto Legality Mod");
     }
 
+    private void Menu_PKM_SLD_GenerateFull_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first!");
+            return;
+        }
+
+        var result = WinFormsUtil.Prompt(MessageBoxButtons.YesNo,
+            "Generate Full Shiny Living Dex?",
+            "This will generate shiny versions of all Pokemon available in your game.\n" +
+            "Pokemon will be placed starting from Box 1.\n\n" +
+            "WARNING: This will overwrite existing Pokemon in those boxes!");
+
+        if (result != DialogResult.Yes) return;
+
+        var generator = new Plugins.ShinyLivingDexGenerator(C_SAV.SAV);
+        var options = new Plugins.ShinyLivingDexGenerator.GeneratorOptions
+        {
+            ShinyOnly = true,
+            SetLevel100 = true,
+            MaxIVs = true,
+            LegalOnly = true
+        };
+
+        var genResult = generator.GenerateShinyLivingDex(options);
+        C_SAV.ReloadSlots();
+        WinFormsUtil.Alert(genResult.GetSummary());
+    }
+
+    private void Menu_PKM_SLD_GenerateGen_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first!");
+            return;
+        }
+
+        // Show generation selection dialog
+        var generations = new[] { "Gen 1 (Kanto)", "Gen 2 (Johto)", "Gen 3 (Hoenn)", "Gen 4 (Sinnoh)",
+            "Gen 5 (Unova)", "Gen 6 (Kalos)", "Gen 7 (Alola)", "Gen 8 (Galar/Hisui)", "Gen 9 (Paldea)" };
+
+        using var dialog = new Form
+        {
+            Text = "Select Generation",
+            Size = new Size(300, 180),
+            StartPosition = FormStartPosition.CenterParent,
+            FormBorderStyle = FormBorderStyle.FixedDialog,
+            MaximizeBox = false,
+            MinimizeBox = false
+        };
+
+        var combo = new ComboBox { Location = new Point(20, 20), Width = 240, DropDownStyle = ComboBoxStyle.DropDownList };
+        combo.Items.AddRange(generations);
+        combo.SelectedIndex = 0;
+
+        var lblBox = new Label { Text = "Start Box:", Location = new Point(20, 55), AutoSize = true };
+        var numBox = new NumericUpDown { Location = new Point(100, 53), Width = 60, Minimum = 1, Maximum = C_SAV.SAV.BoxCount, Value = 1 };
+
+        var btnOk = new Button { Text = "Generate", Location = new Point(80, 95), DialogResult = DialogResult.OK };
+        var btnCancel = new Button { Text = "Cancel", Location = new Point(170, 95), DialogResult = DialogResult.Cancel };
+
+        dialog.Controls.AddRange(new Control[] { combo, lblBox, numBox, btnOk, btnCancel });
+        dialog.AcceptButton = btnOk;
+        dialog.CancelButton = btnCancel;
+
+        if (dialog.ShowDialog() != DialogResult.OK) return;
+
+        var gen = combo.SelectedIndex + 1;
+        var startBox = (int)numBox.Value - 1;
+
+        var generator = new Plugins.ShinyLivingDexGenerator(C_SAV.SAV);
+        var options = new Plugins.ShinyLivingDexGenerator.GeneratorOptions
+        {
+            ShinyOnly = true,
+            SetLevel100 = true,
+            MaxIVs = true,
+            LegalOnly = true,
+            StartGeneration = gen,
+            EndGeneration = gen,
+            StartBox = startBox
+        };
+
+        var genResult = generator.GenerateGeneration(gen, startBox, options);
+        C_SAV.ReloadSlots();
+        WinFormsUtil.Alert(genResult.GetSummary());
+    }
+
+    private void Menu_PKM_SLD_FillMissing_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first!");
+            return;
+        }
+
+        var result = WinFormsUtil.Prompt(MessageBoxButtons.YesNo,
+            "Fill Missing Shinies?",
+            "This will scan your boxes for existing shiny Pokemon and generate any missing ones.\n" +
+            "New Pokemon will be placed in empty slots.");
+
+        if (result != DialogResult.Yes) return;
+
+        var generator = new Plugins.ShinyLivingDexGenerator(C_SAV.SAV);
+        var options = new Plugins.ShinyLivingDexGenerator.GeneratorOptions
+        {
+            ShinyOnly = true,
+            SetLevel100 = true,
+            MaxIVs = true,
+            LegalOnly = true
+        };
+
+        var genResult = generator.FillMissingShiny(options);
+        C_SAV.ReloadSlots();
+        WinFormsUtil.Alert(genResult.GetSummary());
+    }
+
+    private void Menu_PKM_SLD_CalcBoxes_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first!");
+            return;
+        }
+
+        var generator = new Plugins.ShinyLivingDexGenerator(C_SAV.SAV);
+        var optionsBase = new Plugins.ShinyLivingDexGenerator.GeneratorOptions { IncludeForms = false };
+        var optionsForms = new Plugins.ShinyLivingDexGenerator.GeneratorOptions { IncludeForms = true };
+
+        var boxesBase = generator.CalculateBoxesNeeded(optionsBase);
+        var boxesForms = generator.CalculateBoxesNeeded(optionsForms);
+
+        WinFormsUtil.Alert("Boxes Needed for Shiny Living Dex",
+            $"Base forms only: {boxesBase} boxes",
+            $"Including all forms: {boxesForms} boxes",
+            $"\nYour save has {C_SAV.SAV.BoxCount} boxes ({C_SAV.SAV.BoxCount * C_SAV.SAV.BoxSlotCount} slots)");
+    }
+
     #endregion
 
     public void WarnBehavior()

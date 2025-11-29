@@ -65,6 +65,11 @@ namespace PKHeX.WinForms
             Menu_PKM_BatchPresets = new System.Windows.Forms.ToolStripMenuItem();
             Menu_PKM_Preset_MaxIVs = new System.Windows.Forms.ToolStripMenuItem();
             Menu_PKM_Preset_Shiny = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_ShinyLivingDex = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_SLD_GenerateFull = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_SLD_GenerateGen = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_SLD_FillMissing = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_SLD_CalcBoxes = new System.Windows.Forms.ToolStripMenuItem();
             Menu_PKM_Preset_LegalizeAll = new System.Windows.Forms.ToolStripMenuItem();
             Menu_PKM_Preset_MaxEVs = new System.Windows.Forms.ToolStripMenuItem();
             Menu_PKM_Templates = new System.Windows.Forms.ToolStripMenuItem();
@@ -364,7 +369,7 @@ namespace PKHeX.WinForms
             //
             // Menu_PKMUniverse
             //
-            Menu_PKMUniverse.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_RecentFiles, Menu_PKM_BackupManager, Menu_PKM_BatchPresets, Menu_PKM_Templates, Menu_PKM_RandomTeam, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_Discord, Menu_PKM_Kofi, Menu_PKM_Website, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_CheckUpdate, L_PortableMode });
+            Menu_PKMUniverse.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_RecentFiles, Menu_PKM_BackupManager, Menu_PKM_BatchPresets, Menu_PKM_ShinyLivingDex, Menu_PKM_Templates, Menu_PKM_RandomTeam, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_Discord, Menu_PKM_Kofi, Menu_PKM_Website, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_CheckUpdate, L_PortableMode });
             Menu_PKMUniverse.Name = "Menu_PKMUniverse";
             Menu_PKMUniverse.Size = new System.Drawing.Size(95, 20);
             Menu_PKMUniverse.Text = "PKM-Universe";
@@ -417,6 +422,41 @@ namespace PKHeX.WinForms
             Menu_PKM_Preset_LegalizeAll.Size = new System.Drawing.Size(180, 22);
             Menu_PKM_Preset_LegalizeAll.Text = "Legalize (All Box)";
             Menu_PKM_Preset_LegalizeAll.Click += Menu_PKM_Preset_LegalizeAll_Click;
+            //
+            // Menu_PKM_ShinyLivingDex
+            //
+            Menu_PKM_ShinyLivingDex.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_SLD_GenerateFull, Menu_PKM_SLD_GenerateGen, Menu_PKM_SLD_FillMissing, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_SLD_CalcBoxes });
+            Menu_PKM_ShinyLivingDex.Name = "Menu_PKM_ShinyLivingDex";
+            Menu_PKM_ShinyLivingDex.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_ShinyLivingDex.Text = "Shiny Living Dex";
+            //
+            // Menu_PKM_SLD_GenerateFull
+            //
+            Menu_PKM_SLD_GenerateFull.Name = "Menu_PKM_SLD_GenerateFull";
+            Menu_PKM_SLD_GenerateFull.Size = new System.Drawing.Size(220, 22);
+            Menu_PKM_SLD_GenerateFull.Text = "Generate Full Shiny Dex";
+            Menu_PKM_SLD_GenerateFull.Click += Menu_PKM_SLD_GenerateFull_Click;
+            //
+            // Menu_PKM_SLD_GenerateGen
+            //
+            Menu_PKM_SLD_GenerateGen.Name = "Menu_PKM_SLD_GenerateGen";
+            Menu_PKM_SLD_GenerateGen.Size = new System.Drawing.Size(220, 22);
+            Menu_PKM_SLD_GenerateGen.Text = "Generate by Generation...";
+            Menu_PKM_SLD_GenerateGen.Click += Menu_PKM_SLD_GenerateGen_Click;
+            //
+            // Menu_PKM_SLD_FillMissing
+            //
+            Menu_PKM_SLD_FillMissing.Name = "Menu_PKM_SLD_FillMissing";
+            Menu_PKM_SLD_FillMissing.Size = new System.Drawing.Size(220, 22);
+            Menu_PKM_SLD_FillMissing.Text = "Fill Missing Shinies";
+            Menu_PKM_SLD_FillMissing.Click += Menu_PKM_SLD_FillMissing_Click;
+            //
+            // Menu_PKM_SLD_CalcBoxes
+            //
+            Menu_PKM_SLD_CalcBoxes.Name = "Menu_PKM_SLD_CalcBoxes";
+            Menu_PKM_SLD_CalcBoxes.Size = new System.Drawing.Size(220, 22);
+            Menu_PKM_SLD_CalcBoxes.Text = "Calculate Boxes Needed";
+            Menu_PKM_SLD_CalcBoxes.Click += Menu_PKM_SLD_CalcBoxes_Click;
             //
             // Menu_PKM_Templates
             //
@@ -681,6 +721,11 @@ namespace PKHeX.WinForms
         private System.Windows.Forms.ToolStripMenuItem Menu_PKM_Website;
         private System.Windows.Forms.ToolStripMenuItem Menu_PKM_CheckUpdate;
         private System.Windows.Forms.ToolStripLabel L_PortableMode;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_ShinyLivingDex;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SLD_GenerateFull;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SLD_GenerateGen;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SLD_FillMissing;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SLD_CalcBoxes;
     }
 }
 
