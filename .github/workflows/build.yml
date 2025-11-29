@@ -1,193 +1,38 @@
-name: PKHeX-Build
-on: [push, workflow_dispatch]
-permissions:
-  contents: write
+name: Build PKHeX-ALL-IN-ONE
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
 jobs:
   build:
     runs-on: windows-latest
+
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 9.0.x
-      - run: dotnet restore PKHeX.sln
-      - run: dotnet build PKHeX.sln --configuration Release --no-restore
-      - run: dotnet publish PKHeX.WinForms/PKHeX.WinForms.csproj -c Release -o ./publish
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
 
-      - name: Download All Plugins
-        run: |
-          mkdir ./publish/plugins
+    - name: Setup .NET 10 Preview
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+        dotnet-quality: 'preview'
 
-          # Download from hexbyt3 PKHeXth (AutoMod, LivingDex, Spinda)
-          $hexbyt3Plugins = @(
-            "AutoModPlugins.dll",
-            "PKHeX.Plugin.LivingDex.dll",
-            "SpindaPatternPlugin.dll"
-          )
-          foreach ($plugin in $hexbyt3Plugins) {
-            $url = "https://raw.githubusercontent.com/hexbyt3/PKHeXth/master/PKHeX.WinForms/MainWindow/Plugins/$plugin"
-            Invoke-WebRequest -Uri $url -OutFile "./publish/plugins/$plugin"
-            Write-Host "Downloaded from hexbyt3: $plugin"
-          }
+    - name: Restore dependencies
+      run: dotnet restore PKHeX.sln
 
-          # Download Seed Finders from PKM-Universe (our own repo!)
-          $seedFinderPlugins = @(
-            "PLZASeedFinderPlugin.dll",
-            "SVSeedFinderPlugin.dll",
-            "SWSHSeedFinderPlugin.dll"
-          )
+    - name: Build
+      run: dotnet build PKHeX.sln --configuration Release --no-restore
 
-          # Get latest release from PKM-Universe Seed Finder repo
-          $releaseUrl = "https://api.github.com/repos/PKM-Universe/-PKM-Universe-Seed-Finder/releases/latest"
-          $release = Invoke-RestMethod -Uri $releaseUrl -Headers @{"Accept"="application/vnd.github.v3+json"}
+    - name: Publish WinForms
+      run: dotnet publish PKHeX.WinForms/PKHeX.WinForms.csproj -c Release -r win-x64 --self-contained false -o publish/win-x64
 
-          foreach ($plugin in $seedFinderPlugins) {
-            $asset = $release.assets | Where-Object { $_.name -eq $plugin }
-            if ($asset) {
-              Invoke-WebRequest -Uri $asset.browser_download_url -OutFile "./publish/plugins/$plugin"
-              Write-Host "Downloaded from PKM-Universe: $plugin"
-            }
-          }
-        shell: pwsh
-
-      - name: Get Version with Revision
-        id: version
-        run: |
-          $date = Get-Date -Format "yy.MM.dd"
-          $baseTag = "v$date"
-
-          # Get existing tags for today
-          $existingTags = git tag -l "$baseTag*" 2>$null
-
-          if ($existingTags) {
-            # Find highest revision
-            $maxRev = 0
-            foreach ($tag in $existingTags) {
-              if ($tag -match "rev\.(\d+)") {
-                $rev = [int]$matches[1]
-                if ($rev -gt $maxRev) { $maxRev = $rev }
-              }
-            }
-            $newRev = $maxRev + 1
-            $version = "$date-rev.$newRev"
-          } else {
-            $version = $date
-          }
-
-          echo "VERSION=$version" >> $env:GITHUB_OUTPUT
-          echo "Version: $version"
-        shell: pwsh
-
-      - name: Generate Changelog
-        id: changelog
-        run: |
-          $lastTag = git describe --tags --abbrev=0 2>$null
-          if ($lastTag) {
-            $changes = git log "$lastTag..HEAD" --pretty=format:"- %s" 2>$null
-          } else {
-            $changes = git log -10 --pretty=format:"- %s" 2>$null
-          }
-
-          if (-not $changes) { $changes = "- Initial release" }
-
-          # Write to file for multiline output
-          $changes | Out-File -FilePath changelog.txt -Encoding utf8
-          echo "Generated changelog"
-        shell: pwsh
-
-      - name: Create ZIP Package
-        run: |
-          Compress-Archive -Path ./publish/* -DestinationPath ./PKM-Universe-v${{ steps.version.outputs.VERSION }}.zip
-        shell: pwsh
-
-      - name: Create Installer Script
-        run: |
-          $version = "${{ steps.version.outputs.VERSION }}"
-          $lines = @(
-            "[Setup]",
-            "AppName=PKM-Universe",
-            "AppVersion=$version",
-            "AppPublisher=PKM-Universe",
-            "AppPublisherURL=https://github.com/PKM-Universe",
-            "DefaultDirName={autopf}\PKM-Universe",
-            "DefaultGroupName=PKM-Universe",
-            "OutputDir=.",
-            "OutputBaseFilename=PKM-Universe-Setup-v$version",
-            "Compression=lzma2",
-            "SolidCompression=yes",
-            "",
-            "[Languages]",
-            'Name: "english"; MessagesFile: "compiler:Default.isl"',
-            "",
-            "[Tasks]",
-            'Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"',
-            "",
-            "[Files]",
-            'Source: "publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs',
-            "",
-            "[Icons]",
-            'Name: "{group}\PKM-Universe"; Filename: "{app}\PKM-Universe.exe"',
-            'Name: "{autodesktop}\PKM-Universe"; Filename: "{app}\PKM-Universe.exe"; Tasks: desktopicon',
-            "",
-            "[Run]",
-            'Filename: "{app}\PKM-Universe.exe"; Description: "Launch PKM-Universe"; Flags: nowait postinstall skipifsilent'
-          )
-          $lines | Out-File -FilePath installer.iss -Encoding ASCII
-        shell: pwsh
-
-      - name: Build Installer
-        run: |
-          choco install innosetup -y
-          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
-        shell: pwsh
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: v${{ steps.version.outputs.VERSION }}
-          name: PKM-Universe v${{ steps.version.outputs.VERSION }}
-          files: |
-            ./PKM-Universe-v${{ steps.version.outputs.VERSION }}.zip
-            ./PKM-Universe-Setup-v${{ steps.version.outputs.VERSION }}.exe
-            ./publish/PKM-Universe.exe
-            ./publish/PKHeX.Core.dll
-          body: |
-            ## PKM-Universe v${{ steps.version.outputs.VERSION }}
-
-            ### 🆕 What's New
-            - Custom PKM-Universe branding
-            - Enhanced splash screen
-            - Discord/Ko-fi links in About dialog
-            - Version displayed in title bar
-
-            ### ✨ Features Included
-            - 🎨 Custom Red Theme
-            - ⚡ Auto-Legality Mod Plugin
-            - 📚 Living Dex Generator
-            - 🔍 Seed Finder Plugins (SV, SWSH, PLZA)
-            - 🌀 Spinda Pattern Plugin
-            - 📝 Batch Editor & More!
-
-            ### 📥 Download Options
-            | File | Description |
-            |------|-------------|
-            | **PKM-Universe-Setup.exe** | Windows Installer (Recommended) |
-            | **PKM-Universe.zip** | Portable version with all plugins |
-            | **PKM-Universe.exe** | Standalone executable |
-
-            ### 🔗 Links
-            - [Discord](https://discord.gg/pkm-universe)
-            - [Ko-fi](https://ko-fi.com/pokemonlover8888)
-            - [Website](https://pkm-universe.github.io/PKHeX-ALL-IN-ONE/)
-
-            ---
-            Made with ❤️ by PKM-Universe
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: PKM-Universe-v${{ steps.version.outputs.VERSION }}
-          path: ./publish/
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: PKHeX-ALL-IN-ONE-win-x64
+        path: publish/win-x64/
+        retention-days: 30
