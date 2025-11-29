@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PKHex Mobile">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+    <title>PKHex Mobile - Pokemon Creator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #22d3ee;
+            --background: #0f0f1a;
+            --surface: #1a1a2e;
+            --surface-light: #252542;
+            --text: #f8fafc;
+            --text-secondary: #94a3b8;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --gold: #ffd700;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface-light) 100%);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .subtitle {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        /* Tab Navigation */
+        .tabs {
+            display: flex;
+            background: var(--surface);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tab {
+            flex: 1;
+            min-width: 80px;
+            padding: 0.75rem 1rem;
+            text-align: center;
+            color: var(--text-secondary);
+            border: none;
+            background: none;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .tab-icon {
+            font-size: 1.25rem;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Content Sections */
+        .content {
+            padding: 1rem;
+            padding-bottom: 5rem;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--surface);
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .card-title {
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 0.5rem;
+            background: var(--surface-light);
+            color: var(--text);
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Toggle Switch */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+        }
+
+        .toggle {
+            width: 50px;
+            height: 28px;
+            background: var(--surface-light);
+            border-radius: 14px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .toggle.active {
+            background: var(--primary);
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.2s;
+        }
+
+        .toggle.active::after {
+            transform: translateX(22px);
+        }
+
+        /* Stat Sliders */
+        .stat-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            width: 40px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .stat-slider {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 8px;
+            border-radius: 4px;
+            background: var(--surface-light);
+        }
+
+        .stat-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        .stat-value {
+            width: 35px;
+            text-align: right;
+            font-size: 0.875rem;
+            color: var(--text);
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--surface-light);
+            color: var(--text);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #ffd700 0%, #ffb800 100%);
+            color: #1a1a2e;
+        }
+
+        /* Move Slots */
+        .move-slots {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        .move-slot {
+            background: var(--surface-light);
+            border: 1px dashed rgba(255,255,255,0.2);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .move-slot.filled {
+            border-style: solid;
+            color: var(--text);
+            background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(34,211,238,0.1));
+        }
+
+        /* Pokemon Preview */
+        .pokemon-preview {
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .pokemon-sprite {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1rem;
+            background: var(--surface-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            position: relative;
+        }
+
+        .pokemon-sprite.shiny::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid var(--gold);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+
+        .pokemon-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .pokemon-details {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Queue Status */
+        .queue-status {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .queue-stat {
+            background: var(--surface-light);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+
+        .queue-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .queue-stat-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        /* Trade History Item */
+        .trade-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            background: var(--surface-light);
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .trade-item-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--surface);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .trade-item-info {
+            flex: 1;
+        }
+
+        .trade-item-name {
+            font-weight: 600;
+        }
+
+        .trade-item-date {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .trade-item-status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .trade-item-status.completed {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
+        }
+
+        .trade-item-status.pending {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        /* Template Cards */
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .template-card {
+            background: var(--surface-light);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .template-card:active {
+            transform: scale(0.98);
+        }
+
+        .template-card.selected {
+            border-color: var(--primary);
+        }
+
+        .template-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .template-desc {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            padding: 0.5rem;
+            padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.7rem;
+            transition: color 0.2s;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+            z-index: 200;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border-radius: 1.5rem 1.5rem 0 0;
+            width: 100%;
+            max-height: 80vh;
+            padding: 1.5rem;
+            padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Search */
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding-left: 2.5rem;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        /* List items */
+        .list-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--surface-light);
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+        }
+
+        .list-item:active {
+            opacity: 0.8;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--surface-light);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--surface);
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            z-index: 300;
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, 20px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>PKHex Mobile</h1>
+        <p class="subtitle">Create and trade Pokemon on the go</p>
+    </header>
+
+    <nav class="tabs">
+        <button class="tab active" data-tab="create">
+            <span class="tab-icon">+</span>
+            Create
+        </button>
+        <button class="tab" data-tab="templates">
+            <span class="tab-icon">*</span>
+            Templates
+        </button>
+        <button class="tab" data-tab="queue">
+            <span class="tab-icon">...</span>
+            Queue
+        </button>
+        <button class="tab" data-tab="history">
+            <span class="tab-icon">~</span>
+            History
+        </button>
+    </nav>
+
+    <main class="content">
+        <!-- Create Section -->
+        <section id="create" class="section active">
+            <div class="card">
+                <div class="card-title">Basic Info</div>
+                <div class="form-group">
+                    <label>Species</label>
+                    <input type="text" id="species" placeholder="Search Pokemon..." autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label>Nickname (Optional)</label>
+                    <input type="text" id="nickname" placeholder="Enter nickname">
+                </div>
+                <div class="form-group">
+                    <label>Level</label>
+                    <input type="range" id="level" min="1" max="100" value="100" class="stat-slider">
+                    <div style="text-align: center; margin-top: 0.25rem;">Level <span id="levelValue">100</span></div>
+                </div>
+                <div class="toggle-container">
+                    <span>Shiny</span>
+                    <div class="toggle" id="shinyToggle"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Nature & Ability</div>
+                <div class="form-group">
+                    <label>Nature</label>
+                    <select id="nature">
+                        <option value="adamant">Adamant (+Atk, -SpA)</option>
+                        <option value="jolly">Jolly (+Spe, -SpA)</option>
+                        <option value="modest">Modest (+SpA, -Atk)</option>
+                        <option value="timid">Timid (+Spe, -Atk)</option>
+                        <option value="bold">Bold (+Def, -Atk)</option>
+                        <option value="impish">Impish (+Def, -SpA)</option>
+                        <option value="calm">Calm (+SpD, -Atk)</option>
+                        <option value="careful">Careful (+SpD, -SpA)</option>
+                        <option value="brave">Brave (+Atk, -Spe)</option>
+                        <option value="quiet">Quiet (+SpA, -Spe)</option>
+                        <option value="relaxed">Relaxed (+Def, -Spe)</option>
+                        <option value="sassy">Sassy (+SpD, -Spe)</option>
+                        <option value="hardy">Hardy (Neutral)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Ability</label>
+                    <select id="ability">
+                        <option value="">Default</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tera Type</label>
+                    <select id="teraType">
+                        <option value="">Default</option>
+                        <option value="Normal">Normal</option>
+                        <option value="Fire">Fire</option>
+                        <option value="Water">Water</option>
+                        <option value="Electric">Electric</option>
+                        <option value="Grass">Grass</option>
+                        <option value="Ice">Ice</option>
+                        <option value="Fighting">Fighting</option>
+                        <option value="Poison">Poison</option>
+                        <option value="Ground">Ground</option>
+                        <option value="Flying">Flying</option>
+                        <option value="Psychic">Psychic</option>
+                        <option value="Bug">Bug</option>
+                        <option value="Rock">Rock</option>
+                        <option value="Ghost">Ghost</option>
+                        <option value="Dragon">Dragon</option>
+                        <option value="Dark">Dark</option>
+                        <option value="Steel">Steel</option>
+                        <option value="Fairy">Fairy</option>
+                        <option value="Stellar">Stellar</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">IVs</div>
+                <div class="stat-row">
+                    <span class="stat-label">HP</span>
+                    <input type="range" class="stat-slider iv-slider" data-stat="hp" min="0" max="31" value="31">
+                    <span class="stat-value iv-value" data-stat="hp">31</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Atk</span>
+                    <input type="range" class="stat-slider iv-slider" data-stat="atk" min="0" max="31" value="31">
+                    <span class="stat-value iv-value" data-stat="atk">31</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Def</span>
+                    <input type="range" class="stat-slider iv-slider" data-stat="def" min="0" max="31" value="31">
+                    <span class="stat-value iv-value" data-stat="def">31</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">SpA</span>
+                    <input type="range" class="stat-slider iv-slider" data-stat="spa" min="0" max="31" value="31">
+                    <span class="stat-value iv-value" data-stat="spa">31</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">SpD</span>
+                    <input type="range" class="stat-slider iv-slider" data-stat="spd" min="0" max="31" value="31">
+                    <span class="stat-value iv-value" data-stat="spd">31</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Spe</span>
+                    <input type="range" class="stat-slider iv-slider" data-stat="spe" min="0" max="31" value="31">
+                    <span class="stat-value iv-value" data-stat="spe">31</span>
+                </div>
+                <button class="btn btn-secondary" style="margin-top: 0.5rem;" onclick="maxIVs()">Max All IVs</button>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Moves</div>
+                <div class="move-slots">
+                    <div class="move-slot" onclick="openMoveModal(0)">+ Add Move</div>
+                    <div class="move-slot" onclick="openMoveModal(1)">+ Add Move</div>
+                    <div class="move-slot" onclick="openMoveModal(2)">+ Add Move</div>
+                    <div class="move-slot" onclick="openMoveModal(3)">+ Add Move</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Held Item</div>
+                <div class="form-group">
+                    <select id="item">
+                        <option value="">None</option>
+                        <option value="Leftovers">Leftovers</option>
+                        <option value="Choice Band">Choice Band</option>
+                        <option value="Choice Specs">Choice Specs</option>
+                        <option value="Choice Scarf">Choice Scarf</option>
+                        <option value="Life Orb">Life Orb</option>
+                        <option value="Focus Sash">Focus Sash</option>
+                        <option value="Assault Vest">Assault Vest</option>
+                        <option value="Rocky Helmet">Rocky Helmet</option>
+                        <option value="Heavy-Duty Boots">Heavy-Duty Boots</option>
+                        <option value="Booster Energy">Booster Energy</option>
+                        <option value="Eviolite">Eviolite</option>
+                        <option value="Black Sludge">Black Sludge</option>
+                        <option value="Expert Belt">Expert Belt</option>
+                        <option value="Air Balloon">Air Balloon</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="requestTrade()">Request Trade</button>
+        </section>
+
+        <!-- Templates Section -->
+        <section id="templates" class="section">
+            <div class="card">
+                <div class="card-title">Quick Templates</div>
+                <div class="template-grid">
+                    <div class="template-card" onclick="loadTemplate('physical')">
+                        <div class="template-name">Physical</div>
+                        <div class="template-desc">31/31/31/0/31/31</div>
+                    </div>
+                    <div class="template-card" onclick="loadTemplate('special')">
+                        <div class="template-name">Special</div>
+                        <div class="template-desc">31/0/31/31/31/31</div>
+                    </div>
+                    <div class="template-card" onclick="loadTemplate('trickroom')">
+                        <div class="template-name">Trick Room</div>
+                        <div class="template-desc">31/31/31/31/31/0</div>
+                    </div>
+                    <div class="template-card" onclick="loadTemplate('perfect')">
+                        <div class="template-name">6IV Perfect</div>
+                        <div class="template-desc">31/31/31/31/31/31</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Competitive Sets</div>
+                <div class="search-box form-group">
+                    <span class="search-icon">Q</span>
+                    <input type="text" id="templateSearch" placeholder="Search Pokemon...">
+                </div>
+                <div id="templateResults"></div>
+            </div>
+        </section>
+
+        <!-- Queue Section -->
+        <section id="queue" class="section">
+            <div class="queue-status">
+                <div class="queue-stat">
+                    <div class="queue-stat-value" id="queuePending">0</div>
+                    <div class="queue-stat-label">Pending</div>
+                </div>
+                <div class="queue-stat">
+                    <div class="queue-stat-value" id="queueProcessing">0</div>
+                    <div class="queue-stat-label">Trading</div>
+                </div>
+                <div class="queue-stat">
+                    <div class="queue-stat-value" id="queueCompleted">0</div>
+                    <div class="queue-stat-label">Complete</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Your Trades</div>
+                <div id="userTrades">
+                    <p style="color: var(--text-secondary); text-align: center; padding: 1rem;">No active trades</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- History Section -->
+        <section id="history" class="section">
+            <div class="card">
+                <div class="card-title">Recent Trades</div>
+                <div id="tradeHistory">
+                    <div class="loading"><div class="spinner"></div></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Move Modal -->
+    <div class="modal-overlay" id="moveModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Select Move</h2>
+                <button class="modal-close" onclick="closeMoveModal()">x</button>
+            </div>
+            <div class="search-box form-group">
+                <span class="search-icon">Q</span>
+                <input type="text" id="moveSearch" placeholder="Search moves...">
+            </div>
+            <div id="moveList" style="max-height: 50vh; overflow-y: auto;"></div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // State
+        let currentMoveSlot = 0;
+        let moves = [null, null, null, null];
+        let isShiny = false;
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Level slider
+        document.getElementById('level').addEventListener('input', (e) => {
+            document.getElementById('levelValue').textContent = e.target.value;
+        });
+
+        // IV sliders
+        document.querySelectorAll('.iv-slider').forEach(slider => {
+            slider.addEventListener('input', (e) => {
+                document.querySelector(`.iv-value[data-stat="${e.target.dataset.stat}"]`).textContent = e.target.value;
+            });
+        });
+
+        // Shiny toggle
+        document.getElementById('shinyToggle').addEventListener('click', function() {
+            this.classList.toggle('active');
+            isShiny = this.classList.contains('active');
+        });
+
+        // Max IVs
+        function maxIVs() {
+            document.querySelectorAll('.iv-slider').forEach(slider => {
+                slider.value = 31;
+                document.querySelector(`.iv-value[data-stat="${slider.dataset.stat}"]`).textContent = '31';
+            });
+            showToast('IVs maxed!');
+        }
+
+        // Move modal
+        function openMoveModal(slot) {
+            currentMoveSlot = slot;
+            document.getElementById('moveModal').classList.add('active');
+            loadMoves();
+        }
+
+        function closeMoveModal() {
+            document.getElementById('moveModal').classList.remove('active');
+        }
+
+        function loadMoves() {
+            const moves = [
+                'Earthquake', 'Close Combat', 'Stone Edge', 'Swords Dance',
+                'Moonblast', 'Shadow Ball', 'Focus Blast', 'Nasty Plot',
+                'Ice Beam', 'Thunderbolt', 'Flamethrower', 'Hydro Pump',
+                'Dragon Dance', 'Outrage', 'Iron Head', 'Knock Off',
+                'U-turn', 'Volt Switch', 'Rapid Spin', 'Stealth Rock',
+                'Protect', 'Substitute', 'Roost', 'Recover'
+            ];
+
+            const html = moves.map(move => `
+                <div class="list-item" onclick="selectMove('${move}')">
+                    <span>${move}</span>
+                </div>
+            `).join('');
+
+            document.getElementById('moveList').innerHTML = html;
+        }
+
+        function selectMove(move) {
+            moves[currentMoveSlot] = move;
+            const slots = document.querySelectorAll('.move-slot');
+            slots[currentMoveSlot].textContent = move;
+            slots[currentMoveSlot].classList.add('filled');
+            closeMoveModal();
+        }
+
+        // Templates
+        function loadTemplate(type) {
+            const templates = {
+                physical: { hp: 31, atk: 31, def: 31, spa: 0, spd: 31, spe: 31 },
+                special: { hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 31 },
+                trickroom: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 0 },
+                perfect: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 }
+            };
+
+            const ivs = templates[type];
+            Object.entries(ivs).forEach(([stat, value]) => {
+                const slider = document.querySelector(`.iv-slider[data-stat="${stat}"]`);
+                const display = document.querySelector(`.iv-value[data-stat="${stat}"]`);
+                if (slider && display) {
+                    slider.value = value;
+                    display.textContent = value;
+                }
+            });
+
+            // Switch to create tab
+            document.querySelector('.tab[data-tab="create"]').click();
+            showToast(`${type.charAt(0).toUpperCase() + type.slice(1)} template loaded!`);
+        }
+
+        // Request trade
+        function requestTrade() {
+            const species = document.getElementById('species').value;
+            if (!species) {
+                showToast('Please enter a Pokemon species!');
+                return;
+            }
+
+            const pokemon = {
+                species,
+                nickname: document.getElementById('nickname').value,
+                level: parseInt(document.getElementById('level').value),
+                shiny: isShiny,
+                nature: document.getElementById('nature').value,
+                ability: document.getElementById('ability').value,
+                teraType: document.getElementById('teraType').value,
+                item: document.getElementById('item').value,
+                ivs: {
+                    hp: parseInt(document.querySelector('.iv-slider[data-stat="hp"]').value),
+                    atk: parseInt(document.querySelector('.iv-slider[data-stat="atk"]').value),
+                    def: parseInt(document.querySelector('.iv-slider[data-stat="def"]').value),
+                    spa: parseInt(document.querySelector('.iv-slider[data-stat="spa"]').value),
+                    spd: parseInt(document.querySelector('.iv-slider[data-stat="spd"]').value),
+                    spe: parseInt(document.querySelector('.iv-slider[data-stat="spe"]').value)
+                },
+                moves: moves.filter(m => m)
+            };
+
+            console.log('Trade request:', pokemon);
+            showToast('Trade request sent! Check the Queue tab.');
+
+            // Switch to queue tab
+            document.querySelector('.tab[data-tab="queue"]').click();
+        }
+
+        // Toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load history placeholder
+            document.getElementById('tradeHistory').innerHTML = `
+                <div class="trade-item">
+                    <div class="trade-item-icon">P</div>
+                    <div class="trade-item-info">
+                        <div class="trade-item-name">Pikachu</div>
+                        <div class="trade-item-date">Today, 2:30 PM</div>
+                    </div>
+                    <span class="trade-item-status completed">Completed</span>
+                </div>
+                <div class="trade-item">
+                    <div class="trade-item-icon">C</div>
+                    <div class="trade-item-info">
+                        <div class="trade-item-name">Charizard</div>
+                        <div class="trade-item-date">Today, 1:15 PM</div>
+                    </div>
+                    <span class="trade-item-status completed">Completed</span>
+                </div>
+            `;
+        });
+
+        // Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(() => {});
+        }
+    </script>
+</body>
+</html>

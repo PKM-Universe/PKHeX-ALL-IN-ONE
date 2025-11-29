@@ -1,0 +1,106 @@
+{
+  "gen9ou": {
+    "garchomp": {
+      "sets": [
+        {"name": "Swords Dance", "item": "Lum Berry", "ability": "Rough Skin", "nature": "Jolly", "teraType": "Steel", "evs": {"atk": 252, "spe": 252, "hp": 4}, "moves": ["Swords Dance", "Earthquake", "Scale Shot", "Stone Edge"]},
+        {"name": "Stealth Rock", "item": "Rocky Helmet", "ability": "Rough Skin", "nature": "Jolly", "teraType": "Water", "evs": {"hp": 252, "spe": 252, "def": 4}, "moves": ["Stealth Rock", "Earthquake", "Dragon Tail", "Spikes"]}
+      ]
+    },
+    "dragapult": {
+      "sets": [
+        {"name": "Dragon Dance", "item": "Heavy-Duty Boots", "ability": "Clear Body", "nature": "Adamant", "teraType": "Steel", "evs": {"atk": 252, "spe": 252, "hp": 4}, "moves": ["Dragon Dance", "Dragon Darts", "Phantom Force", "U-turn"]},
+        {"name": "Specs", "item": "Choice Specs", "ability": "Infiltrator", "nature": "Timid", "teraType": "Ghost", "evs": {"spa": 252, "spe": 252, "hp": 4}, "moves": ["Shadow Ball", "Draco Meteor", "Fire Blast", "U-turn"]}
+      ]
+    },
+    "gholdengo": {
+      "sets": [
+        {"name": "Nasty Plot", "item": "Air Balloon", "ability": "Good as Gold", "nature": "Timid", "teraType": "Fighting", "evs": {"spa": 252, "spe": 252, "hp": 4}, "moves": ["Nasty Plot", "Make It Rain", "Shadow Ball", "Focus Blast"]},
+        {"name": "Specs", "item": "Choice Specs", "ability": "Good as Gold", "nature": "Timid", "teraType": "Steel", "evs": {"spa": 252, "spe": 252, "hp": 4}, "moves": ["Make It Rain", "Shadow Ball", "Trick", "Thunderbolt"]}
+      ]
+    },
+    "great-tusk": {
+      "sets": [
+        {"name": "Bulk Up", "item": "Leftovers", "ability": "Protosynthesis", "nature": "Jolly", "teraType": "Water", "evs": {"hp": 252, "spe": 252, "def": 4}, "moves": ["Bulk Up", "Headlong Rush", "Close Combat", "Ice Spinner"]},
+        {"name": "Hazard Lead", "item": "Heavy-Duty Boots", "ability": "Protosynthesis", "nature": "Jolly", "teraType": "Ghost", "evs": {"atk": 252, "spe": 252, "hp": 4}, "moves": ["Stealth Rock", "Rapid Spin", "Earthquake", "Knock Off"]}
+      ]
+    },
+    "kingambit": {
+      "sets": [
+        {"name": "Swords Dance", "item": "Leftovers", "ability": "Supreme Overlord", "nature": "Adamant", "teraType": "Flying", "evs": {"hp": 252, "atk": 252, "spd": 4}, "moves": ["Swords Dance", "Kowtow Cleave", "Iron Head", "Sucker Punch"]},
+        {"name": "Assault Vest", "item": "Assault Vest", "ability": "Supreme Overlord", "nature": "Adamant", "teraType": "Water", "evs": {"hp": 252, "atk": 252, "spd": 4}, "moves": ["Kowtow Cleave", "Iron Head", "Sucker Punch", "Low Kick"]}
+      ]
+    },
+    "iron-valiant": {
+      "sets": [
+        {"name": "Swords Dance", "item": "Booster Energy", "ability": "Quark Drive", "nature": "Jolly", "teraType": "Fairy", "evs": {"atk": 252, "spe": 252, "hp": 4}, "moves": ["Swords Dance", "Close Combat", "Spirit Break", "Knock Off"]},
+        {"name": "Special Attacker", "item": "Booster Energy", "ability": "Quark Drive", "nature": "Timid", "teraType": "Electric", "evs": {"spa": 252, "spe": 252, "hp": 4}, "moves": ["Moonblast", "Aura Sphere", "Thunderbolt", "Psyshock"]}
+      ]
+    },
+    "roaring-moon": {
+      "sets": [
+        {"name": "Dragon Dance", "item": "Booster Energy", "ability": "Protosynthesis", "nature": "Adamant", "teraType": "Flying", "evs": {"atk": 252, "spe": 252, "hp": 4}, "moves": ["Dragon Dance", "Acrobatics", "Crunch", "Earthquake"]},
+        {"name": "All-Out Attacker", "item": "Heavy-Duty Boots", "ability": "Protosynthesis", "nature": "Jolly", "teraType": "Steel", "evs": {"atk": 252, "spe": 252, "hp": 4}, "moves": ["Knock Off", "Acrobatics", "Earthquake", "U-turn"]}
+      ]
+    },
+    "clefable": {
+      "sets": [
+        {"name": "Calm Mind", "item": "Leftovers", "ability": "Magic Guard", "nature": "Bold", "teraType": "Water", "evs": {"hp": 252, "def": 252, "spa": 4}, "moves": ["Calm Mind", "Moonblast", "Soft-Boiled", "Stealth Rock"]},
+        {"name": "Unaware Wall", "item": "Leftovers", "ability": "Unaware", "nature": "Bold", "teraType": "Poison", "evs": {"hp": 252, "def": 252, "spd": 4}, "moves": ["Moonblast", "Soft-Boiled", "Thunder Wave", "Knock Off"]}
+      ]
+    },
+    "corviknight": {
+      "sets": [
+        {"name": "Defog", "item": "Rocky Helmet", "ability": "Pressure", "nature": "Impish", "teraType": "Water", "evs": {"hp": 252, "def": 252, "spd": 4}, "moves": ["Defog", "Roost", "U-turn", "Brave Bird"]},
+        {"name": "Bulk Up", "item": "Leftovers", "ability": "Pressure", "nature": "Careful", "teraType": "Electric", "evs": {"hp": 252, "spd": 252, "def": 4}, "moves": ["Bulk Up", "Brave Bird", "Roost", "Body Press"]}
+      ]
+    },
+    "landorus-therian": {
+      "sets": [
+        {"name": "Defensive", "item": "Leftovers", "ability": "Intimidate", "nature": "Impish", "evs": {"hp": 252, "def": 252, "spe": 4}, "moves": ["Stealth Rock", "Earthquake", "U-turn", "Stone Edge"]},
+        {"name": "Choice Scarf", "item": "Choice Scarf", "ability": "Intimidate", "nature": "Jolly", "evs": {"atk": 252, "spe": 252, "hp": 4}, "moves": ["Earthquake", "U-turn", "Stone Edge", "Knock Off"]}
+      ]
+    },
+    "skeledirge": {
+      "sets": [
+        {"name": "Unaware", "item": "Heavy-Duty Boots", "ability": "Unaware", "nature": "Bold", "teraType": "Fairy", "evs": {"hp": 252, "def": 252, "spd": 4}, "moves": ["Torch Song", "Shadow Ball", "Slack Off", "Will-O-Wisp"]},
+        {"name": "SubTorch", "item": "Leftovers", "ability": "Unaware", "nature": "Modest", "teraType": "Grass", "evs": {"hp": 252, "spa": 252, "def": 4}, "moves": ["Substitute", "Torch Song", "Hex", "Slack Off"]}
+      ]
+    },
+    "walking-wake": {
+      "sets": [
+        {"name": "Life Orb", "item": "Life Orb", "ability": "Protosynthesis", "nature": "Timid", "teraType": "Water", "evs": {"spa": 252, "spe": 252, "hp": 4}, "moves": ["Hydro Steam", "Draco Meteor", "Flamethrower", "Flip Turn"]},
+        {"name": "Choice Specs", "item": "Choice Specs", "ability": "Protosynthesis", "nature": "Timid", "teraType": "Dragon", "evs": {"spa": 252, "spe": 252, "hp": 4}, "moves": ["Hydro Steam", "Draco Meteor", "Dragon Pulse", "Flip Turn"]}
+      ]
+    }
+  },
+  "gen9vgc": {
+    "flutter-mane": {
+      "sets": [
+        {"name": "Standard", "item": "Choice Specs", "ability": "Protosynthesis", "nature": "Timid", "teraType": "Fairy", "evs": {"spa": 252, "spe": 252, "hp": 4}, "moves": ["Moonblast", "Shadow Ball", "Dazzling Gleam", "Icy Wind"]}
+      ]
+    },
+    "urshifu": {
+      "sets": [
+        {"name": "Single Strike", "item": "Focus Sash", "ability": "Unseen Fist", "nature": "Jolly", "teraType": "Dark", "evs": {"atk": 252, "spe": 252, "hp": 4}, "moves": ["Wicked Blow", "Close Combat", "Sucker Punch", "Protect"]},
+        {"name": "Rapid Strike", "item": "Mystic Water", "ability": "Unseen Fist", "nature": "Jolly", "teraType": "Water", "evs": {"atk": 252, "spe": 252, "hp": 4}, "moves": ["Surging Strikes", "Close Combat", "Aqua Jet", "Protect"]}
+      ]
+    },
+    "amoonguss": {
+      "sets": [
+        {"name": "Redirection Support", "item": "Rocky Helmet", "ability": "Regenerator", "nature": "Relaxed", "teraType": "Water", "ivs": {"spe": 0}, "evs": {"hp": 252, "def": 252, "spd": 4}, "moves": ["Spore", "Rage Powder", "Pollen Puff", "Protect"]}
+      ]
+    },
+    "rillaboom": {
+      "sets": [
+        {"name": "Assault Vest", "item": "Assault Vest", "ability": "Grassy Surge", "nature": "Adamant", "teraType": "Fire", "evs": {"hp": 252, "atk": 252, "spd": 4}, "moves": ["Grassy Glide", "Wood Hammer", "Fake Out", "U-turn"]}
+      ]
+    },
+    "incineroar": {
+      "sets": [
+        {"name": "Pivot", "item": "Safety Goggles", "ability": "Intimidate", "nature": "Careful", "teraType": "Ghost", "evs": {"hp": 252, "spd": 252, "atk": 4}, "moves": ["Flare Blitz", "Parting Shot", "Fake Out", "Knock Off"]}
+      ]
+    }
+  },
+  "totalSets": 50,
+  "lastUpdated": "2024-11-29"
+}

@@ -1,0 +1,28 @@
+{
+  "name": "pkhex-webtools",
+  "version": "1.0.0",
+  "description": "Web-based Pokemon utilities and tools for PKHeX ALL-IN-ONE",
+  "main": "api/pokemonAPI.js",
+  "scripts": {
+    "start": "node api/pokemonAPI.js",
+    "dev": "node api/pokemonAPI.js"
+  },
+  "keywords": [
+    "pokemon",
+    "pkhex",
+    "damage-calculator",
+    "breeding",
+    "team-builder",
+    "showdown"
+  ],
+  "author": "PKM-Universe",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PKM-Universe/PKHeX-ALL-IN-ONE"
+  }
+}
