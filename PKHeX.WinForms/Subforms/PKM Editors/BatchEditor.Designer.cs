@@ -37,6 +37,9 @@ namespace PKHeX.WinForms
             B_Go = new System.Windows.Forms.Button();
             PB_Show = new System.Windows.Forms.ProgressBar();
             B_Add = new System.Windows.Forms.Button();
+            B_Presets = new System.Windows.Forms.Button();
+            Menu_Presets = new System.Windows.Forms.ContextMenuStrip();
+            B_Clear = new System.Windows.Forms.Button();
             b = new System.ComponentModel.BackgroundWorker();
             FLP_RB.SuspendLayout();
             SuspendLayout();
@@ -138,9 +141,9 @@ namespace PKHeX.WinForms
             PB_Show.Name = "PB_Show";
             PB_Show.Size = new System.Drawing.Size(382, 24);
             PB_Show.TabIndex = 7;
-            // 
+            //
             // B_Add
-            // 
+            //
             B_Add.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
             B_Add.Location = new System.Drawing.Point(406, 42);
             B_Add.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -150,9 +153,38 @@ namespace PKHeX.WinForms
             B_Add.Text = "Add";
             B_Add.UseVisualStyleBackColor = true;
             B_Add.Click += B_Add_Click;
-            // 
+            //
+            // B_Presets
+            //
+            B_Presets.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            B_Presets.Location = new System.Drawing.Point(406, 73);
+            B_Presets.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            B_Presets.Name = "B_Presets";
+            B_Presets.Size = new System.Drawing.Size(66, 28);
+            B_Presets.TabIndex = 8;
+            B_Presets.Text = "Presets";
+            B_Presets.UseVisualStyleBackColor = true;
+            B_Presets.Click += B_Presets_Click;
+            //
+            // B_Clear
+            //
+            B_Clear.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
+            B_Clear.Location = new System.Drawing.Point(333, 282);
+            B_Clear.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            B_Clear.Name = "B_Clear";
+            B_Clear.Size = new System.Drawing.Size(66, 28);
+            B_Clear.TabIndex = 9;
+            B_Clear.Text = "Clear";
+            B_Clear.UseVisualStyleBackColor = true;
+            B_Clear.Click += B_Clear_Click;
+            //
+            // Menu_Presets
+            //
+            Menu_Presets.Name = "Menu_Presets";
+            Menu_Presets.Size = new System.Drawing.Size(150, 26);
+            //
             // b
-            // 
+            //
             b.WorkerReportsProgress = true;
             // 
             // BatchEditor
@@ -160,6 +192,8 @@ namespace PKHeX.WinForms
             AllowDrop = true;
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             ClientSize = new System.Drawing.Size(484, 321);
+            Controls.Add(B_Clear);
+            Controls.Add(B_Presets);
             Controls.Add(B_Add);
             Controls.Add(PB_Show);
             Controls.Add(B_Go);
@@ -188,6 +222,9 @@ namespace PKHeX.WinForms
         private System.Windows.Forms.Button B_Go;
         private System.Windows.Forms.ProgressBar PB_Show;
         private System.Windows.Forms.Button B_Add;
+        private System.Windows.Forms.Button B_Presets;
+        private System.Windows.Forms.Button B_Clear;
+        private System.Windows.Forms.ContextMenuStrip Menu_Presets;
         private System.Windows.Forms.RadioButton RB_Party;
         private System.ComponentModel.BackgroundWorker b;
     }
