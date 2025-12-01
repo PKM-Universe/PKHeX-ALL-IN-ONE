@@ -113,6 +113,7 @@ namespace PKHeX.WinForms
             Menu_PKM_WonderCards = new System.Windows.Forms.ToolStripMenuItem();
             Menu_PKM_EventChecker = new System.Windows.Forms.ToolStripMenuItem();
             Menu_PKM_MissingEvents = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_SeedFinder = new System.Windows.Forms.ToolStripMenuItem();
             L_PortableMode = new System.Windows.Forms.ToolStripLabel();
             L_UpdateAvailable = new System.Windows.Forms.LinkLabel();
             toolTip = new System.Windows.Forms.ToolTip(components);
@@ -523,7 +524,7 @@ namespace PKHeX.WinForms
             //
             // Menu_PKMUniverse
             //
-            Menu_PKMUniverse.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_Tools, Menu_PKM_Search, Menu_PKM_Coverage, Menu_PKM_DamageCalc, Menu_PKM_ShowdownForm, Menu_PKM_SmogonImport, Menu_PKM_TournamentTeams, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_QRCode, Menu_PKM_Compare, Menu_PKM_TradeHistory, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_LivingDex, Menu_PKM_PokedexCompletion, Menu_PKM_FormCollector, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_MysteryGiftDB, Menu_PKM_WonderCards, Menu_PKM_EventChecker, Menu_PKM_MissingEvents, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_Wallpapers, Menu_PKM_CompBuilder, Menu_PKM_RaidManager, Menu_PKM_HomeTracker, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_RecentFiles, Menu_PKM_BackupManager, Menu_PKM_BatchPresets, Menu_PKM_ShinyLivingDex, Menu_PKM_Templates, Menu_PKM_RandomTeam, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_Tutorial, Menu_PKM_AboutDialog, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_DiscordRPC, Menu_PKM_Discord, Menu_PKM_Kofi, Menu_PKM_Website, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_CheckUpdate, L_PortableMode });
+            Menu_PKMUniverse.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_Tools, Menu_PKM_Search, Menu_PKM_Coverage, Menu_PKM_DamageCalc, Menu_PKM_ShowdownForm, Menu_PKM_SmogonImport, Menu_PKM_TournamentTeams, Menu_PKM_SeedFinder, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_QRCode, Menu_PKM_Compare, Menu_PKM_TradeHistory, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_LivingDex, Menu_PKM_PokedexCompletion, Menu_PKM_FormCollector, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_MysteryGiftDB, Menu_PKM_WonderCards, Menu_PKM_EventChecker, Menu_PKM_MissingEvents, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_Wallpapers, Menu_PKM_CompBuilder, Menu_PKM_RaidManager, Menu_PKM_HomeTracker, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_RecentFiles, Menu_PKM_BackupManager, Menu_PKM_BatchPresets, Menu_PKM_ShinyLivingDex, Menu_PKM_Templates, Menu_PKM_RandomTeam, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_Tutorial, Menu_PKM_AboutDialog, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_DiscordRPC, Menu_PKM_Discord, Menu_PKM_Kofi, Menu_PKM_Website, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_CheckUpdate, L_PortableMode });
             Menu_PKMUniverse.Name = "Menu_PKMUniverse";
             Menu_PKMUniverse.Size = new System.Drawing.Size(95, 20);
             Menu_PKMUniverse.Text = "PKM-Universe";
@@ -826,6 +827,13 @@ namespace PKHeX.WinForms
             Menu_PKM_MissingEvents.Text = "Missing Events Finder";
             Menu_PKM_MissingEvents.Click += Menu_PKM_MissingEvents_Click;
             //
+            // Menu_PKM_SeedFinder
+            //
+            Menu_PKM_SeedFinder.Name = "Menu_PKM_SeedFinder";
+            Menu_PKM_SeedFinder.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_SeedFinder.Text = "Seed Finder";
+            Menu_PKM_SeedFinder.Click += Menu_PKM_SeedFinder_Click;
+            //
             // L_PortableMode
             //
             L_PortableMode.Name = "L_PortableMode";
@@ -1091,6 +1099,7 @@ namespace PKHeX.WinForms
         private System.Windows.Forms.ToolStripMenuItem Menu_PKM_WonderCards;
         private System.Windows.Forms.ToolStripMenuItem Menu_PKM_EventChecker;
         private System.Windows.Forms.ToolStripMenuItem Menu_PKM_MissingEvents;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SeedFinder;
     }
 }
 

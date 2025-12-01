@@ -2062,6 +2062,17 @@ public partial class Main : Form
         form.ShowDialog();
     }
 
+    private void Menu_PKM_SeedFinder_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new PKMUniverseSeedFinder(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
     #endregion
 
     public void WarnBehavior()
