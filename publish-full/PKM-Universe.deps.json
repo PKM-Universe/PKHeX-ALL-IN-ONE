@@ -1,0 +1,107 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0/win-x64",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {},
+    ".NETCoreApp,Version=v10.0/win-x64": {
+      "PKM-Universe/25.11.16": {
+        "dependencies": {
+          "PKHeX.Core": "25.11.16",
+          "PKHeX.Drawing": "25.11.16",
+          "PKHeX.Drawing.Misc": "25.11.16",
+          "PKHeX.Drawing.PokeSprite": "25.11.16"
+        },
+        "runtime": {
+          "PKM-Universe.dll": {}
+        }
+      },
+      "QRCoder/1.6.0": {
+        "runtime": {
+          "lib/net6.0-windows7.0/QRCoder.dll": {
+            "assemblyVersion": "1.6.0.0",
+            "fileVersion": "1.6.0.0"
+          }
+        }
+      },
+      "PKHeX.Core/25.11.16": {
+        "runtime": {
+          "PKHeX.Core.dll": {
+            "assemblyVersion": "25.11.16.0",
+            "fileVersion": "25.11.16.0"
+          }
+        }
+      },
+      "PKHeX.Drawing/25.11.16": {
+        "runtime": {
+          "PKHeX.Drawing.dll": {
+            "assemblyVersion": "25.11.16.0",
+            "fileVersion": "25.11.16.0"
+          }
+        }
+      },
+      "PKHeX.Drawing.Misc/25.11.16": {
+        "dependencies": {
+          "PKHeX.Core": "25.11.16",
+          "PKHeX.Drawing": "25.11.16",
+          "PKHeX.Drawing.PokeSprite": "25.11.16",
+          "QRCoder": "1.6.0"
+        },
+        "runtime": {
+          "PKHeX.Drawing.Misc.dll": {
+            "assemblyVersion": "25.11.16.0",
+            "fileVersion": "25.11.16.0"
+          }
+        }
+      },
+      "PKHeX.Drawing.PokeSprite/25.11.16": {
+        "dependencies": {
+          "PKHeX.Core": "25.11.16",
+          "PKHeX.Drawing": "25.11.16"
+        },
+        "runtime": {
+          "PKHeX.Drawing.PokeSprite.dll": {
+            "assemblyVersion": "25.11.16.0",
+            "fileVersion": "25.11.16.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "PKM-Universe/25.11.16": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "QRCoder/1.6.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-XmPA81eo+oRxBuyVdswsSkTGTE1d3thfF11Z1PdD7oB56A6HU4G4AAOdySmGRMb/cljwlFTMWUtosGEnwpS6GA==",
+      "path": "qrcoder/1.6.0",
+      "hashPath": "qrcoder.1.6.0.nupkg.sha512"
+    },
+    "PKHeX.Core/25.11.16": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "PKHeX.Drawing/25.11.16": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "PKHeX.Drawing.Misc/25.11.16": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "PKHeX.Drawing.PokeSprite/25.11.16": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

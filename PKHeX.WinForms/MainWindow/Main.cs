@@ -16,6 +16,7 @@ using PKHeX.Drawing;
 using PKHeX.Drawing.Misc;
 using PKHeX.Drawing.PokeSprite;
 using PKHeX.WinForms.Controls;
+using PKHeX.WinForms.Plugins;
 using static PKHeX.Core.MessageStrings;
 
 namespace PKHeX.WinForms;
@@ -479,6 +480,85 @@ public partial class Main : Form
 
     private void ClickShowdownExportParty(object sender, EventArgs e) => C_SAV.ClickShowdownExportParty(sender, e);
     private void ClickShowdownExportCurrentBox(object sender, EventArgs e) => C_SAV.ClickShowdownExportCurrentBox(sender, e);
+
+    private void ClickShowdownImportALM(object? sender, EventArgs e)
+    {
+        if (!Clipboard.ContainsText())
+        { WinFormsUtil.Alert(MsgClipboardFailRead); return; }
+
+        var text = Clipboard.GetText();
+        var pk = ALMShowdownPlugin.ImportShowdownSetWithLegality(text, C_SAV.SAV);
+
+        if (pk == null || pk.Species == 0)
+        {
+            WinFormsUtil.Alert("Failed to import and legalize the Showdown set.", "Check the set format and try again.");
+            return;
+        }
+
+        var la = new LegalityAnalysis(pk);
+        var status = la.Valid ? "Legal" : "Not fully legal - manual adjustments may be needed";
+
+        var programLanguage = Language.GetLanguageValue(Settings.Startup.Language);
+        var settings = Settings.BattleTemplate.Export.GetSettings(programLanguage, pk.Context);
+        var showdownText = ShowdownParsing.GetShowdownText(pk, settings);
+
+        if (DialogResult.Yes == WinFormsUtil.Prompt(MessageBoxButtons.YesNo, $"Import this Pokemon? ({status})", showdownText))
+        {
+            PKME_Tabs.PopulateFields(pk);
+            WinFormsUtil.Alert("Pokemon imported with Auto-Legality!", la.Valid ? "The Pokemon is legal." : "Some legality issues remain - please review.");
+        }
+    }
+
+    private void ClickShowdownSmogon(object? sender, EventArgs e)
+    {
+        using var dialog = new SmogonSetDialog(C_SAV.SAV);
+        if (dialog.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(dialog.SelectedSet))
+        {
+            var pk = ALMShowdownPlugin.ImportShowdownSetWithLegality(dialog.SelectedSet, C_SAV.SAV);
+            if (pk != null && pk.Species != 0)
+            {
+                PKME_Tabs.PopulateFields(pk);
+                WinFormsUtil.Alert("Smogon set imported successfully!");
+            }
+        }
+    }
+
+    private void ClickLegalizeCurrent(object? sender, EventArgs e)
+    {
+        if (!PKME_Tabs.EditsComplete)
+        {
+            WinFormsUtil.Alert("Please complete all edits before legalizing.");
+            return;
+        }
+
+        var pk = PreparePKM();
+        if (pk.Species == 0)
+        {
+            WinFormsUtil.Alert("No Pokemon to legalize.");
+            return;
+        }
+
+        var la = new LegalityAnalysis(pk);
+        if (la.Valid)
+        {
+            WinFormsUtil.Alert("This Pokemon is already legal!", "No changes needed.");
+            return;
+        }
+
+        // Try to legalize using AutoLegalityPlugin
+        var legalizer = new AutoLegalityPlugin(C_SAV.SAV);
+        var result = legalizer.FixLegality(pk);
+
+        if (result.IsNowLegal || result.WasAlreadyLegal)
+        {
+            PKME_Tabs.PopulateFields(pk);
+            WinFormsUtil.Alert("Pokemon legalized successfully!", "The Pokemon is now legal.");
+        }
+        else
+        {
+            WinFormsUtil.Alert("Could not fully legalize this Pokemon.", "Some issues could not be resolved automatically.");
+        }
+    }
 
     // Main Menu Subfunctions
     private void OpenQuick(string path)
@@ -1432,27 +1512,47 @@ public partial class Main : Form
 
     private void Menu_PKM_SLD_GenerateFull_Click(object sender, EventArgs e)
     {
+        // If no save loaded, prompt to create one
         if (!C_SAV.SAV.State.Exportable)
         {
-            WinFormsUtil.Alert("Please load a save file first!");
-            return;
+            var sav = PromptCreateBlankSave("Generate Full Living Dex");
+            if (sav == null) return;
+            OpenSAV(sav, string.Empty);
         }
 
-        var result = WinFormsUtil.Prompt(MessageBoxButtons.YesNo,
-            "Generate Full Shiny Living Dex?",
-            "This will generate shiny versions of all Pokemon available in your game.\n" +
-            "Pokemon will be placed starting from Box 1.\n\n" +
-            "WARNING: This will overwrite existing Pokemon in those boxes!");
+        // Show options dialog
+        using var dialog = new Form
+        {
+            Text = "Generate Living Dex",
+            Size = new Size(320, 200),
+            StartPosition = FormStartPosition.CenterParent,
+            FormBorderStyle = FormBorderStyle.FixedDialog,
+            MaximizeBox = false,
+            MinimizeBox = false
+        };
 
-        if (result != DialogResult.Yes) return;
+        var chkShiny = new CheckBox { Text = "Shiny Pokemon", Location = new Point(20, 20), Checked = true, AutoSize = true };
+        var chkLevel100 = new CheckBox { Text = "Level 100", Location = new Point(20, 45), Checked = true, AutoSize = true };
+        var chkMaxIVs = new CheckBox { Text = "Max IVs (6IV)", Location = new Point(20, 70), Checked = true, AutoSize = true };
+        var chkForms = new CheckBox { Text = "Include Alternate Forms", Location = new Point(20, 95), Checked = false, AutoSize = true };
+
+        var btnOk = new Button { Text = "Generate", Location = new Point(80, 125), DialogResult = DialogResult.OK };
+        var btnCancel = new Button { Text = "Cancel", Location = new Point(170, 125), DialogResult = DialogResult.Cancel };
+
+        dialog.Controls.AddRange(new Control[] { chkShiny, chkLevel100, chkMaxIVs, chkForms, btnOk, btnCancel });
+        dialog.AcceptButton = btnOk;
+        dialog.CancelButton = btnCancel;
+
+        if (dialog.ShowDialog() != DialogResult.OK) return;
 
         var generator = new Plugins.ShinyLivingDexGenerator(C_SAV.SAV);
         var options = new Plugins.ShinyLivingDexGenerator.GeneratorOptions
         {
-            ShinyOnly = true,
-            SetLevel100 = true,
-            MaxIVs = true,
-            LegalOnly = true
+            ShinyOnly = chkShiny.Checked,
+            SetLevel100 = chkLevel100.Checked,
+            MaxIVs = chkMaxIVs.Checked,
+            LegalOnly = true,
+            IncludeForms = chkForms.Checked
         };
 
         var genResult = generator.GenerateShinyLivingDex(options);
@@ -1460,12 +1560,63 @@ public partial class Main : Form
         WinFormsUtil.Alert(genResult.GetSummary());
     }
 
+    private SaveFile? PromptCreateBlankSave(string title)
+    {
+        var gameVersions = new (string Name, GameVersion Version)[]
+        {
+            ("Scarlet/Violet", GameVersion.SV),
+            ("Legends Z-A", GameVersion.ZA),
+            ("Legends Arceus", GameVersion.PLA),
+            ("Sword/Shield", GameVersion.SWSH),
+            ("Brilliant Diamond/Shining Pearl", GameVersion.BDSP),
+            ("Ultra Sun/Ultra Moon", GameVersion.USUM),
+            ("Sun/Moon", GameVersion.SM),
+            ("Omega Ruby/Alpha Sapphire", GameVersion.ORAS),
+            ("X/Y", GameVersion.XY),
+            ("Black 2/White 2", GameVersion.B2W2),
+            ("Black/White", GameVersion.BW),
+            ("HeartGold/SoulSilver", GameVersion.HGSS),
+            ("Platinum", GameVersion.Pt),
+            ("Diamond/Pearl", GameVersion.DP),
+        };
+
+        using var dialog = new Form
+        {
+            Text = title + " - Select Game",
+            Size = new Size(350, 150),
+            StartPosition = FormStartPosition.CenterParent,
+            FormBorderStyle = FormBorderStyle.FixedDialog,
+            MaximizeBox = false,
+            MinimizeBox = false
+        };
+
+        var lbl = new Label { Text = "Select game version:", Location = new Point(20, 20), AutoSize = true };
+        var combo = new ComboBox { Location = new Point(20, 45), Width = 290, DropDownStyle = ComboBoxStyle.DropDownList };
+        foreach (var gv in gameVersions)
+            combo.Items.Add(gv.Name);
+        combo.SelectedIndex = 0;
+
+        var btnOk = new Button { Text = "Create", Location = new Point(150, 80), DialogResult = DialogResult.OK };
+        var btnCancel = new Button { Text = "Cancel", Location = new Point(240, 80), DialogResult = DialogResult.Cancel };
+
+        dialog.Controls.AddRange(new Control[] { lbl, combo, btnOk, btnCancel });
+        dialog.AcceptButton = btnOk;
+        dialog.CancelButton = btnCancel;
+
+        if (dialog.ShowDialog() != DialogResult.OK) return null;
+
+        var selectedVersion = gameVersions[combo.SelectedIndex].Version;
+        return BlankSaveFile.Get(selectedVersion, null);
+    }
+
     private void Menu_PKM_SLD_GenerateGen_Click(object sender, EventArgs e)
     {
+        // If no save loaded, prompt to create one
         if (!C_SAV.SAV.State.Exportable)
         {
-            WinFormsUtil.Alert("Please load a save file first!");
-            return;
+            var sav = PromptCreateBlankSave("Generate Living Dex by Generation");
+            if (sav == null) return;
+            OpenSAV(sav, string.Empty);
         }
 
         // Show generation selection dialog
@@ -1474,8 +1625,8 @@ public partial class Main : Form
 
         using var dialog = new Form
         {
-            Text = "Select Generation",
-            Size = new Size(300, 180),
+            Text = "Generate Living Dex by Generation",
+            Size = new Size(300, 230),
             StartPosition = FormStartPosition.CenterParent,
             FormBorderStyle = FormBorderStyle.FixedDialog,
             MaximizeBox = false,
@@ -1489,10 +1640,14 @@ public partial class Main : Form
         var lblBox = new Label { Text = "Start Box:", Location = new Point(20, 55), AutoSize = true };
         var numBox = new NumericUpDown { Location = new Point(100, 53), Width = 60, Minimum = 1, Maximum = C_SAV.SAV.BoxCount, Value = 1 };
 
-        var btnOk = new Button { Text = "Generate", Location = new Point(80, 95), DialogResult = DialogResult.OK };
-        var btnCancel = new Button { Text = "Cancel", Location = new Point(170, 95), DialogResult = DialogResult.Cancel };
+        var chkShiny = new CheckBox { Text = "Shiny Pokemon", Location = new Point(20, 85), Checked = true, AutoSize = true };
+        var chkLevel100 = new CheckBox { Text = "Level 100", Location = new Point(150, 85), Checked = true, AutoSize = true };
+        var chkMaxIVs = new CheckBox { Text = "Max IVs (6IV)", Location = new Point(20, 110), Checked = true, AutoSize = true };
 
-        dialog.Controls.AddRange(new Control[] { combo, lblBox, numBox, btnOk, btnCancel });
+        var btnOk = new Button { Text = "Generate", Location = new Point(80, 145), DialogResult = DialogResult.OK };
+        var btnCancel = new Button { Text = "Cancel", Location = new Point(170, 145), DialogResult = DialogResult.Cancel };
+
+        dialog.Controls.AddRange(new Control[] { combo, lblBox, numBox, chkShiny, chkLevel100, chkMaxIVs, btnOk, btnCancel });
         dialog.AcceptButton = btnOk;
         dialog.CancelButton = btnCancel;
 
@@ -1504,9 +1659,9 @@ public partial class Main : Form
         var generator = new Plugins.ShinyLivingDexGenerator(C_SAV.SAV);
         var options = new Plugins.ShinyLivingDexGenerator.GeneratorOptions
         {
-            ShinyOnly = true,
-            SetLevel100 = true,
-            MaxIVs = true,
+            ShinyOnly = chkShiny.Checked,
+            SetLevel100 = chkLevel100.Checked,
+            MaxIVs = chkMaxIVs.Checked,
             LegalOnly = true,
             StartGeneration = gen,
             EndGeneration = gen,
@@ -1522,23 +1677,42 @@ public partial class Main : Form
     {
         if (!C_SAV.SAV.State.Exportable)
         {
-            WinFormsUtil.Alert("Please load a save file first!");
+            WinFormsUtil.Alert("Please load a save file first to fill missing Pokemon!");
             return;
         }
 
-        var result = WinFormsUtil.Prompt(MessageBoxButtons.YesNo,
-            "Fill Missing Shinies?",
-            "This will scan your boxes for existing shiny Pokemon and generate any missing ones.\n" +
-            "New Pokemon will be placed in empty slots.");
+        // Show options dialog
+        using var dialog = new Form
+        {
+            Text = "Fill Missing Pokemon",
+            Size = new Size(300, 180),
+            StartPosition = FormStartPosition.CenterParent,
+            FormBorderStyle = FormBorderStyle.FixedDialog,
+            MaximizeBox = false,
+            MinimizeBox = false
+        };
 
-        if (result != DialogResult.Yes) return;
+        var chkShiny = new CheckBox { Text = "Shiny Pokemon", Location = new Point(20, 20), Checked = true, AutoSize = true };
+        var chkLevel100 = new CheckBox { Text = "Level 100", Location = new Point(150, 20), Checked = true, AutoSize = true };
+        var chkMaxIVs = new CheckBox { Text = "Max IVs (6IV)", Location = new Point(20, 45), Checked = true, AutoSize = true };
+
+        var lbl = new Label { Text = "This scans your boxes and generates missing Pokemon.", Location = new Point(20, 75), AutoSize = true };
+
+        var btnOk = new Button { Text = "Fill Missing", Location = new Point(70, 105), DialogResult = DialogResult.OK };
+        var btnCancel = new Button { Text = "Cancel", Location = new Point(170, 105), DialogResult = DialogResult.Cancel };
+
+        dialog.Controls.AddRange(new Control[] { chkShiny, chkLevel100, chkMaxIVs, lbl, btnOk, btnCancel });
+        dialog.AcceptButton = btnOk;
+        dialog.CancelButton = btnCancel;
+
+        if (dialog.ShowDialog() != DialogResult.OK) return;
 
         var generator = new Plugins.ShinyLivingDexGenerator(C_SAV.SAV);
         var options = new Plugins.ShinyLivingDexGenerator.GeneratorOptions
         {
-            ShinyOnly = true,
-            SetLevel100 = true,
-            MaxIVs = true,
+            ShinyOnly = chkShiny.Checked,
+            SetLevel100 = chkLevel100.Checked,
+            MaxIVs = chkMaxIVs.Checked,
             LegalOnly = true
         };
 
@@ -1549,10 +1723,12 @@ public partial class Main : Form
 
     private void Menu_PKM_SLD_CalcBoxes_Click(object sender, EventArgs e)
     {
+        // If no save loaded, prompt to create one
         if (!C_SAV.SAV.State.Exportable)
         {
-            WinFormsUtil.Alert("Please load a save file first!");
-            return;
+            var sav = PromptCreateBlankSave("Calculate Boxes Needed");
+            if (sav == null) return;
+            OpenSAV(sav, string.Empty);
         }
 
         var generator = new Plugins.ShinyLivingDexGenerator(C_SAV.SAV);
@@ -1562,7 +1738,7 @@ public partial class Main : Form
         var boxesBase = generator.CalculateBoxesNeeded(optionsBase);
         var boxesForms = generator.CalculateBoxesNeeded(optionsForms);
 
-        WinFormsUtil.Alert("Boxes Needed for Shiny Living Dex",
+        WinFormsUtil.Alert("Boxes Needed for Living Dex",
             $"Base forms only: {boxesBase} boxes",
             $"Including all forms: {boxesForms} boxes",
             $"\nYour save has {C_SAV.SAV.BoxCount} boxes ({C_SAV.SAV.BoxCount * C_SAV.SAV.BoxSlotCount} slots)");

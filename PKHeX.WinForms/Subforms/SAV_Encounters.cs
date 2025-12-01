@@ -220,6 +220,23 @@ public partial class SAV_Encounters : Form
         var criteria = GetCriteria(enc, Main.Settings.EncounterDb);
         var trainer = Trainers.GetTrainer(enc.Version, enc.Generation <= 2 ? (LanguageID)SAV.Language : null) ?? SAV;
         var temp = enc.ConvertToPKM(trainer, criteria);
+
+        // Force shiny for BDSP roaming Pokemon if user wants shiny
+        bool wantShiny = CHK_Shiny.CheckState == CheckState.Checked;
+        if (wantShiny && temp is PB8 pb8 && enc is EncounterStatic8b { IsRoaming: true })
+        {
+            // Use Roaming8bRNG to generate a shiny version
+            var shinyCriteria = new EncounterCriteria { Shiny = Shiny.Always };
+            Roaming8bRNG.ApplyDetails(pb8, shinyCriteria, Shiny.Always, 3);
+            pb8.RefreshChecksum();
+        }
+        else if (wantShiny && !temp.IsShiny)
+        {
+            // For other Pokemon, use SetShiny
+            temp.SetShiny();
+            temp.RefreshChecksum();
+        }
+
         var pk = EntityConverter.ConvertToType(temp, SAV.PKMType, out var c);
         if (pk is null)
         {
@@ -237,22 +254,37 @@ public partial class SAV_Encounters : Form
 
     private EncounterCriteria GetCriteria(IEncounterTemplate enc, EncounterDatabaseSettings settings)
     {
+        EncounterCriteria criteria;
+
         if (!settings.UseTabsAsCriteria)
-            return EncounterCriteria.Unrestricted;
-
-        var editor = PKME_Tabs.Data;
-        var tree = EvolutionTree.GetEvolutionTree(editor.Context);
-        bool isInChain = tree.IsSpeciesDerivedFrom(editor.Species, editor.Form, enc.Species, enc.Form);
-
-        if (!settings.UseTabsAsCriteriaAnySpecies)
         {
-            if (!isInChain)
-                return EncounterCriteria.Unrestricted;
+            criteria = EncounterCriteria.Unrestricted;
+        }
+        else
+        {
+            var editor = PKME_Tabs.Data;
+            var tree = EvolutionTree.GetEvolutionTree(editor.Context);
+            bool isInChain = tree.IsSpeciesDerivedFrom(editor.Species, editor.Form, enc.Species, enc.Form);
+
+            if (!settings.UseTabsAsCriteriaAnySpecies && !isInChain)
+            {
+                criteria = EncounterCriteria.Unrestricted;
+            }
+            else
+            {
+                criteria = _criteriaValue;
+                if (!isInChain)
+                    criteria = criteria with { Gender = Gender.Random }; // Genderless tabs and a gendered enc -> let's play safe.
+            }
         }
 
-        var criteria = _criteriaValue;
-        if (!isInChain)
-            criteria = criteria with { Gender = Gender.Random }; // Genderless tabs and a gendered enc -> let's play safe.
+        // Apply shiny from checkbox - if checked, make the generated Pokemon shiny
+        // Use Shiny.Always to accept any shiny type (star or square)
+        if (CHK_Shiny.CheckState == CheckState.Checked)
+        {
+            criteria = criteria with { Shiny = Shiny.Always };
+        }
+
         return criteria;
     }
 
@@ -441,8 +473,8 @@ public partial class SAV_Encounters : Form
         if (CHK_IsEgg.CheckState != CheckState.Indeterminate)
             settings.SearchEgg = CHK_IsEgg.CheckState == CheckState.Checked;
 
-        if (CHK_Shiny.CheckState != CheckState.Indeterminate)
-            settings.SearchShiny = CHK_Shiny.CheckState == CheckState.Checked;
+        // Don't filter by shiny - let user find any encounter, then generate as shiny if checkbox is checked
+        // The shiny checkbox now controls generation, not filtering
 
         return settings;
     }

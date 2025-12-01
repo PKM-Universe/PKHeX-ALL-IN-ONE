@@ -146,68 +146,19 @@ public class ShinyLivingDexGenerator
     }
 
     /// <summary>
-    /// Generate a single shiny Pokemon
+    /// Generate a single Pokemon for the living dex
     /// </summary>
     public PKM? GenerateShinyPokemon(ushort species, byte form, GeneratorOptions options)
     {
         try
         {
-            var pk = SAV.BlankPKM;
-            pk.Species = species;
-            pk.Form = form;
-            pk.Gender = pk.GetSaneGender();
-
-            // Try to generate legally first
-            if (options.LegalOnly)
-            {
-                var legal = TryGenerateLegal(species, form, options);
-                if (legal != null)
-                    return legal;
-            }
+            // Try encounter-based generation first
+            var pk = TryGenerateFromEncounter(species, form, options);
+            if (pk != null)
+                return pk;
 
             // Fallback to basic generation
-            pk.CurrentLevel = options.SetLevel100 ? (byte)100 : (byte)50;
-
-            // Set shiny
-            if (options.ShinyOnly)
-            {
-                pk.SetShiny();
-            }
-
-            // Set IVs
-            if (options.MaxIVs)
-            {
-                pk.IV_HP = 31;
-                pk.IV_ATK = 31;
-                pk.IV_DEF = 31;
-                pk.IV_SPA = 31;
-                pk.IV_SPD = 31;
-                pk.IV_SPE = 31;
-            }
-
-            // Set OT
-            if (options.SetOT)
-            {
-                pk.OriginalTrainerName = string.IsNullOrEmpty(options.CustomOT) ? SAV.OT : options.CustomOT;
-                pk.TID16 = options.CustomTID >= 0 ? (ushort)options.CustomTID : SAV.TID16;
-                pk.SID16 = options.CustomSID >= 0 ? (ushort)options.CustomSID : SAV.SID16;
-                pk.OriginalTrainerGender = SAV.Gender;
-                pk.Language = SAV.Language;
-            }
-
-            // Set basic data
-            pk.Ball = (byte)Ball.Poke;
-            pk.MetDate = DateOnly.FromDateTime(DateTime.Now);
-            pk.MetLevel = (byte)Math.Min((int)pk.CurrentLevel, 100);
-            pk.MetLocation = GetDefaultMetLocation(pk);
-
-            // Set a valid move
-            pk.Move1 = 33; // Tackle
-            pk.HealPP();
-
-            pk.RefreshChecksum();
-
-            return EntityConverter.ConvertToType(pk, SAV.PKMType, out _);
+            return GenerateBasicPokemon(species, form, options);
         }
         catch
         {
@@ -215,7 +166,7 @@ public class ShinyLivingDexGenerator
         }
     }
 
-    private PKM? TryGenerateLegal(ushort species, byte form, GeneratorOptions options)
+    private PKM? TryGenerateFromEncounter(ushort species, byte form, GeneratorOptions options)
     {
         try
         {
@@ -230,56 +181,153 @@ public class ShinyLivingDexGenerator
             template.GetMoves(span);
 
             var encounters = EncounterMovesetGenerator.GenerateEncounters(template, SAV, memory);
-            var first = encounters.FirstOrDefault();
+            IEncounterable? selectedEncounter = null;
+
+            // Try to find an encounter - prefer ones that can be shiny if shiny is requested
+            foreach (var enc in encounters)
+            {
+                // Skip shiny-locked encounters if we want shiny
+                if (options.ShinyOnly && enc is IShinyPotential sp && sp.Shiny == Shiny.Never)
+                    continue;
+                selectedEncounter = enc;
+                break;
+            }
 
             span.Clear();
             ArrayPool<ushort>.Shared.Return(moves);
 
-            if (first == null)
+            if (selectedEncounter == null)
                 return null;
 
-            var pk = first.ConvertToPKM(SAV);
+            // Create criteria for the encounter generation
+            var criteria = new EncounterCriteria
+            {
+                Shiny = options.ShinyOnly ? Shiny.Always : Shiny.Never,
+                IV_HP = options.MaxIVs ? (sbyte)31 : (sbyte)-1,
+                IV_ATK = options.MaxIVs ? (sbyte)31 : (sbyte)-1,
+                IV_DEF = options.MaxIVs ? (sbyte)31 : (sbyte)-1,
+                IV_SPA = options.MaxIVs ? (sbyte)31 : (sbyte)-1,
+                IV_SPD = options.MaxIVs ? (sbyte)31 : (sbyte)-1,
+                IV_SPE = options.MaxIVs ? (sbyte)31 : (sbyte)-1,
+            };
+
+            // Generate with criteria if the encounter supports it
+            PKM pk;
+            if (selectedEncounter is IEncounterConvertible conv)
+            {
+                pk = conv.ConvertToPKM(SAV, criteria);
+            }
+            else
+            {
+                pk = selectedEncounter.ConvertToPKM(SAV);
+            }
+
             if (pk == null)
                 return null;
 
-            // Convert to save format
-            var result = EntityConverter.ConvertToType(pk, SAV.PKMType, out _);
-            if (result == null)
-                return null;
-
-            // Apply shiny
-            if (options.ShinyOnly)
+            // Set level if requested
+            if (options.SetLevel100)
             {
-                result.SetShiny();
+                pk.CurrentLevel = 100;
             }
 
+            // If shiny wasn't set by criteria (encounter may not support it), try to set it
+            if (options.ShinyOnly && !pk.IsShiny)
+            {
+                pk.SetShiny();
+            }
+
+            // If max IVs weren't set by criteria, set them manually
+            if (options.MaxIVs)
+            {
+                pk.IV_HP = 31;
+                pk.IV_ATK = 31;
+                pk.IV_DEF = 31;
+                pk.IV_SPA = 31;
+                pk.IV_SPD = 31;
+                pk.IV_SPE = 31;
+            }
+
+            // Set move flags (TM records, move mastery, etc.)
+            SetMoveFlags(pk);
+
+            pk.Heal();
+            pk.RefreshChecksum();
+
+            // Convert to save format
+            return EntityConverter.ConvertToType(pk, SAV.PKMType, out _);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private PKM? GenerateBasicPokemon(ushort species, byte form, GeneratorOptions options)
+    {
+        try
+        {
+            var pk = SAV.BlankPKM;
+            pk.Species = species;
+            pk.Form = form;
+            pk.Gender = pk.GetSaneGender();
+            pk.Nature = (Nature)Util.Rand.Next(25);
+            pk.Ability = pk.PersonalInfo.GetAbilityAtIndex(0);
+
+            // Set trainer info
+            pk.OriginalTrainerName = string.IsNullOrEmpty(options.CustomOT) ? SAV.OT : options.CustomOT;
+            pk.TID16 = options.CustomTID >= 0 ? (ushort)options.CustomTID : SAV.TID16;
+            pk.SID16 = options.CustomSID >= 0 ? (ushort)options.CustomSID : SAV.SID16;
+            pk.OriginalTrainerGender = SAV.Gender;
+            pk.Language = SAV.Language;
+
             // Set level
-            if (options.SetLevel100)
-                result.CurrentLevel = 100;
+            pk.CurrentLevel = options.SetLevel100 ? (byte)100 : (byte)50;
+            pk.MetLevel = 1;
+
+            // Set shiny using PKHeX's built-in method
+            if (options.ShinyOnly)
+            {
+                pk.SetShiny();
+            }
+            else
+            {
+                pk.PID = Util.Rand32();
+            }
 
             // Set IVs
             if (options.MaxIVs)
             {
-                result.IV_HP = 31;
-                result.IV_ATK = 31;
-                result.IV_DEF = 31;
-                result.IV_SPA = 31;
-                result.IV_SPD = 31;
-                result.IV_SPE = 31;
+                pk.IV_HP = 31;
+                pk.IV_ATK = 31;
+                pk.IV_DEF = 31;
+                pk.IV_SPA = 31;
+                pk.IV_SPD = 31;
+                pk.IV_SPE = 31;
             }
-
-            // Set OT if requested
-            if (options.SetOT)
+            else
             {
-                result.OriginalTrainerName = string.IsNullOrEmpty(options.CustomOT) ? SAV.OT : options.CustomOT;
-                if (options.CustomTID >= 0) result.TID16 = (ushort)options.CustomTID;
-                if (options.CustomSID >= 0) result.SID16 = (ushort)options.CustomSID;
+                pk.SetRandomIVs();
             }
 
-            result.Heal();
-            result.RefreshChecksum();
+            // Set met data
+            pk.Ball = (byte)Ball.Poke;
+            pk.MetDate = DateOnly.FromDateTime(DateTime.Now);
+            pk.MetLocation = GetDefaultMetLocation(pk);
 
-            return result;
+            // Set valid moves
+            pk.SetMoveset();
+            pk.HealPP();
+
+            // Set proper encryption constant
+            pk.EncryptionConstant = Util.Rand32();
+
+            // Set move flags (TM records, move mastery, etc.)
+            SetMoveFlags(pk);
+
+            pk.RefreshChecksum();
+
+            return EntityConverter.ConvertToType(pk, SAV.PKMType, out _);
         }
         catch
         {
@@ -301,6 +349,150 @@ public class ShinyLivingDexGenerator
             EntityContext.Gen4 => 6,    // Route 201
             EntityContext.Gen3 => 16,   // Route 101
             _ => 30001                  // Poke Transfer
+        };
+    }
+
+    /// <summary>
+    /// Sets required move flags for legality (TM records, move mastery, etc.)
+    /// </summary>
+    private void SetMoveFlags(PKM pk)
+    {
+        // Run legality analysis first to get proper context
+        var la = new LegalityAnalysis(pk);
+
+        // Handle TM/TR records for Gen 8+ (SWSH, BDSP, SV)
+        // Uses extension methods from TechnicalRecordApplicator with LegalityAnalysis
+        if (pk is ITechRecord tr)
+        {
+            // Set record flags using legality-aware method (sets flags based on current moves legally)
+            tr.SetRecordFlags(pk, TechnicalRecordApplicatorOption.LegalCurrent, la);
+        }
+
+        // Handle Plus Records for Legends Z-A (PA9)
+        // Uses extension methods from PlusRecordApplicator
+        if (pk is IPlusRecord plus && pk is PA9 pa9)
+        {
+            // Get the permit from the personal info (PersonalInfo9ZA implements IPermitPlus)
+            var permit = (IPermitPlus)pa9.PersonalInfo;
+            // Set plus flags using legality-aware method with TM support
+            plus.SetPlusFlags(permit, PlusRecordApplicatorOption.LegalCurrentTM, la);
+        }
+
+        // Handle move mastery for Legends Arceus
+        // Uses extension methods from MoveShopRecordApplicator
+        if (pk is IMoveShop8Mastery mastery)
+        {
+            // Set move shop flags for current moves
+            mastery.SetMoveShopFlags(pk);
+        }
+
+        // Handle memory/affection for Gen 6/7 Pokemon
+        if (pk is IAffection aff)
+        {
+            aff.OriginalTrainerAffection = 0;
+        }
+
+        // Handle dynamax level for Gen 8 (SWSH)
+        if (pk is IDynamaxLevel dmax)
+        {
+            dmax.DynamaxLevel = 10;
+        }
+
+        // Handle Tera Type for Gen 9 (SV)
+        if (pk is ITeraType tera)
+        {
+            // Set tera type to match first type
+            tera.TeraTypeOriginal = (MoveType)pk.PersonalInfo.Type1;
+        }
+
+        // Handle Gigantamax factor (SWSH)
+        if (pk is IGigantamax gmaxW)
+        {
+            // Only set if species can Gigantamax
+            gmaxW.CanGigantamax = CanHaveGigantamax(pk.Species, pk.Form);
+        }
+
+        // Set contest stats for older gens
+        if (pk is IContestStats cs)
+        {
+            cs.ContestCool = 0;
+            cs.ContestBeauty = 0;
+            cs.ContestCute = 0;
+            cs.ContestSmart = 0;
+            cs.ContestTough = 0;
+            cs.ContestSheen = 0;
+        }
+
+        // Set height/weight scale for Gen 8+
+        if (pk is IScaledSize3 size3)
+        {
+            size3.Scale = 128; // Default/average scale
+        }
+        else if (pk is IScaledSize size)
+        {
+            size.HeightScalar = 128;
+            size.WeightScalar = 128;
+        }
+
+        // Handle mark for Gen 8+ (wild marks)
+        if (pk is IRibbonSetMark8 mark8)
+        {
+            // Clear any marks that might cause issues
+            mark8.RibbonMarkLunchtime = false;
+            mark8.RibbonMarkSleepyTime = false;
+            mark8.RibbonMarkDusk = false;
+            mark8.RibbonMarkDawn = false;
+            mark8.RibbonMarkCloudy = false;
+            mark8.RibbonMarkRainy = false;
+            mark8.RibbonMarkStormy = false;
+            mark8.RibbonMarkSnowy = false;
+            mark8.RibbonMarkBlizzard = false;
+            mark8.RibbonMarkDry = false;
+            mark8.RibbonMarkSandstorm = false;
+        }
+    }
+
+    /// <summary>
+    /// Check if species can have Gigantamax form
+    /// </summary>
+    private static bool CanHaveGigantamax(ushort species, byte form)
+    {
+        // List of species that can Gigantamax
+        return species switch
+        {
+            (ushort)Species.Venusaur => true,
+            (ushort)Species.Charizard => true,
+            (ushort)Species.Blastoise => true,
+            (ushort)Species.Butterfree => true,
+            (ushort)Species.Pikachu => true,
+            (ushort)Species.Meowth when form == 0 => true, // Only Kantonian
+            (ushort)Species.Machamp => true,
+            (ushort)Species.Gengar => true,
+            (ushort)Species.Kingler => true,
+            (ushort)Species.Lapras => true,
+            (ushort)Species.Eevee => true,
+            (ushort)Species.Snorlax => true,
+            (ushort)Species.Garbodor => true,
+            (ushort)Species.Melmetal => true,
+            (ushort)Species.Rillaboom => true,
+            (ushort)Species.Cinderace => true,
+            (ushort)Species.Inteleon => true,
+            (ushort)Species.Corviknight => true,
+            (ushort)Species.Orbeetle => true,
+            (ushort)Species.Drednaw => true,
+            (ushort)Species.Coalossal => true,
+            (ushort)Species.Flapple => true,
+            (ushort)Species.Appletun => true,
+            (ushort)Species.Sandaconda => true,
+            (ushort)Species.Toxtricity => true,
+            (ushort)Species.Centiskorch => true,
+            (ushort)Species.Hatterene => true,
+            (ushort)Species.Grimmsnarl => true,
+            (ushort)Species.Alcremie => true,
+            (ushort)Species.Copperajah => true,
+            (ushort)Species.Duraludon => true,
+            (ushort)Species.Urshifu => true,
+            _ => false
         };
     }
 

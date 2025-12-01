@@ -161,14 +161,21 @@ namespace PKHeX.WinForms
             Menu_Exit.Click += MainMenuExit;
             // 
             // Menu_Tools
-            // 
-            Menu_Tools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_Showdown, Menu_Data, Menu_Folder });
+            //
+            // Initialize Menu_AutoLegality first
+            Menu_AutoLegality = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_AutoLegality.Image = Properties.Resources.wand;
+            Menu_AutoLegality.Name = "Menu_AutoLegality";
+            Menu_AutoLegality.Size = new System.Drawing.Size(133, 22);
+            Menu_AutoLegality.Text = "Auto Legality Mod";
+            //
+            Menu_Tools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_AutoLegality, Menu_Showdown, Menu_Data, Menu_Folder });
             Menu_Tools.Name = "Menu_Tools";
             Menu_Tools.Size = new System.Drawing.Size(46, 20);
             Menu_Tools.Text = "Tools";
-            // 
+            //
             // Menu_Showdown
-            // 
+            //
             Menu_Showdown.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_ShowdownImportPKM, Menu_ShowdownExportPKM, Menu_ShowdownExportParty, Menu_ShowdownExportCurrentBox });
             Menu_Showdown.Image = Properties.Resources.showdown;
             Menu_Showdown.Name = "Menu_Showdown";
@@ -204,13 +211,45 @@ namespace PKHeX.WinForms
             Menu_ShowdownExportParty.Click += ClickShowdownExportParty;
             // 
             // Menu_ShowdownExportCurrentBox
-            // 
+            //
             Menu_ShowdownExportCurrentBox.Image = Properties.Resources.export;
             Menu_ShowdownExportCurrentBox.Name = "Menu_ShowdownExportCurrentBox";
             Menu_ShowdownExportCurrentBox.Size = new System.Drawing.Size(243, 22);
             Menu_ShowdownExportCurrentBox.Text = "Export Current Box to Clipboard";
             Menu_ShowdownExportCurrentBox.Click += ClickShowdownExportCurrentBox;
-            // 
+            //
+            // Menu_ShowdownImportALM
+            //
+            Menu_ShowdownImportALM = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_ShowdownImportALM.Image = Properties.Resources.import;
+            Menu_ShowdownImportALM.Name = "Menu_ShowdownImportALM";
+            Menu_ShowdownImportALM.Size = new System.Drawing.Size(243, 22);
+            Menu_ShowdownImportALM.Text = "Import && Auto-Legalize (ALM)";
+            Menu_ShowdownImportALM.Click += ClickShowdownImportALM;
+            //
+            // Menu_ShowdownSmogon
+            //
+            Menu_ShowdownSmogon = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_ShowdownSmogon.Image = Properties.Resources.showdown;
+            Menu_ShowdownSmogon.Name = "Menu_ShowdownSmogon";
+            Menu_ShowdownSmogon.Size = new System.Drawing.Size(243, 22);
+            Menu_ShowdownSmogon.Text = "Smogon Set Generator";
+            Menu_ShowdownSmogon.Click += ClickShowdownSmogon;
+            //
+            // Menu_LegalizeCurrent
+            //
+            Menu_LegalizeCurrent = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_LegalizeCurrent.Image = Properties.Resources.report;
+            Menu_LegalizeCurrent.Name = "Menu_LegalizeCurrent";
+            Menu_LegalizeCurrent.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L;
+            Menu_LegalizeCurrent.Size = new System.Drawing.Size(243, 22);
+            Menu_LegalizeCurrent.Text = "Legalize Current Pokemon";
+            Menu_LegalizeCurrent.Click += ClickLegalizeCurrent;
+            //
+            // Menu_AutoLegality children (add after items are initialized)
+            //
+            Menu_AutoLegality.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_ShowdownImportALM, Menu_LegalizeCurrent, new System.Windows.Forms.ToolStripSeparator(), Menu_ShowdownSmogon });
+            //
             // Menu_Data
             // 
             Menu_Data.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_LoadBoxes, Menu_DumpBoxes, Menu_DumpBox, Menu_Report, Menu_Database, Menu_MGDatabase, Menu_EncDatabase, Menu_BatchEditor });
@@ -700,6 +739,10 @@ namespace PKHeX.WinForms
         private System.Windows.Forms.ToolStripMenuItem Menu_Redo;
         private System.Windows.Forms.ToolStripMenuItem Menu_Settings;
         private System.Windows.Forms.ToolStripMenuItem Menu_ShowdownExportCurrentBox;
+        private System.Windows.Forms.ToolStripMenuItem Menu_ShowdownImportALM;
+        private System.Windows.Forms.ToolStripMenuItem Menu_ShowdownSmogon;
+        private System.Windows.Forms.ToolStripMenuItem Menu_LegalizeCurrent;
+        private System.Windows.Forms.ToolStripMenuItem Menu_AutoLegality;
         private System.Windows.Forms.ToolStripMenuItem Menu_EncDatabase;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.SplitContainer splitContainer1;
