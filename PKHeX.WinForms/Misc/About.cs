@@ -17,6 +17,7 @@ public partial class About : Form
         WinFormsUtil.TranslateInterface(this, Main.CurrentLanguage);
         RTB_Changelog.Text = Properties.Resources.changelog;
         RTB_Shortcuts.Text = Properties.Resources.shortcuts;
+        RTB_PKMUpdates.Text = GetPKMUniverseChangelog();
         TC_About.SelectedIndex = (int)index;
 
         // Apply theme
@@ -53,6 +54,10 @@ public partial class About : Form
         RTB_Changelog.ForeColor = colors.Text;
         RTB_Shortcuts.BackColor = colors.Surface;
         RTB_Shortcuts.ForeColor = colors.Text;
+        RTB_PKMUpdates.BackColor = colors.Surface;
+        RTB_PKMUpdates.ForeColor = colors.Text;
+        RTB_Credits.BackColor = colors.Surface;
+        RTB_Credits.ForeColor = colors.Text;
 
         // Labels
         L_Title.ForeColor = colors.Text;
@@ -122,6 +127,60 @@ public partial class About : Form
             Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
         }
         catch { }
+    }
+
+    private static string GetPKMUniverseChangelog()
+    {
+        return @"PKM-Universe Updates
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Version 25.12 (December 2025)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+NEW FEATURES:
+• Animated Shiny Sparkles - Shiny Pokemon now display beautiful animated sparkle effects
+• New Theme Presets - Added Neon, Ocean, Forest, and Sunset color themes
+• PKM-Universe Updates Tab - This new changelog to track our exclusive features
+
+ENHANCEMENTS:
+• Integrated santacrab2's Auto-Legality Mod (ALM) for automatic legality fixing
+• Enhanced Pokemon Preview panel with type badges and legality indicators
+• Improved theme system with smooth gradients and modern styling
+• Updated to .NET 10 for better performance
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Version 25.01 (January 2025)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+INITIAL PKM-UNIVERSE RELEASE:
+• Custom branded interface with PKM-Universe theming
+• Built-in Shiny Living Dex Generator
+• Trade-Ready Indicator system
+• Enhanced Dashboard screen
+• Quick Templates for competitive builds
+• Batch Operations Panel
+• Pokemon Search & Filter system
+• QR Code Generator
+• Bulk Importer functionality
+• Custom About page with social links
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Coming Soon:
+• More visual effects and animations
+• Additional theme customization options
+• Enhanced competitive analysis tools
+• Community-requested features
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Join our Discord for the latest updates!
+discord.gg/pkm-universe
+
+Support development on Ko-fi:
+ko-fi.com/pokemonlover8888
+";
     }
 
     protected override void OnResize(EventArgs e)

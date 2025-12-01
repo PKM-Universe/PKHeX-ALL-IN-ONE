@@ -10,7 +10,35 @@ using PKHeX.WinForms.Themes;
 namespace PKHeX.WinForms.Controls;
 
 /// <summary>
+/// Represents a single animated sparkle particle
+/// </summary>
+public class SparkleParticle
+{
+    public float X { get; set; }
+    public float Y { get; set; }
+    public float VelocityX { get; set; }
+    public float VelocityY { get; set; }
+    public float Size { get; set; }
+    public float Opacity { get; set; }
+    public float Rotation { get; set; }
+    public float RotationSpeed { get; set; }
+    public int LifeTime { get; set; }
+    public int MaxLifeTime { get; set; }
+    public Color Color { get; set; }
+    public SparkleType Type { get; set; }
+}
+
+public enum SparkleType
+{
+    Star,
+    Diamond,
+    Circle,
+    Cross
+}
+
+/// <summary>
 /// Enhanced Pokemon Preview Panel - Shows larger sprites with type badges and legality indicators
+/// Features animated sparkle effects for shiny Pokemon
 /// </summary>
 public class EnhancedPokemonPreview : Panel
 {
@@ -26,6 +54,25 @@ public class EnhancedPokemonPreview : Panel
     private string _ability = "";
     private string _nature = "";
     private string _heldItem = "";
+
+    // Sparkle animation fields
+    private readonly List<SparkleParticle> _sparkles = new();
+    private readonly Timer _sparkleTimer;
+    private readonly Random _random = new();
+    private int _sparkleSpawnCounter;
+    private Rectangle _spriteArea;
+    private bool _animationEnabled = true;
+
+    // Sparkle colors for variety
+    private static readonly Color[] SparkleColors = new[]
+    {
+        Color.FromArgb(255, 215, 0),    // Gold
+        Color.FromArgb(255, 255, 200),  // Light yellow
+        Color.FromArgb(255, 250, 250),  // Snow white
+        Color.FromArgb(255, 223, 186),  // Peach
+        Color.FromArgb(173, 216, 230),  // Light blue
+        Color.FromArgb(255, 182, 193),  // Light pink
+    };
 
     // Type colors for badges
     private static readonly Dictionary<string, Color> TypeColors = new()
@@ -57,6 +104,187 @@ public class EnhancedPokemonPreview : Panel
                  ControlStyles.DoubleBuffer | ControlStyles.ResizeRedraw, true);
         Size = new Size(280, 320);
         BackColor = Color.Transparent;
+
+        // Initialize sparkle animation timer
+        _sparkleTimer = new Timer
+        {
+            Interval = 33 // ~30 FPS
+        };
+        _sparkleTimer.Tick += SparkleTimer_Tick;
+    }
+
+    /// <summary>
+    /// Enable or disable the shiny sparkle animation
+    /// </summary>
+    public bool AnimationEnabled
+    {
+        get => _animationEnabled;
+        set
+        {
+            _animationEnabled = value;
+            if (_isShiny && value)
+                _sparkleTimer.Start();
+            else
+                _sparkleTimer.Stop();
+        }
+    }
+
+    private void SparkleTimer_Tick(object? sender, EventArgs e)
+    {
+        if (!_isShiny || !_animationEnabled)
+        {
+            _sparkleTimer.Stop();
+            _sparkles.Clear();
+            return;
+        }
+
+        // Spawn new sparkles periodically
+        _sparkleSpawnCounter++;
+        if (_sparkleSpawnCounter >= 3) // Spawn every ~100ms
+        {
+            _sparkleSpawnCounter = 0;
+            if (_sparkles.Count < 15) // Max 15 sparkles at once
+            {
+                SpawnSparkle();
+            }
+        }
+
+        // Update existing sparkles
+        for (int i = _sparkles.Count - 1; i >= 0; i--)
+        {
+            var sparkle = _sparkles[i];
+            sparkle.X += sparkle.VelocityX;
+            sparkle.Y += sparkle.VelocityY;
+            sparkle.Rotation += sparkle.RotationSpeed;
+            sparkle.LifeTime++;
+
+            // Fade out as lifetime increases
+            float lifeRatio = (float)sparkle.LifeTime / sparkle.MaxLifeTime;
+            if (lifeRatio < 0.2f)
+                sparkle.Opacity = lifeRatio * 5f; // Fade in
+            else if (lifeRatio > 0.7f)
+                sparkle.Opacity = (1f - lifeRatio) / 0.3f; // Fade out
+            else
+                sparkle.Opacity = 1f;
+
+            // Pulse size
+            sparkle.Size = sparkle.Size * (1f + 0.02f * (float)Math.Sin(sparkle.LifeTime * 0.2f));
+
+            // Remove dead sparkles
+            if (sparkle.LifeTime >= sparkle.MaxLifeTime)
+            {
+                _sparkles.RemoveAt(i);
+            }
+        }
+
+        Invalidate();
+    }
+
+    private void SpawnSparkle()
+    {
+        if (_spriteArea.Width <= 0 || _spriteArea.Height <= 0)
+            return;
+
+        var sparkle = new SparkleParticle
+        {
+            X = _spriteArea.X + (float)_random.NextDouble() * _spriteArea.Width,
+            Y = _spriteArea.Y + (float)_random.NextDouble() * _spriteArea.Height,
+            VelocityX = (float)(_random.NextDouble() - 0.5) * 1.5f,
+            VelocityY = (float)(_random.NextDouble() - 0.8) * 2f, // Bias upward
+            Size = 4 + (float)_random.NextDouble() * 6,
+            Opacity = 0f,
+            Rotation = (float)_random.NextDouble() * 360f,
+            RotationSpeed = (float)(_random.NextDouble() - 0.5) * 10f,
+            LifeTime = 0,
+            MaxLifeTime = 40 + _random.Next(30),
+            Color = SparkleColors[_random.Next(SparkleColors.Length)],
+            Type = (SparkleType)_random.Next(4)
+        };
+
+        _sparkles.Add(sparkle);
+    }
+
+    private void DrawSparkle(Graphics g, SparkleParticle sparkle)
+    {
+        if (sparkle.Opacity <= 0)
+            return;
+
+        var state = g.Save();
+        g.TranslateTransform(sparkle.X, sparkle.Y);
+        g.RotateTransform(sparkle.Rotation);
+
+        var alpha = (int)(sparkle.Opacity * 255);
+        var color = Color.FromArgb(alpha, sparkle.Color);
+        var glowColor = Color.FromArgb(alpha / 3, sparkle.Color);
+        var size = sparkle.Size;
+
+        using var brush = new SolidBrush(color);
+        using var glowBrush = new SolidBrush(glowColor);
+
+        // Draw glow
+        g.FillEllipse(glowBrush, -size * 1.5f, -size * 1.5f, size * 3f, size * 3f);
+
+        switch (sparkle.Type)
+        {
+            case SparkleType.Star:
+                DrawStar(g, brush, size);
+                break;
+            case SparkleType.Diamond:
+                DrawDiamond(g, brush, size);
+                break;
+            case SparkleType.Circle:
+                g.FillEllipse(brush, -size / 2, -size / 2, size, size);
+                break;
+            case SparkleType.Cross:
+                DrawCross(g, brush, size);
+                break;
+        }
+
+        g.Restore(state);
+    }
+
+    private void DrawStar(Graphics g, Brush brush, float size)
+    {
+        var points = new PointF[8];
+        for (int i = 0; i < 8; i++)
+        {
+            var angle = i * Math.PI / 4;
+            var radius = i % 2 == 0 ? size : size / 2.5f;
+            points[i] = new PointF(
+                (float)(Math.Cos(angle) * radius),
+                (float)(Math.Sin(angle) * radius)
+            );
+        }
+        g.FillPolygon(brush, points);
+    }
+
+    private void DrawDiamond(Graphics g, Brush brush, float size)
+    {
+        var points = new PointF[]
+        {
+            new(0, -size),
+            new(size * 0.6f, 0),
+            new(0, size),
+            new(-size * 0.6f, 0)
+        };
+        g.FillPolygon(brush, points);
+    }
+
+    private void DrawCross(Graphics g, Brush brush, float size)
+    {
+        var thickness = size / 3;
+        g.FillRectangle(brush, -size, -thickness / 2, size * 2, thickness);
+        g.FillRectangle(brush, -thickness / 2, -size, thickness, size * 2);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _sparkleTimer?.Stop();
+            _sparkleTimer?.Dispose();
+        }
+        base.Dispose(disposing);
     }
 
     public void SetPokemon(PKM? pk)
@@ -69,6 +297,8 @@ public class EnhancedPokemonPreview : Panel
             _nickname = "";
             _isShiny = false;
             _isLegal = true;
+            _sparkleTimer.Stop();
+            _sparkles.Clear();
             Invalidate();
             return;
         }
@@ -97,6 +327,19 @@ public class EnhancedPokemonPreview : Panel
         // Check legality
         var la = new LegalityAnalysis(pk);
         _isLegal = la.Valid;
+
+        // Handle sparkle animation for shiny Pokemon
+        if (_isShiny && _animationEnabled)
+        {
+            _sparkles.Clear();
+            _sparkleSpawnCounter = 0;
+            _sparkleTimer.Start();
+        }
+        else
+        {
+            _sparkleTimer.Stop();
+            _sparkles.Clear();
+        }
 
         Invalidate();
     }
@@ -164,9 +407,13 @@ public class EnhancedPokemonPreview : Panel
         {
             var spriteSize = 96;
             var spriteX = (Width - spriteSize) / 2;
+
+            // Store sprite area for sparkle spawning (expanded area)
+            _spriteArea = new Rectangle(spriteX - 20, y - 10, spriteSize + 40, spriteSize + 20);
+
             g.DrawImage(_sprite, spriteX, y, spriteSize, spriteSize);
 
-            // Draw shiny sparkle
+            // Draw shiny sparkle indicator (static star)
             if (_isShiny)
             {
                 using var sparkleFont = new Font("Segoe UI", 14);
@@ -221,6 +468,15 @@ public class EnhancedPokemonPreview : Panel
         // Held Item
         var itemText = $"Item: {_heldItem}";
         g.DrawString(itemText, statFont, statColor, 20, y);
+
+        // Draw animated sparkles for shiny Pokemon (drawn last so they appear on top)
+        if (_isShiny && _sparkles.Count > 0)
+        {
+            foreach (var sparkle in _sparkles)
+            {
+                DrawSparkle(g, sparkle);
+            }
+        }
     }
 
     private void DrawTypeBadges(Graphics g, int y, string type1, string type2)

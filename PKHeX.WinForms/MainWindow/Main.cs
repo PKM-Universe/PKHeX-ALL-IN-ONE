@@ -109,6 +109,13 @@ public partial class Main : Form
         mnu.RequestEditorSaveAs += MainMenuSave;
         dragout.ContextMenuStrip = mnu.mnuL;
         C_SAV.menu.RequestEditorLegality = DisplayLegalityReport;
+
+        // Initialize Recent Files menu
+        RecentFilesManager.PopulateMenu(Menu_PKM_RecentFiles, path =>
+        {
+            if (File.Exists(path))
+                OpenQuick(path);
+        });
     }
 
     public void LoadInitialFiles(StartupArguments args)
@@ -831,6 +838,17 @@ public partial class Main : Form
         TryBackupExportCheck(sav, path);
         CheckLoadPath(path);
 
+        // Add to recent files
+        if (!string.IsNullOrEmpty(path))
+        {
+            RecentFilesManager.AddRecentFile(path);
+            RecentFilesManager.PopulateMenu(Menu_PKM_RecentFiles, p =>
+            {
+                if (File.Exists(p))
+                    OpenQuick(p);
+            });
+        }
+
         Menu_ShowdownExportParty.Visible = sav.HasParty;
         Menu_ShowdownExportCurrentBox.Visible = sav.HasBox;
 
@@ -1400,6 +1418,29 @@ public partial class Main : Form
 
     #region PKM-Universe Menu Handlers
 
+    private void SetApplicationTheme(string themeName)
+    {
+        Themes.ThemeManager.SetTheme(themeName);
+
+        // Actually apply the theme to all controls
+        Themes.ThemeManager.ApplyTheme(this);
+
+        // Force form to redraw
+        Invalidate(true);
+        Refresh();
+
+        // Refresh all child controls
+        foreach (Control control in Controls)
+        {
+            control.Invalidate();
+            control.Refresh();
+        }
+
+        // Notify user
+        var displayName = themeName.Replace("_", " ");
+        WinFormsUtil.Alert($"Theme changed to: {displayName}", "Theme Applied!");
+    }
+
     private void Menu_PKM_Discord_Click(object sender, EventArgs e) =>
         Process.Start(new ProcessStartInfo("https://discord.gg/pkm-universe") { UseShellExecute = true });
 
@@ -1411,6 +1452,68 @@ public partial class Main : Form
 
     private void Menu_PKM_CheckUpdate_Click(object sender, EventArgs e) =>
         Process.Start(new ProcessStartInfo(ThreadPath) { UseShellExecute = true });
+
+    private void Menu_PKM_Tools_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first!");
+            return;
+        }
+        using var form = new PKMUniverseTools(C_SAV.SAV, PKME_Tabs);
+        form.ShowDialog();
+        C_SAV.ReloadSlots();
+    }
+
+    private void Menu_PKM_Wallpapers_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first!");
+            return;
+        }
+        using var form = new BoxWallpaperManager(C_SAV.SAV, () => C_SAV.ReloadSlots());
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_CompBuilder_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first!");
+            return;
+        }
+        using var form = new QuickCompetitiveBuilder(C_SAV.SAV, PKME_Tabs);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_RaidManager_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first!");
+            return;
+        }
+        if (C_SAV.SAV is not PKHeX.Core.SAV8SWSH swsh)
+        {
+            WinFormsUtil.Alert("Raid Den Manager is only available for Sword/Shield saves!");
+            return;
+        }
+        using var form = new RaidDenManager(swsh);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_HomeTracker_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first!");
+            return;
+        }
+        using var form = new HomeTrackerForm(C_SAV.SAV);
+        form.ShowDialog();
+        C_SAV.ReloadSlots();
+    }
 
     private void Menu_PKM_BackupManager_Click(object sender, EventArgs e)
     {
@@ -1562,22 +1665,23 @@ public partial class Main : Form
 
     private SaveFile? PromptCreateBlankSave(string title)
     {
-        var gameVersions = new (string Name, GameVersion Version)[]
+        // Use SaveFileType and specific game versions to avoid None type error
+        var gameVersions = new (string Name, SaveFileType Type, GameVersion Version)[]
         {
-            ("Scarlet/Violet", GameVersion.SV),
-            ("Legends Z-A", GameVersion.ZA),
-            ("Legends Arceus", GameVersion.PLA),
-            ("Sword/Shield", GameVersion.SWSH),
-            ("Brilliant Diamond/Shining Pearl", GameVersion.BDSP),
-            ("Ultra Sun/Ultra Moon", GameVersion.USUM),
-            ("Sun/Moon", GameVersion.SM),
-            ("Omega Ruby/Alpha Sapphire", GameVersion.ORAS),
-            ("X/Y", GameVersion.XY),
-            ("Black 2/White 2", GameVersion.B2W2),
-            ("Black/White", GameVersion.BW),
-            ("HeartGold/SoulSilver", GameVersion.HGSS),
-            ("Platinum", GameVersion.Pt),
-            ("Diamond/Pearl", GameVersion.DP),
+            ("Scarlet/Violet", SaveFileType.SV, GameVersion.SL),
+            ("Legends Z-A", SaveFileType.ZA, GameVersion.ZA),
+            ("Legends Arceus", SaveFileType.LA, GameVersion.PLA),
+            ("Sword/Shield", SaveFileType.SWSH, GameVersion.SW),
+            ("Brilliant Diamond/Shining Pearl", SaveFileType.BDSP, GameVersion.BD),
+            ("Ultra Sun/Ultra Moon", SaveFileType.USUM, GameVersion.US),
+            ("Sun/Moon", SaveFileType.SM, GameVersion.SN),
+            ("Omega Ruby/Alpha Sapphire", SaveFileType.AO, GameVersion.OR),
+            ("X/Y", SaveFileType.XY, GameVersion.X),
+            ("Black 2/White 2", SaveFileType.B2W2, GameVersion.B2),
+            ("Black/White", SaveFileType.BW, GameVersion.B),
+            ("HeartGold/SoulSilver", SaveFileType.HGSS, GameVersion.HG),
+            ("Platinum", SaveFileType.Pt, GameVersion.Pt),
+            ("Diamond/Pearl", SaveFileType.DP, GameVersion.D),
         };
 
         using var dialog = new Form
@@ -1605,8 +1709,8 @@ public partial class Main : Form
 
         if (dialog.ShowDialog() != DialogResult.OK) return null;
 
-        var selectedVersion = gameVersions[combo.SelectedIndex].Version;
-        return BlankSaveFile.Get(selectedVersion, null);
+        var selected = gameVersions[combo.SelectedIndex];
+        return BlankSaveFile.Get(selected.Type, selected.Version);
     }
 
     private void Menu_PKM_SLD_GenerateGen_Click(object sender, EventArgs e)
@@ -1742,6 +1846,220 @@ public partial class Main : Form
             $"Base forms only: {boxesBase} boxes",
             $"Including all forms: {boxesForms} boxes",
             $"\nYour save has {C_SAV.SAV.BoxCount} boxes ({C_SAV.SAV.BoxCount * C_SAV.SAV.BoxSlotCount} slots)");
+    }
+
+    private void Menu_PKM_Search_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first!");
+            return;
+        }
+        using var form = new PokemonSearchDialog(C_SAV.SAV);
+        if (form.ShowDialog() == DialogResult.OK && form.SelectedLocation.HasValue)
+        {
+            var (box, slot) = form.SelectedLocation.Value;
+            var pk = C_SAV.SAV.GetBoxSlotAtIndex(box, slot);
+            PKME_Tabs.PopulateFields(pk, false);
+        }
+    }
+
+    private void Menu_PKM_Coverage_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first!");
+            return;
+        }
+        using var form = new TeamCoverageAnalyzer(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_DamageCalc_Click(object sender, EventArgs e)
+    {
+        using var form = new DamageCalculator();
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_ShowdownForm_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first!");
+            return;
+        }
+        using var form = new ShowdownImportExport(C_SAV.SAV, PKME_Tabs);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_SmogonImport_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first!");
+            return;
+        }
+        using var form = new SmogonSetImporter(C_SAV.SAV, PKME_Tabs);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_TournamentTeams_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first!");
+            return;
+        }
+        using var form = new TournamentTeamManager(C_SAV.SAV);
+        form.ShowDialog();
+        C_SAV.ReloadSlots();
+    }
+
+    private void Menu_PKM_Tutorial_Click(object sender, EventArgs e)
+    {
+        using var form = new QuickStartTutorial();
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_AboutDialog_Click(object sender, EventArgs e)
+    {
+        using var form = new AboutDialog();
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_QRCode_Click(object sender, EventArgs e)
+    {
+        var pk = PKME_Tabs.PreparePKM();
+        if (pk.Species == 0)
+        {
+            WinFormsUtil.Alert("No Pokemon loaded to generate QR code!");
+            return;
+        }
+        using var form = new QRCodeGenerator(pk);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_Compare_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first!");
+            return;
+        }
+        using var form = new PokemonComparisonTool(C_SAV.SAV);
+        var pk = PKME_Tabs.PreparePKM();
+        if (pk.Species != 0)
+            form.SetPokemon1(pk);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_TradeHistory_Click(object sender, EventArgs e)
+    {
+        using var form = new TradeHistoryLog();
+        form.ShowDialog();
+    }
+
+    private DiscordRichPresence? _discordRPC;
+
+    private void Menu_PKM_DiscordRPC_Click(object sender, EventArgs e)
+    {
+        var menuItem = sender as ToolStripMenuItem;
+        if (menuItem == null) return;
+
+        if (menuItem.Checked)
+        {
+            // Enable Discord RPC
+            _discordRPC ??= new DiscordRichPresence();
+            _discordRPC.IsEnabled = true;
+            _discordRPC.Start();
+            if (C_SAV.SAV.State.Exportable)
+                _discordRPC.SetSave(C_SAV.SAV);
+            WinFormsUtil.Alert("Discord Rich Presence enabled!", "Connecting to Discord in background...\nMake sure Discord is running.");
+        }
+        else
+        {
+            // Disable Discord RPC
+            _discordRPC?.Stop();
+            WinFormsUtil.Alert("Discord Rich Presence disabled.");
+        }
+    }
+
+    private void Menu_PKM_LivingDex_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new LivingDexTracker(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_PokedexCompletion_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new PokedexCompletionTool(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_FormCollector_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new FormCollectorTool(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_MysteryGiftDB_Click(object sender, EventArgs e)
+    {
+        using var form = new MysteryGiftDatabase();
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_WonderCards_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new WonderCardManager(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_EventChecker_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        var pk = PKME_Tabs.CurrentPKM;
+        if (pk == null || pk.Species == 0)
+        {
+            WinFormsUtil.Alert("Please select a Pokemon to check.");
+            return;
+        }
+        using var form = new EventPokemonChecker(pk);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_MissingEvents_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new MissingEventsFinder(C_SAV.SAV);
+        form.ShowDialog();
     }
 
     #endregion

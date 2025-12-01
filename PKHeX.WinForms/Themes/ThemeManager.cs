@@ -201,6 +201,130 @@ public static class ThemeManager
             ShinyGold = Color.FromArgb(255, 220, 80),
             LegalGreen = Color.FromArgb(80, 220, 150),
             IllegalRed = Color.FromArgb(255, 90, 110)
+        },
+        ["Neon"] = new ThemeColors
+        {
+            Background = Color.FromArgb(10, 10, 18),
+            BackgroundSecondary = Color.FromArgb(18, 18, 28),
+            BackgroundTertiary = Color.FromArgb(25, 25, 38),
+            Surface = Color.FromArgb(22, 22, 35),
+            SurfaceHover = Color.FromArgb(35, 35, 50),
+            Primary = Color.FromArgb(0, 255, 255),
+            Secondary = Color.FromArgb(150, 150, 180),
+            Text = Color.FromArgb(240, 255, 255),
+            TextSecondary = Color.FromArgb(180, 220, 220),
+            TextMuted = Color.FromArgb(100, 140, 140),
+            Border = Color.FromArgb(0, 150, 150),
+            BorderLight = Color.FromArgb(0, 180, 180),
+            Success = Color.FromArgb(0, 255, 150),
+            Warning = Color.FromArgb(255, 255, 0),
+            Error = Color.FromArgb(255, 50, 100),
+            Info = Color.FromArgb(0, 200, 255),
+            Accent = Color.FromArgb(0, 255, 255),
+            AccentHover = Color.FromArgb(50, 255, 255),
+            AccentSecondary = Color.FromArgb(255, 0, 200),
+            ButtonBackground = Color.FromArgb(25, 35, 45),
+            ButtonHover = Color.FromArgb(0, 200, 200),
+            InputBackground = Color.FromArgb(15, 15, 25),
+            MenuBackground = Color.FromArgb(12, 12, 22),
+            GradientStart = Color.FromArgb(0, 255, 255),
+            GradientEnd = Color.FromArgb(255, 0, 200),
+            ShinyGold = Color.FromArgb(255, 255, 100),
+            LegalGreen = Color.FromArgb(0, 255, 150),
+            IllegalRed = Color.FromArgb(255, 50, 100)
+        },
+        ["Ocean"] = new ThemeColors
+        {
+            Background = Color.FromArgb(12, 20, 30),
+            BackgroundSecondary = Color.FromArgb(18, 30, 45),
+            BackgroundTertiary = Color.FromArgb(25, 40, 58),
+            Surface = Color.FromArgb(20, 35, 52),
+            SurfaceHover = Color.FromArgb(30, 50, 70),
+            Primary = Color.FromArgb(0, 180, 200),
+            Secondary = Color.FromArgb(100, 150, 180),
+            Text = Color.FromArgb(230, 245, 255),
+            TextSecondary = Color.FromArgb(170, 200, 220),
+            TextMuted = Color.FromArgb(100, 130, 150),
+            Border = Color.FromArgb(40, 80, 110),
+            BorderLight = Color.FromArgb(60, 100, 135),
+            Success = Color.FromArgb(0, 200, 150),
+            Warning = Color.FromArgb(255, 200, 80),
+            Error = Color.FromArgb(255, 100, 100),
+            Info = Color.FromArgb(80, 180, 255),
+            Accent = Color.FromArgb(0, 200, 220),
+            AccentHover = Color.FromArgb(50, 220, 240),
+            AccentSecondary = Color.FromArgb(0, 150, 200),
+            ButtonBackground = Color.FromArgb(25, 45, 65),
+            ButtonHover = Color.FromArgb(0, 180, 200),
+            InputBackground = Color.FromArgb(15, 28, 42),
+            MenuBackground = Color.FromArgb(14, 25, 38),
+            GradientStart = Color.FromArgb(0, 180, 220),
+            GradientEnd = Color.FromArgb(0, 100, 150),
+            ShinyGold = Color.FromArgb(255, 215, 0),
+            LegalGreen = Color.FromArgb(0, 200, 150),
+            IllegalRed = Color.FromArgb(255, 100, 100)
+        },
+        ["Forest"] = new ThemeColors
+        {
+            Background = Color.FromArgb(15, 22, 15),
+            BackgroundSecondary = Color.FromArgb(22, 32, 22),
+            BackgroundTertiary = Color.FromArgb(30, 45, 30),
+            Surface = Color.FromArgb(25, 38, 25),
+            SurfaceHover = Color.FromArgb(38, 55, 38),
+            Primary = Color.FromArgb(80, 180, 80),
+            Secondary = Color.FromArgb(120, 150, 120),
+            Text = Color.FromArgb(235, 250, 235),
+            TextSecondary = Color.FromArgb(180, 210, 180),
+            TextMuted = Color.FromArgb(110, 140, 110),
+            Border = Color.FromArgb(50, 90, 50),
+            BorderLight = Color.FromArgb(70, 110, 70),
+            Success = Color.FromArgb(100, 220, 100),
+            Warning = Color.FromArgb(220, 180, 50),
+            Error = Color.FromArgb(220, 80, 80),
+            Info = Color.FromArgb(80, 160, 200),
+            Accent = Color.FromArgb(100, 200, 100),
+            AccentHover = Color.FromArgb(130, 220, 130),
+            AccentSecondary = Color.FromArgb(150, 200, 80),
+            ButtonBackground = Color.FromArgb(35, 50, 35),
+            ButtonHover = Color.FromArgb(80, 180, 80),
+            InputBackground = Color.FromArgb(18, 28, 18),
+            MenuBackground = Color.FromArgb(18, 26, 18),
+            GradientStart = Color.FromArgb(80, 180, 80),
+            GradientEnd = Color.FromArgb(40, 100, 40),
+            ShinyGold = Color.FromArgb(255, 215, 0),
+            LegalGreen = Color.FromArgb(100, 220, 100),
+            IllegalRed = Color.FromArgb(220, 80, 80)
+        },
+        ["Sunset"] = new ThemeColors
+        {
+            Background = Color.FromArgb(25, 18, 18),
+            BackgroundSecondary = Color.FromArgb(38, 28, 25),
+            BackgroundTertiary = Color.FromArgb(52, 38, 32),
+            Surface = Color.FromArgb(45, 32, 28),
+            SurfaceHover = Color.FromArgb(60, 45, 38),
+            Primary = Color.FromArgb(255, 140, 50),
+            Secondary = Color.FromArgb(180, 140, 120),
+            Text = Color.FromArgb(255, 245, 235),
+            TextSecondary = Color.FromArgb(220, 190, 170),
+            TextMuted = Color.FromArgb(160, 130, 110),
+            Border = Color.FromArgb(100, 70, 55),
+            BorderLight = Color.FromArgb(130, 95, 75),
+            Success = Color.FromArgb(150, 220, 100),
+            Warning = Color.FromArgb(255, 200, 50),
+            Error = Color.FromArgb(255, 80, 80),
+            Info = Color.FromArgb(100, 180, 220),
+            Accent = Color.FromArgb(255, 120, 50),
+            AccentHover = Color.FromArgb(255, 150, 80),
+            AccentSecondary = Color.FromArgb(255, 80, 100),
+            ButtonBackground = Color.FromArgb(55, 40, 35),
+            ButtonHover = Color.FromArgb(255, 120, 50),
+            InputBackground = Color.FromArgb(32, 24, 22),
+            MenuBackground = Color.FromArgb(30, 22, 20),
+            GradientStart = Color.FromArgb(255, 140, 50),
+            GradientEnd = Color.FromArgb(200, 50, 80),
+            ShinyGold = Color.FromArgb(255, 220, 80),
+            LegalGreen = Color.FromArgb(150, 220, 100),
+            IllegalRed = Color.FromArgb(255, 80, 80)
         }
     };
 
@@ -226,7 +350,7 @@ public static class ThemeManager
 
     public static string[] GetAvailableThemes()
     {
-        return new[] { "Light", "Dark", "Midnight", "Pokemon Red", "Pokemon Blue", "PKM Universe" };
+        return new[] { "Light", "Dark", "Midnight", "Pokemon Red", "Pokemon Blue", "PKM Universe", "Neon", "Ocean", "Forest", "Sunset" };
     }
 
     /// <summary>
@@ -528,7 +652,11 @@ public enum Theme
     Midnight,
     Pokemon_Red,
     Pokemon_Blue,
-    PKM_Universe
+    PKM_Universe,
+    Neon,
+    Ocean,
+    Forest,
+    Sunset
 }
 
 public class ThemeColors

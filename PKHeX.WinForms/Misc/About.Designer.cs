@@ -41,6 +41,8 @@ namespace PKHeX.WinForms
             RTB_Changelog = new System.Windows.Forms.RichTextBox();
             Tab_Credits = new System.Windows.Forms.TabPage();
             RTB_Credits = new System.Windows.Forms.RichTextBox();
+            Tab_PKMUpdates = new System.Windows.Forms.TabPage();
+            RTB_PKMUpdates = new System.Windows.Forms.RichTextBox();
             PNL_Footer = new System.Windows.Forms.Panel();
             LL_Discord = new System.Windows.Forms.LinkLabel();
             LL_Kofi = new System.Windows.Forms.LinkLabel();
@@ -53,6 +55,7 @@ namespace PKHeX.WinForms
             Tab_Shortcuts.SuspendLayout();
             Tab_Changelog.SuspendLayout();
             Tab_Credits.SuspendLayout();
+            Tab_PKMUpdates.SuspendLayout();
             PNL_Footer.SuspendLayout();
             SuspendLayout();
             //
@@ -135,6 +138,7 @@ namespace PKHeX.WinForms
             TC_About.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             TC_About.Controls.Add(Tab_Shortcuts);
             TC_About.Controls.Add(Tab_Changelog);
+            TC_About.Controls.Add(Tab_PKMUpdates);
             TC_About.Controls.Add(Tab_Credits);
             TC_About.Location = new System.Drawing.Point(12, 145);
             TC_About.Name = "TC_About";
@@ -228,6 +232,28 @@ Features:
 • Modern themed interface
 • Batch editing tools
 • And much more!";
+            //
+            // Tab_PKMUpdates
+            //
+            Tab_PKMUpdates.Controls.Add(RTB_PKMUpdates);
+            Tab_PKMUpdates.Location = new System.Drawing.Point(4, 24);
+            Tab_PKMUpdates.Name = "Tab_PKMUpdates";
+            Tab_PKMUpdates.Padding = new System.Windows.Forms.Padding(8);
+            Tab_PKMUpdates.Size = new System.Drawing.Size(588, 282);
+            Tab_PKMUpdates.TabIndex = 3;
+            Tab_PKMUpdates.Text = "PKM-Universe Updates";
+            //
+            // RTB_PKMUpdates
+            //
+            RTB_PKMUpdates.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            RTB_PKMUpdates.Dock = System.Windows.Forms.DockStyle.Fill;
+            RTB_PKMUpdates.Font = new System.Drawing.Font("Segoe UI", 10F);
+            RTB_PKMUpdates.Location = new System.Drawing.Point(8, 8);
+            RTB_PKMUpdates.Name = "RTB_PKMUpdates";
+            RTB_PKMUpdates.ReadOnly = true;
+            RTB_PKMUpdates.Size = new System.Drawing.Size(572, 266);
+            RTB_PKMUpdates.TabIndex = 0;
+            RTB_PKMUpdates.Text = "";
             //
             // PNL_Footer
             //
@@ -324,6 +350,7 @@ Features:
             Tab_Shortcuts.ResumeLayout(false);
             Tab_Changelog.ResumeLayout(false);
             Tab_Credits.ResumeLayout(false);
+            Tab_PKMUpdates.ResumeLayout(false);
             PNL_Footer.ResumeLayout(false);
             PNL_Footer.PerformLayout();
             ResumeLayout(false);
@@ -344,6 +371,8 @@ Features:
         private System.Windows.Forms.RichTextBox RTB_Changelog;
         private System.Windows.Forms.TabPage Tab_Credits;
         private System.Windows.Forms.RichTextBox RTB_Credits;
+        private System.Windows.Forms.TabPage Tab_PKMUpdates;
+        private System.Windows.Forms.RichTextBox RTB_PKMUpdates;
         private System.Windows.Forms.Panel PNL_Footer;
         private System.Windows.Forms.LinkLabel LL_Discord;
         private System.Windows.Forms.LinkLabel LL_Kofi;

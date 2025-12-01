@@ -55,6 +55,17 @@ namespace PKHeX.WinForms
             Menu_Options = new System.Windows.Forms.ToolStripMenuItem();
             Menu_Language = new System.Windows.Forms.ToolStripMenuItem();
             CB_MainLanguage = new System.Windows.Forms.ToolStripComboBox();
+            Menu_Theme = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_Theme_Light = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_Theme_Dark = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_Theme_Midnight = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_Theme_PKMUniverse = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_Theme_Neon = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_Theme_Ocean = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_Theme_Forest = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_Theme_Sunset = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_Theme_PokemonRed = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_Theme_PokemonBlue = new System.Windows.Forms.ToolStripMenuItem();
             Menu_Undo = new System.Windows.Forms.ToolStripMenuItem();
             Menu_Redo = new System.Windows.Forms.ToolStripMenuItem();
             Menu_Settings = new System.Windows.Forms.ToolStripMenuItem();
@@ -78,6 +89,30 @@ namespace PKHeX.WinForms
             Menu_PKM_Kofi = new System.Windows.Forms.ToolStripMenuItem();
             Menu_PKM_Website = new System.Windows.Forms.ToolStripMenuItem();
             Menu_PKM_CheckUpdate = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_Tools = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_Wallpapers = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_CompBuilder = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_RaidManager = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_HomeTracker = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_Search = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_Coverage = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_DamageCalc = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_ShowdownForm = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_SmogonImport = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_TournamentTeams = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_Tutorial = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_AboutDialog = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_QRCode = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_Compare = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_TradeHistory = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_DiscordRPC = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_LivingDex = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_PokedexCompletion = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_FormCollector = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_MysteryGiftDB = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_WonderCards = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_EventChecker = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_MissingEvents = new System.Windows.Forms.ToolStripMenuItem();
             L_PortableMode = new System.Windows.Forms.ToolStripLabel();
             L_UpdateAvailable = new System.Windows.Forms.LinkLabel();
             toolTip = new System.Windows.Forms.ToolTip(components);
@@ -344,10 +379,90 @@ namespace PKHeX.WinForms
             // 
             // Menu_Options
             // 
-            Menu_Options.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_Language, Menu_Undo, Menu_Redo, Menu_Settings, Menu_About });
+            Menu_Options.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_Language, Menu_Theme, Menu_Undo, Menu_Redo, Menu_Settings, Menu_About });
             Menu_Options.Name = "Menu_Options";
             Menu_Options.Size = new System.Drawing.Size(61, 20);
             Menu_Options.Text = "Options";
+            //
+            // Menu_Theme
+            //
+            Menu_Theme.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                Menu_Theme_Light, Menu_Theme_Dark, Menu_Theme_Midnight, Menu_Theme_PKMUniverse,
+                Menu_Theme_Neon, Menu_Theme_Ocean, Menu_Theme_Forest, Menu_Theme_Sunset,
+                Menu_Theme_PokemonRed, Menu_Theme_PokemonBlue });
+            Menu_Theme.Name = "Menu_Theme";
+            Menu_Theme.Size = new System.Drawing.Size(164, 22);
+            Menu_Theme.Text = "Theme";
+            //
+            // Menu_Theme_Light
+            //
+            Menu_Theme_Light.Name = "Menu_Theme_Light";
+            Menu_Theme_Light.Size = new System.Drawing.Size(150, 22);
+            Menu_Theme_Light.Text = "Light";
+            Menu_Theme_Light.Click += (s, e) => SetApplicationTheme("Light");
+            //
+            // Menu_Theme_Dark
+            //
+            Menu_Theme_Dark.Name = "Menu_Theme_Dark";
+            Menu_Theme_Dark.Size = new System.Drawing.Size(150, 22);
+            Menu_Theme_Dark.Text = "Dark";
+            Menu_Theme_Dark.Click += (s, e) => SetApplicationTheme("Dark");
+            //
+            // Menu_Theme_Midnight
+            //
+            Menu_Theme_Midnight.Name = "Menu_Theme_Midnight";
+            Menu_Theme_Midnight.Size = new System.Drawing.Size(150, 22);
+            Menu_Theme_Midnight.Text = "Midnight";
+            Menu_Theme_Midnight.Click += (s, e) => SetApplicationTheme("Midnight");
+            //
+            // Menu_Theme_PKMUniverse
+            //
+            Menu_Theme_PKMUniverse.Name = "Menu_Theme_PKMUniverse";
+            Menu_Theme_PKMUniverse.Size = new System.Drawing.Size(150, 22);
+            Menu_Theme_PKMUniverse.Text = "PKM Universe";
+            Menu_Theme_PKMUniverse.Click += (s, e) => SetApplicationTheme("PKM_Universe");
+            //
+            // Menu_Theme_Neon
+            //
+            Menu_Theme_Neon.Name = "Menu_Theme_Neon";
+            Menu_Theme_Neon.Size = new System.Drawing.Size(150, 22);
+            Menu_Theme_Neon.Text = "Neon";
+            Menu_Theme_Neon.Click += (s, e) => SetApplicationTheme("Neon");
+            //
+            // Menu_Theme_Ocean
+            //
+            Menu_Theme_Ocean.Name = "Menu_Theme_Ocean";
+            Menu_Theme_Ocean.Size = new System.Drawing.Size(150, 22);
+            Menu_Theme_Ocean.Text = "Ocean";
+            Menu_Theme_Ocean.Click += (s, e) => SetApplicationTheme("Ocean");
+            //
+            // Menu_Theme_Forest
+            //
+            Menu_Theme_Forest.Name = "Menu_Theme_Forest";
+            Menu_Theme_Forest.Size = new System.Drawing.Size(150, 22);
+            Menu_Theme_Forest.Text = "Forest";
+            Menu_Theme_Forest.Click += (s, e) => SetApplicationTheme("Forest");
+            //
+            // Menu_Theme_Sunset
+            //
+            Menu_Theme_Sunset.Name = "Menu_Theme_Sunset";
+            Menu_Theme_Sunset.Size = new System.Drawing.Size(150, 22);
+            Menu_Theme_Sunset.Text = "Sunset";
+            Menu_Theme_Sunset.Click += (s, e) => SetApplicationTheme("Sunset");
+            //
+            // Menu_Theme_PokemonRed
+            //
+            Menu_Theme_PokemonRed.Name = "Menu_Theme_PokemonRed";
+            Menu_Theme_PokemonRed.Size = new System.Drawing.Size(150, 22);
+            Menu_Theme_PokemonRed.Text = "Pokemon Red";
+            Menu_Theme_PokemonRed.Click += (s, e) => SetApplicationTheme("Pokemon_Red");
+            //
+            // Menu_Theme_PokemonBlue
+            //
+            Menu_Theme_PokemonBlue.Name = "Menu_Theme_PokemonBlue";
+            Menu_Theme_PokemonBlue.Size = new System.Drawing.Size(150, 22);
+            Menu_Theme_PokemonBlue.Text = "Pokemon Blue";
+            Menu_Theme_PokemonBlue.Click += (s, e) => SetApplicationTheme("Pokemon_Blue");
             // 
             // Menu_Language
             // 
@@ -408,11 +523,46 @@ namespace PKHeX.WinForms
             //
             // Menu_PKMUniverse
             //
-            Menu_PKMUniverse.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_RecentFiles, Menu_PKM_BackupManager, Menu_PKM_BatchPresets, Menu_PKM_ShinyLivingDex, Menu_PKM_Templates, Menu_PKM_RandomTeam, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_Discord, Menu_PKM_Kofi, Menu_PKM_Website, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_CheckUpdate, L_PortableMode });
+            Menu_PKMUniverse.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_Tools, Menu_PKM_Search, Menu_PKM_Coverage, Menu_PKM_DamageCalc, Menu_PKM_ShowdownForm, Menu_PKM_SmogonImport, Menu_PKM_TournamentTeams, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_QRCode, Menu_PKM_Compare, Menu_PKM_TradeHistory, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_LivingDex, Menu_PKM_PokedexCompletion, Menu_PKM_FormCollector, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_MysteryGiftDB, Menu_PKM_WonderCards, Menu_PKM_EventChecker, Menu_PKM_MissingEvents, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_Wallpapers, Menu_PKM_CompBuilder, Menu_PKM_RaidManager, Menu_PKM_HomeTracker, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_RecentFiles, Menu_PKM_BackupManager, Menu_PKM_BatchPresets, Menu_PKM_ShinyLivingDex, Menu_PKM_Templates, Menu_PKM_RandomTeam, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_Tutorial, Menu_PKM_AboutDialog, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_DiscordRPC, Menu_PKM_Discord, Menu_PKM_Kofi, Menu_PKM_Website, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_CheckUpdate, L_PortableMode });
             Menu_PKMUniverse.Name = "Menu_PKMUniverse";
             Menu_PKMUniverse.Size = new System.Drawing.Size(95, 20);
             Menu_PKMUniverse.Text = "PKM-Universe";
             Menu_PKMUniverse.ForeColor = System.Drawing.Color.FromArgb(139, 0, 0);
+            //
+            // Menu_PKM_Tools
+            //
+            Menu_PKM_Tools.Name = "Menu_PKM_Tools";
+            Menu_PKM_Tools.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_Tools.Text = "PKM Universe Tools";
+            Menu_PKM_Tools.Click += Menu_PKM_Tools_Click;
+            //
+            // Menu_PKM_Wallpapers
+            //
+            Menu_PKM_Wallpapers.Name = "Menu_PKM_Wallpapers";
+            Menu_PKM_Wallpapers.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_Wallpapers.Text = "Box Wallpapers";
+            Menu_PKM_Wallpapers.Click += Menu_PKM_Wallpapers_Click;
+            //
+            // Menu_PKM_CompBuilder
+            //
+            Menu_PKM_CompBuilder.Name = "Menu_PKM_CompBuilder";
+            Menu_PKM_CompBuilder.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_CompBuilder.Text = "Quick Competitive Builder";
+            Menu_PKM_CompBuilder.Click += Menu_PKM_CompBuilder_Click;
+            //
+            // Menu_PKM_RaidManager
+            //
+            Menu_PKM_RaidManager.Name = "Menu_PKM_RaidManager";
+            Menu_PKM_RaidManager.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_RaidManager.Text = "Raid Den Manager (SwSh)";
+            Menu_PKM_RaidManager.Click += Menu_PKM_RaidManager_Click;
+            //
+            // Menu_PKM_HomeTracker
+            //
+            Menu_PKM_HomeTracker.Name = "Menu_PKM_HomeTracker";
+            Menu_PKM_HomeTracker.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_HomeTracker.Text = "Home Tracker";
+            Menu_PKM_HomeTracker.Click += Menu_PKM_HomeTracker_Click;
             //
             // Menu_PKM_RecentFiles
             //
@@ -538,6 +688,143 @@ namespace PKHeX.WinForms
             Menu_PKM_CheckUpdate.Size = new System.Drawing.Size(180, 22);
             Menu_PKM_CheckUpdate.Text = "Check for Updates";
             Menu_PKM_CheckUpdate.Click += Menu_PKM_CheckUpdate_Click;
+            //
+            // Menu_PKM_Search
+            //
+            Menu_PKM_Search.Name = "Menu_PKM_Search";
+            Menu_PKM_Search.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_Search.Text = "Search Pokemon";
+            Menu_PKM_Search.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F;
+            Menu_PKM_Search.Click += Menu_PKM_Search_Click;
+            //
+            // Menu_PKM_Coverage
+            //
+            Menu_PKM_Coverage.Name = "Menu_PKM_Coverage";
+            Menu_PKM_Coverage.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_Coverage.Text = "Team Coverage Analyzer";
+            Menu_PKM_Coverage.Click += Menu_PKM_Coverage_Click;
+            //
+            // Menu_PKM_DamageCalc
+            //
+            Menu_PKM_DamageCalc.Name = "Menu_PKM_DamageCalc";
+            Menu_PKM_DamageCalc.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_DamageCalc.Text = "Damage Calculator";
+            Menu_PKM_DamageCalc.Click += Menu_PKM_DamageCalc_Click;
+            //
+            // Menu_PKM_ShowdownForm
+            //
+            Menu_PKM_ShowdownForm.Name = "Menu_PKM_ShowdownForm";
+            Menu_PKM_ShowdownForm.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_ShowdownForm.Text = "Showdown Import/Export";
+            Menu_PKM_ShowdownForm.Click += Menu_PKM_ShowdownForm_Click;
+            //
+            // Menu_PKM_SmogonImport
+            //
+            Menu_PKM_SmogonImport.Name = "Menu_PKM_SmogonImport";
+            Menu_PKM_SmogonImport.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_SmogonImport.Text = "Smogon Set Importer";
+            Menu_PKM_SmogonImport.Click += Menu_PKM_SmogonImport_Click;
+            //
+            // Menu_PKM_TournamentTeams
+            //
+            Menu_PKM_TournamentTeams.Name = "Menu_PKM_TournamentTeams";
+            Menu_PKM_TournamentTeams.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_TournamentTeams.Text = "Tournament Team Manager";
+            Menu_PKM_TournamentTeams.Click += Menu_PKM_TournamentTeams_Click;
+            //
+            // Menu_PKM_Tutorial
+            //
+            Menu_PKM_Tutorial.Name = "Menu_PKM_Tutorial";
+            Menu_PKM_Tutorial.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_Tutorial.Text = "Quick Start Tutorial";
+            Menu_PKM_Tutorial.ShortcutKeys = System.Windows.Forms.Keys.F1;
+            Menu_PKM_Tutorial.Click += Menu_PKM_Tutorial_Click;
+            //
+            // Menu_PKM_AboutDialog
+            //
+            Menu_PKM_AboutDialog.Name = "Menu_PKM_AboutDialog";
+            Menu_PKM_AboutDialog.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_AboutDialog.Text = "About PKM-Universe";
+            Menu_PKM_AboutDialog.Click += Menu_PKM_AboutDialog_Click;
+            //
+            // Menu_PKM_QRCode
+            //
+            Menu_PKM_QRCode.Name = "Menu_PKM_QRCode";
+            Menu_PKM_QRCode.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_QRCode.Text = "Generate QR Code";
+            Menu_PKM_QRCode.Click += Menu_PKM_QRCode_Click;
+            //
+            // Menu_PKM_Compare
+            //
+            Menu_PKM_Compare.Name = "Menu_PKM_Compare";
+            Menu_PKM_Compare.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_Compare.Text = "Compare Pokemon";
+            Menu_PKM_Compare.Click += Menu_PKM_Compare_Click;
+            //
+            // Menu_PKM_TradeHistory
+            //
+            Menu_PKM_TradeHistory.Name = "Menu_PKM_TradeHistory";
+            Menu_PKM_TradeHistory.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_TradeHistory.Text = "Trade History Log";
+            Menu_PKM_TradeHistory.Click += Menu_PKM_TradeHistory_Click;
+            //
+            // Menu_PKM_DiscordRPC
+            //
+            Menu_PKM_DiscordRPC.Name = "Menu_PKM_DiscordRPC";
+            Menu_PKM_DiscordRPC.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_DiscordRPC.Text = "Discord Rich Presence";
+            Menu_PKM_DiscordRPC.CheckOnClick = true;
+            Menu_PKM_DiscordRPC.Checked = false;
+            Menu_PKM_DiscordRPC.Click += Menu_PKM_DiscordRPC_Click;
+            //
+            // Menu_PKM_LivingDex
+            //
+            Menu_PKM_LivingDex.Name = "Menu_PKM_LivingDex";
+            Menu_PKM_LivingDex.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_LivingDex.Text = "Living Dex Tracker";
+            Menu_PKM_LivingDex.Click += Menu_PKM_LivingDex_Click;
+            //
+            // Menu_PKM_PokedexCompletion
+            //
+            Menu_PKM_PokedexCompletion.Name = "Menu_PKM_PokedexCompletion";
+            Menu_PKM_PokedexCompletion.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_PokedexCompletion.Text = "Pokedex Completion";
+            Menu_PKM_PokedexCompletion.Click += Menu_PKM_PokedexCompletion_Click;
+            //
+            // Menu_PKM_FormCollector
+            //
+            Menu_PKM_FormCollector.Name = "Menu_PKM_FormCollector";
+            Menu_PKM_FormCollector.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_FormCollector.Text = "Form Collector";
+            Menu_PKM_FormCollector.Click += Menu_PKM_FormCollector_Click;
+            //
+            // Menu_PKM_MysteryGiftDB
+            //
+            Menu_PKM_MysteryGiftDB.Name = "Menu_PKM_MysteryGiftDB";
+            Menu_PKM_MysteryGiftDB.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_MysteryGiftDB.Text = "Mystery Gift Database";
+            Menu_PKM_MysteryGiftDB.Click += Menu_PKM_MysteryGiftDB_Click;
+            //
+            // Menu_PKM_WonderCards
+            //
+            Menu_PKM_WonderCards.Name = "Menu_PKM_WonderCards";
+            Menu_PKM_WonderCards.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_WonderCards.Text = "Wonder Card Manager";
+            Menu_PKM_WonderCards.Click += Menu_PKM_WonderCards_Click;
+            //
+            // Menu_PKM_EventChecker
+            //
+            Menu_PKM_EventChecker.Name = "Menu_PKM_EventChecker";
+            Menu_PKM_EventChecker.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_EventChecker.Text = "Event Pokemon Checker";
+            Menu_PKM_EventChecker.Click += Menu_PKM_EventChecker_Click;
+            //
+            // Menu_PKM_MissingEvents
+            //
+            Menu_PKM_MissingEvents.Name = "Menu_PKM_MissingEvents";
+            Menu_PKM_MissingEvents.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_MissingEvents.Text = "Missing Events Finder";
+            Menu_PKM_MissingEvents.Click += Menu_PKM_MissingEvents_Click;
             //
             // L_PortableMode
             //
@@ -720,6 +1007,17 @@ namespace PKHeX.WinForms
         private System.Windows.Forms.ToolStripMenuItem Menu_Options;
         private System.Windows.Forms.ToolStripMenuItem Menu_Language;
         private System.Windows.Forms.ToolStripComboBox CB_MainLanguage;
+        private System.Windows.Forms.ToolStripMenuItem Menu_Theme;
+        private System.Windows.Forms.ToolStripMenuItem Menu_Theme_Light;
+        private System.Windows.Forms.ToolStripMenuItem Menu_Theme_Dark;
+        private System.Windows.Forms.ToolStripMenuItem Menu_Theme_Midnight;
+        private System.Windows.Forms.ToolStripMenuItem Menu_Theme_PKMUniverse;
+        private System.Windows.Forms.ToolStripMenuItem Menu_Theme_Neon;
+        private System.Windows.Forms.ToolStripMenuItem Menu_Theme_Ocean;
+        private System.Windows.Forms.ToolStripMenuItem Menu_Theme_Forest;
+        private System.Windows.Forms.ToolStripMenuItem Menu_Theme_Sunset;
+        private System.Windows.Forms.ToolStripMenuItem Menu_Theme_PokemonRed;
+        private System.Windows.Forms.ToolStripMenuItem Menu_Theme_PokemonBlue;
         private System.Windows.Forms.ToolStripMenuItem Menu_About;
         private System.Windows.Forms.ToolStripMenuItem Menu_ExportSAV;
         private System.Windows.Forms.ToolStripMenuItem Menu_Showdown;
@@ -769,6 +1067,30 @@ namespace PKHeX.WinForms
         private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SLD_GenerateGen;
         private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SLD_FillMissing;
         private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SLD_CalcBoxes;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_Tools;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_Wallpapers;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_CompBuilder;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_RaidManager;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_HomeTracker;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_Search;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_Coverage;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_DamageCalc;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_ShowdownForm;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SmogonImport;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_TournamentTeams;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_Tutorial;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_AboutDialog;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_QRCode;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_Compare;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_TradeHistory;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_DiscordRPC;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_LivingDex;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_PokedexCompletion;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_FormCollector;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_MysteryGiftDB;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_WonderCards;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_EventChecker;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_MissingEvents;
     }
 }
 
