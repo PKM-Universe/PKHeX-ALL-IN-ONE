@@ -23,6 +23,10 @@ public class AutoLegalityPlugin
     public LegalityFixResult FixLegality(PKM pk)
     {
         var result = new LegalityFixResult { Pokemon = pk };
+
+        // Preserve shiny status before making changes
+        bool wasShiny = pk.IsShiny;
+
         var la = new LegalityAnalysis(pk);
 
         if (la.Valid)
@@ -32,6 +36,13 @@ public class AutoLegalityPlugin
         }
 
         var fixes = new List<string>();
+
+        // Fix PID if needed (for shiny compatibility)
+        if (wasShiny && HasPIDIssue(la))
+        {
+            FixShinyPID(pk);
+            fixes.Add("PID (Shiny)");
+        }
 
         // Fix Met Location
         if (!IsMetLocationValid(pk))
@@ -85,6 +96,12 @@ public class AutoLegalityPlugin
         {
             SetPerfectIVs(pk, 3);
             fixes.Add("IVs (Legendary minimum)");
+        }
+
+        // Fix Zygarde form (enforce Complete form rules for Z-A)
+        if (pk.Species == (int)Species.Zygarde)
+        {
+            FixZygardeForm(pk, fixes);
         }
 
         // Fix Ribbons
@@ -283,6 +300,201 @@ public class AutoLegalityPlugin
             (int)Species.Miraidon => true,
             _ => false
         };
+    }
+
+    /// <summary>
+    /// Fix Zygarde form and ability for proper legality
+    /// Forms: 0 = 50%, 1 = 10%, 2 = 10% (Power Construct), 3 = 50% (Power Construct), 4 = Complete
+    /// </summary>
+    private void FixZygardeForm(PKM pk, List<string> fixes)
+    {
+        // Zygarde Complete (form 4) cannot exist outside of battle
+        // It transforms from 10% or 50% with Power Construct ability
+        if (pk.Form == 4)
+        {
+            // Complete form is battle-only, revert to 50% with Power Construct
+            pk.Form = 3; // 50% Power Construct form
+            pk.Ability = (ushort)Ability.PowerConstruct;
+            pk.AbilityNumber = 4; // Hidden ability slot
+            fixes.Add("Zygarde Form (Complete → 50% Power Construct)");
+        }
+        // For Z-A (Gen9a), enforce Power Construct forms
+        else if (pk.Context == EntityContext.Gen9 && pk is PA9)
+        {
+            // Z-A Zygarde should have Power Construct
+            if (pk.Ability != (ushort)Ability.PowerConstruct)
+            {
+                // Set to Power Construct form based on current form
+                if (pk.Form == 0) // 50%
+                    pk.Form = 3; // 50% with Power Construct
+                else if (pk.Form == 1) // 10%
+                    pk.Form = 2; // 10% with Power Construct
+
+                pk.Ability = (ushort)Ability.PowerConstruct;
+                pk.AbilityNumber = 4;
+                fixes.Add("Zygarde Ability (Power Construct for Z-A)");
+            }
+        }
+        // Validate ability matches form for other games
+        else
+        {
+            bool hasPowerConstruct = pk.Ability == (ushort)Ability.PowerConstruct;
+            bool isPowerConstructForm = pk.Form == 2 || pk.Form == 3;
+
+            if (hasPowerConstruct && !isPowerConstructForm)
+            {
+                // Has Power Construct but wrong form - fix form
+                pk.Form = pk.Form == 1 ? (byte)2 : (byte)3;
+                fixes.Add("Zygarde Form (matched to Power Construct)");
+            }
+            else if (!hasPowerConstruct && isPowerConstructForm)
+            {
+                // Power Construct form but wrong ability - fix ability
+                pk.Ability = (ushort)Ability.PowerConstruct;
+                pk.AbilityNumber = 4;
+                fixes.Add("Zygarde Ability (Power Construct for form)");
+            }
+        }
+    }
+
+    private bool HasPIDIssue(LegalityAnalysis la)
+    {
+        foreach (var check in la.Results)
+        {
+            if (!check.Valid && check.Identifier.ToString().Contains("PID"))
+                return true;
+        }
+        return false;
+    }
+
+    private void FixShinyPID(PKM pk)
+    {
+        // Check if this is a BDSP roaming encounter (Mesprit/Cresselia)
+        if (pk is PB8 pb8 && IsBDSPRoamingSpecies(pk.Species))
+        {
+            FixBDSPRoamingShiny(pb8);
+            return;
+        }
+
+        // For other Pokemon, use proper shiny PID calculation
+        FixGenericShinyPID(pk);
+    }
+
+    private bool IsBDSPRoamingSpecies(ushort species)
+    {
+        // Mesprit (481) and Cresselia (488) are roaming in BDSP
+        return species == (int)Species.Mesprit || species == (int)Species.Cresselia;
+    }
+
+    private void FixBDSPRoamingShiny(PB8 pk)
+    {
+        // For BDSP roaming Pokemon, we need to find a valid EC seed that produces shiny PID
+        // The EC is used as the RNG seed, and PID/IVs/Height/Weight all derive from it
+
+        // Save current values we want to preserve
+        var nature = pk.Nature;
+        var statNature = pk.StatNature;
+        var moves = new ushort[] { pk.Move1, pk.Move2, pk.Move3, pk.Move4 };
+        var evs = new int[] { pk.EV_HP, pk.EV_ATK, pk.EV_DEF, pk.EV_SPA, pk.EV_SPD, pk.EV_SPE };
+        var heldItem = pk.HeldItem;
+        var nickname = pk.IsNicknamed ? pk.Nickname : null;
+
+        // Create criteria that requests shiny
+        var criteria = new EncounterCriteria
+        {
+            Shiny = Shiny.AlwaysStar
+        };
+
+        // Use the Roaming8bRNG to find a valid shiny seed
+        // This searches up to 70,000 seeds to find one that:
+        // 1. Produces a shiny PID for this trainer's TID/SID
+        // 2. Has valid IVs, height, weight derived from the same seed
+        Roaming8bRNG.ApplyDetails(pk, criteria, Shiny.AlwaysStar, 3);
+
+        // Restore nature (can be set by Synchronize in-game)
+        pk.Nature = nature;
+        pk.StatNature = statNature;
+
+        // Restore moves
+        pk.Move1 = moves[0];
+        pk.Move2 = moves[1];
+        pk.Move3 = moves[2];
+        pk.Move4 = moves[3];
+        pk.SetMaximumPPCurrent(moves);
+
+        // Restore EVs
+        pk.EV_HP = evs[0];
+        pk.EV_ATK = evs[1];
+        pk.EV_DEF = evs[2];
+        pk.EV_SPA = evs[3];
+        pk.EV_SPD = evs[4];
+        pk.EV_SPE = evs[5];
+
+        // Restore held item
+        pk.HeldItem = heldItem;
+
+        // Restore nickname if it had one
+        if (nickname != null)
+            pk.SetNickname(nickname);
+
+        pk.RefreshChecksum();
+    }
+
+    private void FixGenericShinyPID(PKM pk)
+    {
+        // Use ShinyUtil.GetShinyPID for proper shiny PID calculation
+        // This modifies the upper half of the PID to make it shiny
+        var pid = pk.PID;
+        var newPid = ShinyUtil.GetShinyPID(pk.TID16, pk.SID16, pid, 1); // 1 = star shiny
+        pk.PID = newPid;
+
+        // For Gen 8+, may also need to adjust EC
+        if (pk.Format >= 8 && !pk.IsShiny)
+        {
+            // If still not shiny after PID fix, regenerate EC
+            pk.EncryptionConstant = Util.Rand32();
+            pk.PID = ShinyUtil.GetShinyPID(pk.TID16, pk.SID16, pk.PID, 1);
+        }
+
+        // Final check - if legality still fails, try encounter-based regeneration
+        var la = new LegalityAnalysis(pk);
+        if (!la.Valid && HasPIDIssue(la))
+        {
+            // Try to regenerate from encounter
+            TryRegenerateFromEncounter(pk);
+        }
+    }
+
+    private void TryRegenerateFromEncounter(PKM pk)
+    {
+        // Find a matching encounter
+        var la = new LegalityAnalysis(pk);
+        var encounter = la.Info.EncounterOriginal;
+
+        if (encounter == null)
+            return;
+
+        // Create shiny criteria
+        var criteria = new EncounterCriteria
+        {
+            Shiny = Shiny.AlwaysStar
+        };
+
+        // Try to generate from the encounter
+        var generated = encounter.ConvertToPKM(SAV, criteria);
+        if (generated == null)
+            return;
+
+        // Copy the shiny PID/EC to our Pokemon
+        pk.PID = generated.PID;
+        pk.EncryptionConstant = generated.EncryptionConstant;
+
+        // Copy IVs if they changed (some encounters have fixed IV structure)
+        if (generated is IScaledSize gs && pk is IScaledSize ps)
+        {
+            ps.HeightScalar = gs.HeightScalar;
+            ps.WeightScalar = gs.WeightScalar;
+        }
     }
 
     private List<string> GetRemainingIssues(LegalityAnalysis la)
