@@ -314,7 +314,7 @@ public class AutoLegalityPlugin
         {
             // Complete form is battle-only, revert to 50% with Power Construct
             pk.Form = 3; // 50% Power Construct form
-            pk.Ability = (ushort)Ability.PowerConstruct;
+            pk.Ability = (ushort)PKHeX.Core.Ability.PowerConstruct;
             pk.AbilityNumber = 4; // Hidden ability slot
             fixes.Add("Zygarde Form (Complete → 50% Power Construct)");
         }
@@ -322,7 +322,7 @@ public class AutoLegalityPlugin
         else if (pk.Context == EntityContext.Gen9 && pk is PA9)
         {
             // Z-A Zygarde should have Power Construct
-            if (pk.Ability != (ushort)Ability.PowerConstruct)
+            if (pk.Ability != (ushort)PKHeX.Core.Ability.PowerConstruct)
             {
                 // Set to Power Construct form based on current form
                 if (pk.Form == 0) // 50%
@@ -330,7 +330,7 @@ public class AutoLegalityPlugin
                 else if (pk.Form == 1) // 10%
                     pk.Form = 2; // 10% with Power Construct
 
-                pk.Ability = (ushort)Ability.PowerConstruct;
+                pk.Ability = (ushort)PKHeX.Core.Ability.PowerConstruct;
                 pk.AbilityNumber = 4;
                 fixes.Add("Zygarde Ability (Power Construct for Z-A)");
             }
@@ -338,7 +338,7 @@ public class AutoLegalityPlugin
         // Validate ability matches form for other games
         else
         {
-            bool hasPowerConstruct = pk.Ability == (ushort)Ability.PowerConstruct;
+            bool hasPowerConstruct = pk.Ability == (ushort)PKHeX.Core.Ability.PowerConstruct;
             bool isPowerConstructForm = pk.Form == 2 || pk.Form == 3;
 
             if (hasPowerConstruct && !isPowerConstructForm)
@@ -350,7 +350,7 @@ public class AutoLegalityPlugin
             else if (!hasPowerConstruct && isPowerConstructForm)
             {
                 // Power Construct form but wrong ability - fix ability
-                pk.Ability = (ushort)Ability.PowerConstruct;
+                pk.Ability = (ushort)PKHeX.Core.Ability.PowerConstruct;
                 pk.AbilityNumber = 4;
                 fixes.Add("Zygarde Ability (Power Construct for form)");
             }
