@@ -4,16 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using PKHeX.Core;
+using PKHeX.Core.AutoMod;
 
 namespace PKHeX.WinForms.Plugins;
 
 /// <summary>
 /// ALM (Auto Legality Mod) enhanced Showdown import - Creates legal Pokemon from Showdown sets
+/// Uses the full PKHeX.Core.AutoMod legalization engine
 /// </summary>
 public static class ALMShowdownPlugin
 {
     /// <summary>
-    /// Import a Showdown set and automatically make it legal
+    /// Import a Showdown set and automatically make it legal using the full ALM engine
     /// </summary>
     public static PKM? ImportShowdownSetWithLegality(string showdownText, SaveFile sav)
     {
@@ -45,54 +47,83 @@ public static class ALMShowdownPlugin
     }
 
     /// <summary>
-    /// Generate a legal Pokemon from a battle template set
+    /// Generate a legal Pokemon from a battle template set using the full ALM engine
     /// </summary>
     public static PKM? GenerateLegalPokemon(IBattleTemplate set, SaveFile sav)
+    {
+        try
+        {
+            // Use the proper ALM GetLegalFromSet extension method
+            var result = sav.GetLegalFromSet(set);
+            var pk = result.Created;
+
+            // Check if legalization was successful
+            if (result.Status == LegalizationResult.Regenerated ||
+                result.Status == LegalizationResult.Timeout ||
+                result.Status == LegalizationResult.Failed)
+            {
+                // Try alternative approach with ShowdownSet
+                var showdownSet = set as ShowdownSet;
+                if (showdownSet != null)
+                {
+                    var regen = new RegenTemplate(showdownSet, sav.Generation);
+                    var retryResult = sav.GetLegalFromSet(regen);
+                    pk = retryResult.Created;
+                }
+            }
+
+            // Final check
+            if (pk == null || pk.Species == 0)
+                return FallbackGeneration(set, sav);
+
+            return pk;
+        }
+        catch (Exception)
+        {
+            // Fallback to basic generation if ALM fails
+            return FallbackGeneration(set, sav);
+        }
+    }
+
+    /// <summary>
+    /// Fallback generation when ALM engine fails
+    /// </summary>
+    private static PKM? FallbackGeneration(IBattleTemplate set, SaveFile sav)
     {
         var pk = sav.BlankPKM;
         pk.Species = set.Species;
         pk.Form = set.Form;
 
-        // Apply the template
-        ApplyTemplate(pk, set, sav);
+        // Apply basic template
+        ApplyBasicTemplate(pk, set, sav);
 
-        // Try to make it legal
-        var legalizer = new AutoLegalityPlugin(sav);
-        var result = legalizer.FixLegality(pk);
+        // Try encounter-based generation
+        var encounters = EncounterMovesetGenerator.GenerateEncounters(pk, set.Moves, sav.Version);
+        var encounter = encounters.FirstOrDefault();
 
-        // If still not legal, try alternative approaches
-        if (!result.IsNowLegal && !result.WasAlreadyLegal)
+        if (encounter != null)
         {
-            pk = TryAlternativeLegalization(set, sav);
+            var criteria = EncounterCriteria.Unrestricted;
+            var generated = encounter.ConvertToPKM(sav, criteria);
+            if (generated != null)
+            {
+                ApplySetDetails(generated, set, sav);
+                return generated;
+            }
         }
 
         return pk;
     }
 
-    private static void ApplyTemplate(PKM pk, IBattleTemplate set, SaveFile sav)
+    private static void ApplyBasicTemplate(PKM pk, IBattleTemplate set, SaveFile sav)
     {
-        // Species and Form
         pk.Species = set.Species;
         pk.Form = set.Form;
-
-        // Nickname
-        if (!string.IsNullOrEmpty(set.Nickname))
-        {
-            pk.SetNickname(set.Nickname);
-        }
-        else
-        {
-            pk.SetDefaultNickname();
-        }
-
-        // Level
         pk.CurrentLevel = (byte)Math.Clamp((int)set.Level, 1, 100);
 
         // Gender
         if (set.Gender.HasValue)
-        {
             pk.Gender = set.Gender.Value;
-        }
         else
         {
             var pi = pk.PersonalInfo;
@@ -100,11 +131,7 @@ public static class ALMShowdownPlugin
         }
 
         // Nature
-        if (set.Nature != Nature.Random)
-            pk.Nature = set.Nature;
-        else
-            pk.Nature = Nature.Adamant;
-
+        pk.Nature = set.Nature != Nature.Random ? set.Nature : Nature.Adamant;
         pk.StatNature = pk.Nature;
 
         // Ability
@@ -133,180 +160,131 @@ public static class ALMShowdownPlugin
 
         // IVs
         var ivs = set.IVs;
-        pk.IV_HP = ivs[0];
-        pk.IV_ATK = ivs[1];
-        pk.IV_DEF = ivs[2];
-        pk.IV_SPA = ivs[3];
-        pk.IV_SPD = ivs[4];
-        pk.IV_SPE = ivs[5];
+        pk.IV_HP = ivs[0]; pk.IV_ATK = ivs[1]; pk.IV_DEF = ivs[2];
+        pk.IV_SPA = ivs[3]; pk.IV_SPD = ivs[4]; pk.IV_SPE = ivs[5];
 
         // EVs
         var evs = set.EVs;
-        pk.EV_HP = evs[0];
-        pk.EV_ATK = evs[1];
-        pk.EV_DEF = evs[2];
-        pk.EV_SPA = evs[3];
-        pk.EV_SPD = evs[4];
-        pk.EV_SPE = evs[5];
+        pk.EV_HP = evs[0]; pk.EV_ATK = evs[1]; pk.EV_DEF = evs[2];
+        pk.EV_SPA = evs[3]; pk.EV_SPD = evs[4]; pk.EV_SPE = evs[5];
 
-        // Held Item
+        // Item
         if (set.HeldItem > 0)
             pk.HeldItem = set.HeldItem;
 
-        // Shiny - set with valid PID/EC for the generation
-        if (set.Shiny)
-        {
-            MakeShinyValid(pk);
-        }
-
-        // Tera Type for Gen 9
-        if (pk is ITeraType tera && set is ITeraType setTera && pk is PK9 pk9)
-        {
-            pk9.TeraTypeOriginal = setTera.TeraType;
-        }
-
-        // Set trainer info
+        // Trainer info
         pk.OriginalTrainerName = sav.OT;
         pk.OriginalTrainerGender = sav.Gender;
         pk.TID16 = sav.TID16;
         pk.SID16 = sav.SID16;
         pk.Language = sav.Language;
 
-        // Set valid met data
-        SetMetData(pk, sav);
+        // Met data
+        pk.MetDate = DateOnly.FromDateTime(DateTime.Now);
+        pk.MetLocation = pk.Context switch
+        {
+            EntityContext.Gen9 => 6,
+            EntityContext.Gen8b => 3,
+            EntityContext.Gen8a => 6,
+            EntityContext.Gen8 => 6,
+            EntityContext.Gen7 => 6,
+            _ => 30001
+        };
+        pk.MetLevel = 1;
+        pk.Ball = (byte)Ball.Poke;
+        pk.Version = sav.Version;
+
+        // Shiny
+        if (set.Shiny)
+            pk.SetShinySID(Shiny.AlwaysStar);
+
+        // Nickname
+        if (!string.IsNullOrEmpty(set.Nickname))
+            pk.SetNickname(set.Nickname);
+        else
+            pk.SetDefaultNickname();
 
         pk.RefreshChecksum();
     }
 
-    private static void SetMetData(PKM pk, SaveFile sav)
+    private static void ApplySetDetails(PKM pk, IBattleTemplate set, SaveFile sav)
     {
-        pk.MetDate = DateOnly.FromDateTime(DateTime.Now);
-
-        // Set appropriate met location based on context
-        pk.MetLocation = pk.Context switch
-        {
-            EntityContext.Gen9 => 6, // Mesagoza
-            EntityContext.Gen8b => 3, // Twinleaf Town
-            EntityContext.Gen8a => 6, // Jubilife Village
-            EntityContext.Gen8 => 6, // Postwick
-            EntityContext.Gen7 => 6, // Route 1
-            EntityContext.Gen6 => 6, // Route 1
-            _ => 30001 // Poke Transfer
-        };
-
-        pk.MetLevel = 1;
-        if (pk.CurrentLevel < pk.MetLevel)
-            pk.MetLevel = pk.CurrentLevel;
-
-        // Ball
-        pk.Ball = (byte)Ball.Poke;
-
-        // Version
-        pk.Version = sav.Version;
-    }
-
-    private static PKM? TryAlternativeLegalization(IBattleTemplate set, SaveFile sav)
-    {
-        // Try with encounter-based generation
-        var pk = sav.BlankPKM;
-        pk.Species = set.Species;
-        pk.Form = set.Form;
-
-        // Find a legal encounter
-        var encounters = EncounterMovesetGenerator.GenerateEncounters(pk, set.Moves, sav.Version);
-        var encounter = encounters.FirstOrDefault();
-
-        if (encounter == null)
-            return pk;
-
-        // Generate from encounter using basic criteria
-        var criteria = EncounterCriteria.Unrestricted;
-
-        var generated = encounter.ConvertToPKM(sav, criteria);
-        if (generated == null)
-            return pk;
-
-        // Apply moves and other properties
+        // Moves
         var moves = set.Moves;
-        generated.Move1 = moves.Length > 0 ? moves[0] : (ushort)0;
-        generated.Move2 = moves.Length > 1 ? moves[1] : (ushort)0;
-        generated.Move3 = moves.Length > 2 ? moves[2] : (ushort)0;
-        generated.Move4 = moves.Length > 3 ? moves[3] : (ushort)0;
-        generated.SetMaximumPPCurrent(moves);
+        pk.Move1 = moves.Length > 0 ? moves[0] : pk.Move1;
+        pk.Move2 = moves.Length > 1 ? moves[1] : pk.Move2;
+        pk.Move3 = moves.Length > 2 ? moves[2] : pk.Move3;
+        pk.Move4 = moves.Length > 3 ? moves[3] : pk.Move4;
+        pk.SetMaximumPPCurrent(moves);
 
-        // Apply EVs
+        // EVs
         var evs = set.EVs;
-        generated.EV_HP = evs[0];
-        generated.EV_ATK = evs[1];
-        generated.EV_DEF = evs[2];
-        generated.EV_SPA = evs[3];
-        generated.EV_SPD = evs[4];
-        generated.EV_SPE = evs[5];
+        pk.EV_HP = evs[0]; pk.EV_ATK = evs[1]; pk.EV_DEF = evs[2];
+        pk.EV_SPA = evs[3]; pk.EV_SPD = evs[4]; pk.EV_SPE = evs[5];
 
-        // Held item
+        // Item
         if (set.HeldItem > 0)
-            generated.HeldItem = set.HeldItem;
+            pk.HeldItem = set.HeldItem;
+
+        // Nature
+        if (set.Nature != Nature.Random)
+        {
+            pk.Nature = set.Nature;
+            pk.StatNature = set.Nature;
+        }
 
         // Nickname
         if (!string.IsNullOrEmpty(set.Nickname))
-            generated.SetNickname(set.Nickname);
+            pk.SetNickname(set.Nickname);
 
-        // Apply shiny status
+        // Shiny
         if (set.Shiny)
-            generated.SetShiny();
+            pk.SetShiny();
 
-        // Apply nature
-        if (set.Nature != Nature.Random)
-        {
-            generated.Nature = set.Nature;
-            generated.StatNature = set.Nature;
-        }
-
-        generated.RefreshChecksum();
-        return generated;
+        pk.RefreshChecksum();
     }
 
     /// <summary>
-    /// Make a Pokemon shiny with a valid PID/EC for its generation
-    /// Uses SetShinySID for better compatibility
+    /// Legalize an existing Pokemon using the full ALM engine
     /// </summary>
-    private static void MakeShinyValid(PKM pk)
+    public static PKM? LegalizeExisting(PKM pk, SaveFile sav)
     {
-        // Use SetShinySID which adjusts SID to make the current PID shiny
-        // This is more compatible than regenerating PID
-        pk.SetShinySID(Shiny.AlwaysStar);
-
-        // For Gen 8+, also ensure the shiny flag is properly set
-        if (pk.Format >= 8)
+        try
         {
-            // EC-based shiny for modern games - adjust EC if needed
-            if (!pk.IsShiny)
-            {
-                pk.SetShiny();
-            }
+            var la = new LegalityAnalysis(pk);
+            if (la.Valid)
+                return pk; // Already legal
+
+            // Try to legalize using ALM
+            var result = sav.Legalize(pk);
+            return result;
+        }
+        catch
+        {
+            return pk; // Return original if legalization fails
         }
     }
 
-    private static AbilityPermission GetAbilityNumber(int ability, IPersonalInfo pi)
+    /// <summary>
+    /// Generate a Pokemon from Smogon sets
+    /// </summary>
+    public static PKM? GenerateFromSmogon(PKM template, SaveFile sav)
     {
-        if (ability < 0)
-            return AbilityPermission.Any12;
-
-        for (int i = 0; i < pi.AbilityCount; i++)
+        try
         {
-            if (pi.GetAbilityAtIndex(i) == ability)
-            {
-                return i switch
-                {
-                    0 => AbilityPermission.OnlyFirst,
-                    1 => AbilityPermission.OnlySecond,
-                    2 => AbilityPermission.OnlyHidden,
-                    _ => AbilityPermission.Any12
-                };
-            }
-        }
+            // Use SmogonSetGenerator from PKHeX.Core.AutoMod namespace to fetch sets from Smogon
+            var generator = new PKHeX.Core.AutoMod.SmogonSetGenerator(template);
+            if (!generator.Valid || generator.Sets.Count == 0)
+                return null;
 
-        return AbilityPermission.Any12;
+            // Use the first set
+            var set = generator.Sets.First();
+            return GenerateLegalPokemon(set, sav);
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     /// <summary>

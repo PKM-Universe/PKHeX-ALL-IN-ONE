@@ -148,6 +148,8 @@ public sealed class LegendsZAVerifier : Verifier
             la.AddLine(GetInvalid(PlusMoveCountInvalid));
 
         // Check for all required indexes.
+        // Seed of Mastery can be used on any currently-known move to grant the Plus Move flag.
+        // Without using one, moves naturally learned on level-up/evolution will be automatically marked as Plus when a higher level threshold is met.
         var (_, plus) = LearnSource9ZA.GetLearnsetAndPlus(pk.Species, pk.Form);
         var currentLevel = pk.CurrentLevel;
         CheckPlusMoveFlags(la, pk, permit, plus, currentLevel);
@@ -257,12 +259,12 @@ public sealed class LegendsZAVerifier : Verifier
 
         foreach (var evo in evos)
         {
-            // If the move can be learned as TM, can be marked as Plus Move regardless of level via Seed of Mastery.
+            // If the move can be learned as TM, can be marked as Plus Move via Seed of Mastery regardless of level.
             var pi = table[evo.Species, evo.Form];
             if (tmIndex != -1 && pi.GetIsLearnTM(tmIndex))
                 return true;
 
-            // If the move can be learned via learnset. Seed of Mastery allows marking as Plus Move regardless of level.
+            // If the move can be learned via learnset, check if it's learnable at all (Seed of Mastery allows any known move to be Plus'd).
             var (learn, _) = source.GetLearnsetAndOther(evo.Species, evo.Form);
             if (learn.TryGetLevelLearnMove(move, out var level) && level <= evo.LevelMax)
                 return true;

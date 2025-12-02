@@ -185,6 +185,10 @@ public partial class Main : Form
 
         // Select Language
         CB_MainLanguage.SelectedIndex = GameLanguage.GetLanguageIndex(settings.Startup.Language);
+
+        // Load and apply saved theme (PKM-Universe theme persistence)
+        Themes.ThemeManager.LoadSavedTheme();
+        Themes.ThemeManager.ApplyTheme(this);
     }
 
     public void AttachPlugins()
@@ -2070,6 +2074,338 @@ public partial class Main : Form
             return;
         }
         using var form = new PKMUniverseSeedFinder(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_EVSpreadCalc_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new EVSpreadCalculator(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_EncounterBrowser_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new EncounterDatabaseBrowser(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_ShinyOdds_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new ShinyOddsCalculator(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_TeamAnalyzer_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new TeamAnalyzer(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_MoveTutor_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new MoveTutorFinder(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_BallTracker_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new BallCollectionTracker(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_RibbonTracker_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new RibbonMasterTracker(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_MarkHunter_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new MarkHunter(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_SaveCompare_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new SaveFileComparison(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_BoxOrganizer_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new BoxOrganizer(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_BreedingHelper_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new BreedingHelper(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_TradeEvoHelper_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new TradeEvolutionHelper(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_Quiz_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new PokemonQuiz(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_SpriteViewer_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new SpriteViewer(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    // Advanced Customization Tools
+    private void Menu_PKM_HotkeyCustomizer_Click(object sender, EventArgs e)
+    {
+        using var form = new HotkeyCustomizer();
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_ThemeDesigner_Click(object sender, EventArgs e)
+    {
+        using var form = new ThemeDesigner();
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_StatsDashboard_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new StatisticsDashboard(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_SmartClipboard_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new SmartClipboard(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_ShinyHuntTracker_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new ShinyHuntTracker(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_TrainingPlanner_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new TrainingPlanner(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_BreedingPreview_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new BreedingPreview(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_BattleMatchup_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new BattleMatchupPredictor(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_ViabilityScore_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new ViabilityScoreCalculator(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_BatchOptimizer_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new IVEVBatchOptimizer(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_Tournament_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new TournamentBracketSimulator(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_ReportExporter_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new ProfessionalReportExporter(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_SynergyAnalyzer_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new TeamSynergyAnalyzer(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_MoveTracker_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new MoveAvailabilityTracker(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_MetaAnalyzer_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new MetaGameAnalyzer(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_SetupRecommender_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new OptimalSetupRecommender(C_SAV.SAV);
+        form.ShowDialog();
+    }
+
+    private void Menu_PKM_CrossGenValidator_Click(object sender, EventArgs e)
+    {
+        if (!C_SAV.SAV.State.Exportable)
+        {
+            WinFormsUtil.Alert("Please load a save file first.");
+            return;
+        }
+        using var form = new CrossGenerationTeamValidator(C_SAV.SAV);
         form.ShowDialog();
     }
 

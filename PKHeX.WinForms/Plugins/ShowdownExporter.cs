@@ -389,7 +389,7 @@ public class ShowdownExporter
     private string GetMoveName(int move)
     {
         if (move == 0) return "None";
-        return MoveInfo.GetMoveName(move, 2);
+        return ShowdownMoveHelper.GetMoveName(move, 2);
     }
 
     private string GetNatureName(Nature nature)
@@ -510,7 +510,7 @@ public static class Ability
 }
 
 // Helper class for move info
-public static class MoveInfo
+public static class ShowdownMoveHelper
 {
     public static string GetMoveName(int move, int language)
     {
@@ -518,7 +518,7 @@ public static class MoveInfo
         return $"Move_{move}";
     }
 
-    public static byte GetType(int move, EntityContext context)
+    public static byte GetMoveType(int move, EntityContext context)
     {
         // Simplified - would use actual move data
         return 0;

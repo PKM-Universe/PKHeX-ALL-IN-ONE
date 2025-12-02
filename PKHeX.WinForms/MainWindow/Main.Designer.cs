@@ -114,6 +114,58 @@ namespace PKHeX.WinForms
             Menu_PKM_EventChecker = new System.Windows.Forms.ToolStripMenuItem();
             Menu_PKM_MissingEvents = new System.Windows.Forms.ToolStripMenuItem();
             Menu_PKM_SeedFinder = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_SubCompetitive = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_SubCollections = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_SubMysteryGifts = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_SubRNG = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_SubUtilities = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_SubHelp = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_SubBreeding = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_SubFun = new System.Windows.Forms.ToolStripMenuItem();
+            // New tools
+            Menu_PKM_EVSpreadCalc = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_EncounterBrowser = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_ShinyOdds = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_TeamAnalyzer = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_MoveTutor = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_BallTracker = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_RibbonTracker = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_MarkHunter = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_SaveCompare = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_BoxOrganizer = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_BreedingHelper = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_TradeEvoHelper = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_Quiz = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_SpriteViewer = new System.Windows.Forms.ToolStripMenuItem();
+            // Advanced customization tools
+            Menu_PKM_SubCustomization = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_HotkeyCustomizer = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_ThemeDesigner = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_StatsDashboard = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_SmartClipboard = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_ShinyHuntTracker = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_TrainingPlanner = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_BreedingPreview = new System.Windows.Forms.ToolStripMenuItem();
+            // Pro competitive tools - Main submenu
+            Menu_PKM_SubProTools = new System.Windows.Forms.ToolStripMenuItem();
+            // Pro Tools - Battle Analysis category
+            Menu_PKM_SubBattleAnalysis = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_BattleMatchup = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_ViabilityScore = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_MetaAnalyzer = new System.Windows.Forms.ToolStripMenuItem();
+            // Pro Tools - Team Building category
+            Menu_PKM_SubTeamBuilding = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_SynergyAnalyzer = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_SetupRecommender = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_CrossGenValidator = new System.Windows.Forms.ToolStripMenuItem();
+            // Pro Tools - Optimization category
+            Menu_PKM_SubOptimization = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_BatchOptimizer = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_MoveTracker = new System.Windows.Forms.ToolStripMenuItem();
+            // Pro Tools - Tournament & Export category
+            Menu_PKM_SubTournament = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_Tournament = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_ReportExporter = new System.Windows.Forms.ToolStripMenuItem();
             L_PortableMode = new System.Windows.Forms.ToolStripLabel();
             L_UpdateAvailable = new System.Windows.Forms.LinkLabel();
             toolTip = new System.Windows.Forms.ToolTip(components);
@@ -524,7 +576,7 @@ namespace PKHeX.WinForms
             //
             // Menu_PKMUniverse
             //
-            Menu_PKMUniverse.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_Tools, Menu_PKM_Search, Menu_PKM_Coverage, Menu_PKM_DamageCalc, Menu_PKM_ShowdownForm, Menu_PKM_SmogonImport, Menu_PKM_TournamentTeams, Menu_PKM_SeedFinder, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_QRCode, Menu_PKM_Compare, Menu_PKM_TradeHistory, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_LivingDex, Menu_PKM_PokedexCompletion, Menu_PKM_FormCollector, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_MysteryGiftDB, Menu_PKM_WonderCards, Menu_PKM_EventChecker, Menu_PKM_MissingEvents, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_Wallpapers, Menu_PKM_CompBuilder, Menu_PKM_RaidManager, Menu_PKM_HomeTracker, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_RecentFiles, Menu_PKM_BackupManager, Menu_PKM_BatchPresets, Menu_PKM_ShinyLivingDex, Menu_PKM_Templates, Menu_PKM_RandomTeam, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_Tutorial, Menu_PKM_AboutDialog, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_DiscordRPC, Menu_PKM_Discord, Menu_PKM_Kofi, Menu_PKM_Website, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_CheckUpdate, L_PortableMode });
+            Menu_PKMUniverse.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_SubCompetitive, Menu_PKM_SubCollections, Menu_PKM_SubBreeding, Menu_PKM_SubMysteryGifts, Menu_PKM_SubRNG, Menu_PKM_SubUtilities, Menu_PKM_SubFun, Menu_PKM_SubCustomization, Menu_PKM_SubProTools, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_SubHelp, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_DiscordRPC, L_PortableMode });
             Menu_PKMUniverse.Name = "Menu_PKMUniverse";
             Menu_PKMUniverse.Size = new System.Drawing.Size(95, 20);
             Menu_PKMUniverse.Text = "PKM-Universe";
@@ -834,6 +886,331 @@ namespace PKHeX.WinForms
             Menu_PKM_SeedFinder.Text = "Seed Finder";
             Menu_PKM_SeedFinder.Click += Menu_PKM_SeedFinder_Click;
             //
+            // Menu_PKM_EVSpreadCalc
+            //
+            Menu_PKM_EVSpreadCalc.Name = "Menu_PKM_EVSpreadCalc";
+            Menu_PKM_EVSpreadCalc.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_EVSpreadCalc.Text = "EV Spread Calculator";
+            Menu_PKM_EVSpreadCalc.Click += Menu_PKM_EVSpreadCalc_Click;
+            //
+            // Menu_PKM_EncounterBrowser
+            //
+            Menu_PKM_EncounterBrowser.Name = "Menu_PKM_EncounterBrowser";
+            Menu_PKM_EncounterBrowser.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_EncounterBrowser.Text = "Encounter Browser";
+            Menu_PKM_EncounterBrowser.Click += Menu_PKM_EncounterBrowser_Click;
+            //
+            // Menu_PKM_ShinyOdds
+            //
+            Menu_PKM_ShinyOdds.Name = "Menu_PKM_ShinyOdds";
+            Menu_PKM_ShinyOdds.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_ShinyOdds.Text = "Shiny Odds Calculator";
+            Menu_PKM_ShinyOdds.Click += Menu_PKM_ShinyOdds_Click;
+            //
+            // Menu_PKM_TeamAnalyzer
+            //
+            Menu_PKM_TeamAnalyzer.Name = "Menu_PKM_TeamAnalyzer";
+            Menu_PKM_TeamAnalyzer.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_TeamAnalyzer.Text = "Team Analyzer";
+            Menu_PKM_TeamAnalyzer.Click += Menu_PKM_TeamAnalyzer_Click;
+            //
+            // Menu_PKM_MoveTutor
+            //
+            Menu_PKM_MoveTutor.Name = "Menu_PKM_MoveTutor";
+            Menu_PKM_MoveTutor.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_MoveTutor.Text = "Move Tutor Finder";
+            Menu_PKM_MoveTutor.Click += Menu_PKM_MoveTutor_Click;
+            //
+            // Menu_PKM_BallTracker
+            //
+            Menu_PKM_BallTracker.Name = "Menu_PKM_BallTracker";
+            Menu_PKM_BallTracker.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_BallTracker.Text = "Ball Collection Tracker";
+            Menu_PKM_BallTracker.Click += Menu_PKM_BallTracker_Click;
+            //
+            // Menu_PKM_RibbonTracker
+            //
+            Menu_PKM_RibbonTracker.Name = "Menu_PKM_RibbonTracker";
+            Menu_PKM_RibbonTracker.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_RibbonTracker.Text = "Ribbon Master Tracker";
+            Menu_PKM_RibbonTracker.Click += Menu_PKM_RibbonTracker_Click;
+            //
+            // Menu_PKM_MarkHunter
+            //
+            Menu_PKM_MarkHunter.Name = "Menu_PKM_MarkHunter";
+            Menu_PKM_MarkHunter.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_MarkHunter.Text = "Mark Hunter";
+            Menu_PKM_MarkHunter.Click += Menu_PKM_MarkHunter_Click;
+            //
+            // Menu_PKM_SaveCompare
+            //
+            Menu_PKM_SaveCompare.Name = "Menu_PKM_SaveCompare";
+            Menu_PKM_SaveCompare.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_SaveCompare.Text = "Save File Comparison";
+            Menu_PKM_SaveCompare.Click += Menu_PKM_SaveCompare_Click;
+            //
+            // Menu_PKM_BoxOrganizer
+            //
+            Menu_PKM_BoxOrganizer.Name = "Menu_PKM_BoxOrganizer";
+            Menu_PKM_BoxOrganizer.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_BoxOrganizer.Text = "Box Organizer";
+            Menu_PKM_BoxOrganizer.Click += Menu_PKM_BoxOrganizer_Click;
+            //
+            // Menu_PKM_BreedingHelper
+            //
+            Menu_PKM_BreedingHelper.Name = "Menu_PKM_BreedingHelper";
+            Menu_PKM_BreedingHelper.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_BreedingHelper.Text = "Breeding Helper";
+            Menu_PKM_BreedingHelper.Click += Menu_PKM_BreedingHelper_Click;
+            //
+            // Menu_PKM_TradeEvoHelper
+            //
+            Menu_PKM_TradeEvoHelper.Name = "Menu_PKM_TradeEvoHelper";
+            Menu_PKM_TradeEvoHelper.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_TradeEvoHelper.Text = "Trade Evolution Helper";
+            Menu_PKM_TradeEvoHelper.Click += Menu_PKM_TradeEvoHelper_Click;
+            //
+            // Menu_PKM_Quiz
+            //
+            Menu_PKM_Quiz.Name = "Menu_PKM_Quiz";
+            Menu_PKM_Quiz.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_Quiz.Text = "Pokemon Quiz";
+            Menu_PKM_Quiz.Click += Menu_PKM_Quiz_Click;
+            //
+            // Menu_PKM_SpriteViewer
+            //
+            Menu_PKM_SpriteViewer.Name = "Menu_PKM_SpriteViewer";
+            Menu_PKM_SpriteViewer.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_SpriteViewer.Text = "Sprite Viewer";
+            Menu_PKM_SpriteViewer.Click += Menu_PKM_SpriteViewer_Click;
+            //
+            // Menu_PKM_SubBreeding - Breeding Submenu
+            //
+            Menu_PKM_SubBreeding.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_BreedingHelper, Menu_PKM_TradeEvoHelper, Menu_PKM_ShinyOdds });
+            Menu_PKM_SubBreeding.Name = "Menu_PKM_SubBreeding";
+            Menu_PKM_SubBreeding.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_SubBreeding.Text = "Breeding && Evolution";
+            //
+            // Menu_PKM_SubFun - Fun & Games Submenu
+            //
+            Menu_PKM_SubFun.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_Quiz, Menu_PKM_SpriteViewer, Menu_PKM_EncounterBrowser });
+            Menu_PKM_SubFun.Name = "Menu_PKM_SubFun";
+            Menu_PKM_SubFun.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_SubFun.Text = "Fun && Explore";
+            //
+            // Menu_PKM_SubCompetitive - Competitive Tools Submenu
+            //
+            Menu_PKM_SubCompetitive.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_ShowdownForm, Menu_PKM_SmogonImport, Menu_PKM_Coverage, Menu_PKM_DamageCalc, Menu_PKM_TournamentTeams, Menu_PKM_CompBuilder, Menu_PKM_Search, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_EVSpreadCalc, Menu_PKM_TeamAnalyzer, Menu_PKM_MoveTutor });
+            Menu_PKM_SubCompetitive.Name = "Menu_PKM_SubCompetitive";
+            Menu_PKM_SubCompetitive.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_SubCompetitive.Text = "Competitive Tools";
+            //
+            // Menu_PKM_SubCollections - Collection Trackers Submenu
+            //
+            Menu_PKM_SubCollections.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_LivingDex, Menu_PKM_PokedexCompletion, Menu_PKM_FormCollector, Menu_PKM_ShinyLivingDex, Menu_PKM_HomeTracker, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_BallTracker, Menu_PKM_RibbonTracker, Menu_PKM_MarkHunter });
+            Menu_PKM_SubCollections.Name = "Menu_PKM_SubCollections";
+            Menu_PKM_SubCollections.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_SubCollections.Text = "Collection Trackers";
+            //
+            // Menu_PKM_SubMysteryGifts - Mystery Gifts Submenu
+            //
+            Menu_PKM_SubMysteryGifts.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_MysteryGiftDB, Menu_PKM_WonderCards, Menu_PKM_EventChecker, Menu_PKM_MissingEvents });
+            Menu_PKM_SubMysteryGifts.Name = "Menu_PKM_SubMysteryGifts";
+            Menu_PKM_SubMysteryGifts.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_SubMysteryGifts.Text = "Mystery Gifts";
+            //
+            // Menu_PKM_SubRNG - RNG & Seeds Submenu
+            //
+            Menu_PKM_SubRNG.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_SeedFinder, Menu_PKM_RaidManager });
+            Menu_PKM_SubRNG.Name = "Menu_PKM_SubRNG";
+            Menu_PKM_SubRNG.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_SubRNG.Text = "RNG && Seeds";
+            //
+            // Menu_PKM_SubUtilities - Utilities Submenu
+            //
+            Menu_PKM_SubUtilities.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_Tools, Menu_PKM_QRCode, Menu_PKM_Compare, Menu_PKM_TradeHistory, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_BoxOrganizer, Menu_PKM_SaveCompare, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_Templates, Menu_PKM_RandomTeam, Menu_PKM_Wallpapers, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_BackupManager, Menu_PKM_RecentFiles, Menu_PKM_BatchPresets });
+            Menu_PKM_SubUtilities.Name = "Menu_PKM_SubUtilities";
+            Menu_PKM_SubUtilities.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_SubUtilities.Text = "Utilities";
+            //
+            // Menu_PKM_SubHelp - Help & Info Submenu
+            //
+            Menu_PKM_SubHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_Tutorial, Menu_PKM_AboutDialog, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_Discord, Menu_PKM_Kofi, Menu_PKM_Website, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_CheckUpdate });
+            Menu_PKM_SubHelp.Name = "Menu_PKM_SubHelp";
+            Menu_PKM_SubHelp.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_SubHelp.Text = "Help && Info";
+            //
+            // Menu_PKM_SubCustomization - Customization Submenu
+            //
+            Menu_PKM_SubCustomization.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_HotkeyCustomizer, Menu_PKM_ThemeDesigner, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_StatsDashboard, Menu_PKM_SmartClipboard, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_ShinyHuntTracker, Menu_PKM_TrainingPlanner, Menu_PKM_BreedingPreview });
+            Menu_PKM_SubCustomization.Name = "Menu_PKM_SubCustomization";
+            Menu_PKM_SubCustomization.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_SubCustomization.Text = "Customization";
+            //
+            // Menu_PKM_HotkeyCustomizer
+            //
+            Menu_PKM_HotkeyCustomizer.Name = "Menu_PKM_HotkeyCustomizer";
+            Menu_PKM_HotkeyCustomizer.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_HotkeyCustomizer.Text = "Hotkey Customizer";
+            Menu_PKM_HotkeyCustomizer.Click += Menu_PKM_HotkeyCustomizer_Click;
+            //
+            // Menu_PKM_ThemeDesigner
+            //
+            Menu_PKM_ThemeDesigner.Name = "Menu_PKM_ThemeDesigner";
+            Menu_PKM_ThemeDesigner.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_ThemeDesigner.Text = "Theme Designer";
+            Menu_PKM_ThemeDesigner.Click += Menu_PKM_ThemeDesigner_Click;
+            //
+            // Menu_PKM_StatsDashboard
+            //
+            Menu_PKM_StatsDashboard.Name = "Menu_PKM_StatsDashboard";
+            Menu_PKM_StatsDashboard.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_StatsDashboard.Text = "Statistics Dashboard";
+            Menu_PKM_StatsDashboard.Click += Menu_PKM_StatsDashboard_Click;
+            //
+            // Menu_PKM_SmartClipboard
+            //
+            Menu_PKM_SmartClipboard.Name = "Menu_PKM_SmartClipboard";
+            Menu_PKM_SmartClipboard.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_SmartClipboard.Text = "Smart Clipboard";
+            Menu_PKM_SmartClipboard.Click += Menu_PKM_SmartClipboard_Click;
+            //
+            // Menu_PKM_ShinyHuntTracker
+            //
+            Menu_PKM_ShinyHuntTracker.Name = "Menu_PKM_ShinyHuntTracker";
+            Menu_PKM_ShinyHuntTracker.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_ShinyHuntTracker.Text = "Shiny Hunt Tracker";
+            Menu_PKM_ShinyHuntTracker.Click += Menu_PKM_ShinyHuntTracker_Click;
+            //
+            // Menu_PKM_TrainingPlanner
+            //
+            Menu_PKM_TrainingPlanner.Name = "Menu_PKM_TrainingPlanner";
+            Menu_PKM_TrainingPlanner.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_TrainingPlanner.Text = "EV Training Planner";
+            Menu_PKM_TrainingPlanner.Click += Menu_PKM_TrainingPlanner_Click;
+            //
+            // Menu_PKM_BreedingPreview
+            //
+            Menu_PKM_BreedingPreview.Name = "Menu_PKM_BreedingPreview";
+            Menu_PKM_BreedingPreview.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_BreedingPreview.Text = "Breeding Preview";
+            Menu_PKM_BreedingPreview.Click += Menu_PKM_BreedingPreview_Click;
+            //
+            // Menu_PKM_SubProTools - Pro Competitive Tools submenu (organized by category)
+            //
+            Menu_PKM_SubProTools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_SubBattleAnalysis, Menu_PKM_SubTeamBuilding, Menu_PKM_SubOptimization, Menu_PKM_SubTournament });
+            Menu_PKM_SubProTools.Name = "Menu_PKM_SubProTools";
+            Menu_PKM_SubProTools.Size = new System.Drawing.Size(180, 22);
+            Menu_PKM_SubProTools.Text = "Pro Tools";
+            //
+            // Menu_PKM_SubBattleAnalysis - Battle Analysis category
+            //
+            Menu_PKM_SubBattleAnalysis.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_BattleMatchup, Menu_PKM_ViabilityScore, Menu_PKM_MetaAnalyzer });
+            Menu_PKM_SubBattleAnalysis.Name = "Menu_PKM_SubBattleAnalysis";
+            Menu_PKM_SubBattleAnalysis.Size = new System.Drawing.Size(220, 22);
+            Menu_PKM_SubBattleAnalysis.Text = "Battle Analysis";
+            //
+            // Menu_PKM_SubTeamBuilding - Team Building category
+            //
+            Menu_PKM_SubTeamBuilding.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_SynergyAnalyzer, Menu_PKM_SetupRecommender, Menu_PKM_CrossGenValidator });
+            Menu_PKM_SubTeamBuilding.Name = "Menu_PKM_SubTeamBuilding";
+            Menu_PKM_SubTeamBuilding.Size = new System.Drawing.Size(220, 22);
+            Menu_PKM_SubTeamBuilding.Text = "Team Building";
+            //
+            // Menu_PKM_SubOptimization - Optimization category
+            //
+            Menu_PKM_SubOptimization.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_BatchOptimizer, Menu_PKM_MoveTracker });
+            Menu_PKM_SubOptimization.Name = "Menu_PKM_SubOptimization";
+            Menu_PKM_SubOptimization.Size = new System.Drawing.Size(220, 22);
+            Menu_PKM_SubOptimization.Text = "Optimization";
+            //
+            // Menu_PKM_SubTournament - Tournament & Export category
+            //
+            Menu_PKM_SubTournament.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_Tournament, Menu_PKM_ReportExporter });
+            Menu_PKM_SubTournament.Name = "Menu_PKM_SubTournament";
+            Menu_PKM_SubTournament.Size = new System.Drawing.Size(220, 22);
+            Menu_PKM_SubTournament.Text = "Tournament & Export";
+            //
+            // Menu_PKM_BattleMatchup - Predict type advantages and battle outcomes
+            //
+            Menu_PKM_BattleMatchup.Name = "Menu_PKM_BattleMatchup";
+            Menu_PKM_BattleMatchup.Size = new System.Drawing.Size(280, 22);
+            Menu_PKM_BattleMatchup.Text = "Battle Matchup Predictor";
+            Menu_PKM_BattleMatchup.ToolTipText = "Analyze type matchups and predict battle outcomes";
+            Menu_PKM_BattleMatchup.Click += Menu_PKM_BattleMatchup_Click;
+            //
+            // Menu_PKM_ViabilityScore - Calculate competitive viability scores
+            //
+            Menu_PKM_ViabilityScore.Name = "Menu_PKM_ViabilityScore";
+            Menu_PKM_ViabilityScore.Size = new System.Drawing.Size(280, 22);
+            Menu_PKM_ViabilityScore.Text = "Viability Score Calculator";
+            Menu_PKM_ViabilityScore.ToolTipText = "Calculate competitive viability based on stats, moves, and abilities";
+            Menu_PKM_ViabilityScore.Click += Menu_PKM_ViabilityScore_Click;
+            //
+            // Menu_PKM_MetaAnalyzer - Analyze meta-game trends and counters
+            //
+            Menu_PKM_MetaAnalyzer.Name = "Menu_PKM_MetaAnalyzer";
+            Menu_PKM_MetaAnalyzer.Size = new System.Drawing.Size(280, 22);
+            Menu_PKM_MetaAnalyzer.Text = "Meta-Game Analyzer";
+            Menu_PKM_MetaAnalyzer.ToolTipText = "Analyze current meta trends, threats, and counter strategies";
+            Menu_PKM_MetaAnalyzer.Click += Menu_PKM_MetaAnalyzer_Click;
+            //
+            // Menu_PKM_SynergyAnalyzer - Analyze team composition and synergy
+            //
+            Menu_PKM_SynergyAnalyzer.Name = "Menu_PKM_SynergyAnalyzer";
+            Menu_PKM_SynergyAnalyzer.Size = new System.Drawing.Size(280, 22);
+            Menu_PKM_SynergyAnalyzer.Text = "Team Synergy Analyzer";
+            Menu_PKM_SynergyAnalyzer.ToolTipText = "Evaluate team composition, type coverage, and synergies";
+            Menu_PKM_SynergyAnalyzer.Click += Menu_PKM_SynergyAnalyzer_Click;
+            //
+            // Menu_PKM_SetupRecommender - Get optimal EV/IV/Nature recommendations
+            //
+            Menu_PKM_SetupRecommender.Name = "Menu_PKM_SetupRecommender";
+            Menu_PKM_SetupRecommender.Size = new System.Drawing.Size(280, 22);
+            Menu_PKM_SetupRecommender.Text = "Optimal Setup Recommender";
+            Menu_PKM_SetupRecommender.ToolTipText = "Get recommended EV spreads, natures, and abilities for roles";
+            Menu_PKM_SetupRecommender.Click += Menu_PKM_SetupRecommender_Click;
+            //
+            // Menu_PKM_CrossGenValidator - Validate team legality across generations
+            //
+            Menu_PKM_CrossGenValidator.Name = "Menu_PKM_CrossGenValidator";
+            Menu_PKM_CrossGenValidator.Size = new System.Drawing.Size(280, 22);
+            Menu_PKM_CrossGenValidator.Text = "Cross-Gen Team Validator";
+            Menu_PKM_CrossGenValidator.ToolTipText = "Validate team compatibility and legality across different games";
+            Menu_PKM_CrossGenValidator.Click += Menu_PKM_CrossGenValidator_Click;
+            //
+            // Menu_PKM_BatchOptimizer - Bulk optimize IVs/EVs for multiple Pokemon
+            //
+            Menu_PKM_BatchOptimizer.Name = "Menu_PKM_BatchOptimizer";
+            Menu_PKM_BatchOptimizer.Size = new System.Drawing.Size(280, 22);
+            Menu_PKM_BatchOptimizer.Text = "IV/EV Batch Optimizer";
+            Menu_PKM_BatchOptimizer.ToolTipText = "Bulk optimize IVs and EVs for multiple Pokemon at once";
+            Menu_PKM_BatchOptimizer.Click += Menu_PKM_BatchOptimizer_Click;
+            //
+            // Menu_PKM_MoveTracker - Track available moves and tutors
+            //
+            Menu_PKM_MoveTracker.Name = "Menu_PKM_MoveTracker";
+            Menu_PKM_MoveTracker.Size = new System.Drawing.Size(280, 22);
+            Menu_PKM_MoveTracker.Text = "Move Availability Tracker";
+            Menu_PKM_MoveTracker.ToolTipText = "Track available moves, TMs, and move tutors by game";
+            Menu_PKM_MoveTracker.Click += Menu_PKM_MoveTracker_Click;
+            //
+            // Menu_PKM_Tournament - Simulate tournament brackets
+            //
+            Menu_PKM_Tournament.Name = "Menu_PKM_Tournament";
+            Menu_PKM_Tournament.Size = new System.Drawing.Size(280, 22);
+            Menu_PKM_Tournament.Text = "Tournament Bracket Simulator";
+            Menu_PKM_Tournament.ToolTipText = "Simulate tournament brackets and predict outcomes";
+            Menu_PKM_Tournament.Click += Menu_PKM_Tournament_Click;
+            //
+            // Menu_PKM_ReportExporter - Export professional team reports
+            //
+            Menu_PKM_ReportExporter.Name = "Menu_PKM_ReportExporter";
+            Menu_PKM_ReportExporter.Size = new System.Drawing.Size(280, 22);
+            Menu_PKM_ReportExporter.Text = "Professional Report Exporter";
+            Menu_PKM_ReportExporter.ToolTipText = "Export detailed team reports in multiple formats (PDF, HTML, Markdown)";
+            Menu_PKM_ReportExporter.Click += Menu_PKM_ReportExporter_Click;
+            //
             // L_PortableMode
             //
             L_PortableMode.Name = "L_PortableMode";
@@ -1100,6 +1477,56 @@ namespace PKHeX.WinForms
         private System.Windows.Forms.ToolStripMenuItem Menu_PKM_EventChecker;
         private System.Windows.Forms.ToolStripMenuItem Menu_PKM_MissingEvents;
         private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SeedFinder;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SubCompetitive;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SubCollections;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SubMysteryGifts;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SubRNG;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SubUtilities;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SubHelp;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SubBreeding;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SubFun;
+        // New tools
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_EVSpreadCalc;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_EncounterBrowser;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_ShinyOdds;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_TeamAnalyzer;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_MoveTutor;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_BallTracker;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_RibbonTracker;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_MarkHunter;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SaveCompare;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_BoxOrganizer;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_BreedingHelper;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_TradeEvoHelper;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_Quiz;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SpriteViewer;
+        // Advanced Customization Tools
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SubCustomization;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_HotkeyCustomizer;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_ThemeDesigner;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_StatsDashboard;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SmartClipboard;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_ShinyHuntTracker;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_TrainingPlanner;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_BreedingPreview;
+        // Pro Tools declarations
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SubProTools;
+        // Pro Tools - Category submenus
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SubBattleAnalysis;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SubTeamBuilding;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SubOptimization;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SubTournament;
+        // Pro Tools - Individual items
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_BattleMatchup;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_ViabilityScore;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_BatchOptimizer;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_Tournament;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_ReportExporter;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SynergyAnalyzer;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_MoveTracker;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_MetaAnalyzer;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_SetupRecommender;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_CrossGenValidator;
     }
 }
 

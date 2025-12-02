@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Windows.Forms;
 using System.Collections.Generic;
 
@@ -13,6 +14,12 @@ public static class ThemeManager
 {
     public static Theme CurrentTheme { get; private set; } = Theme.Dark;
     public static event EventHandler? ThemeChanged;
+
+    // Settings file path for theme persistence
+    private static readonly string SettingsPath = Path.Combine(
+        Path.GetDirectoryName(Application.ExecutablePath) ?? "",
+        "pkm-universe-theme.txt"
+    );
 
     private static readonly Dictionary<string, ThemeColors> Themes = new()
     {
@@ -333,6 +340,7 @@ public static class ThemeManager
     public static void SetTheme(Theme theme)
     {
         CurrentTheme = theme;
+        SaveTheme(); // Persist the theme selection
         ThemeChanged?.Invoke(null, EventArgs.Empty);
     }
 
@@ -346,6 +354,43 @@ public static class ThemeManager
     public static void ToggleTheme()
     {
         SetTheme(CurrentTheme == Theme.Dark ? Theme.Light : Theme.Dark);
+    }
+
+    /// <summary>
+    /// Save the current theme to a settings file for persistence
+    /// </summary>
+    private static void SaveTheme()
+    {
+        try
+        {
+            File.WriteAllText(SettingsPath, CurrentTheme.ToString());
+        }
+        catch
+        {
+            // Silently fail if we can't save (e.g., read-only directory)
+        }
+    }
+
+    /// <summary>
+    /// Load the saved theme from settings file. Call this on application startup.
+    /// </summary>
+    public static void LoadSavedTheme()
+    {
+        try
+        {
+            if (File.Exists(SettingsPath))
+            {
+                var savedTheme = File.ReadAllText(SettingsPath).Trim();
+                if (Enum.TryParse<Theme>(savedTheme, out var theme))
+                {
+                    CurrentTheme = theme;
+                }
+            }
+        }
+        catch
+        {
+            // If loading fails, just use the default theme (Dark)
+        }
     }
 
     public static string[] GetAvailableThemes()
