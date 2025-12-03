@@ -75,8 +75,8 @@ internal static class Encounters9a
         // Side Missions EX
         new(0150,0,70,128) { Location = 00234, FlawlessIVCount = 3, Moves = new(094,396,427,133) }, // Mewtwo (sub_120_mewtwo)
 
-        // Project M - Special Mewtwo Encounter
-        new(0150,0,85,255) { Location = 00240, Nature = Nature.Timid, FlawlessIVCount = 6, Shiny = Random, IsAlpha = true, Moves = new(094,540,417,059) }, // Mewtwo (project_m_mewtwo) - Perfect IVs, Alpha, Timid Nature, Psychic/Psystrike/Will-O-Wisp/Blizzard
+        // Project M - Special Mewtwo Encounter (Shiny-Locked)
+        new(0150,0,85,255) { Location = 00240, Nature = Nature.Timid, FlawlessIVCount = 6, Shiny = Never, IsAlpha = true, Moves = new(094,540,417,059) }, // Mewtwo (project_m_mewtwo) - Perfect IVs, Alpha, Timid Nature, Shiny-Locked, Psychic/Psystrike/Will-O-Wisp/Blizzard
 
         new(0703,0,66,128) { Location = 00063, FlawlessIVCount = 3, Moves = new(444,430,605,157) }, // Carbink (sub_119_melecie_01)
         new(0703,0,66,128) { Location = 00063, FlawlessIVCount = 3, Moves = new(444,446,408,605) }, // Carbink (sub_119_melecie_02)
