@@ -98,7 +98,6 @@ public sealed class ItemStorage9ZA : IItemStorage
     public static ReadOnlySpan<ushort> Unreleased =>
     [
         0005, // Safari Ball (Season 3 Ranked Reward)
-
         0851, // Beast Ball
     ];
 
@@ -183,6 +182,8 @@ public sealed class ItemStorage9ZA : IItemStorage
         Garchomp when form == 1 => 0683,
         Latias when form == 1 => 0684,
         Latios when form == 1 => 0685,
+        Swampert when form == 1 => 0752,
+        Sceptile when form == 1 => 0753,
         Sableye when form == 1 => 0754,
         Altaria when form == 1 => 0755,
         Gallade when form == 1 => 0756,
@@ -198,8 +199,6 @@ public sealed class ItemStorage9ZA : IItemStorage
         Lopunny when form == 1 => 0768,
         Salamence when form == 1 => 0769,
         Beedrill when form == 1 => 0770,
-        Swampert when form == 1 => 0752,
-        Sceptile when form == 1 => 0753,
         Clefable when form == 1 => 2559,
         Victreebel when form == 1 => 2560,
         Starmie when form == 1 => 2561,
