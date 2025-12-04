@@ -1028,10 +1028,34 @@ namespace PKHeX.WinForms
             //
             // Menu_PKM_SubUtilities - Utilities Submenu
             //
-            Menu_PKM_SubUtilities.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_Tools, Menu_PKM_QRCode, Menu_PKM_Compare, Menu_PKM_TradeHistory, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_BoxOrganizer, Menu_PKM_SaveCompare, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_Templates, Menu_PKM_RandomTeam, Menu_PKM_Wallpapers, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_BackupManager, Menu_PKM_RecentFiles, Menu_PKM_BatchPresets });
+            Menu_PKM_SubUtilities.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { Menu_PKM_TradeBotIntegration, Menu_PKM_CloudSync, Menu_PKM_VGCTeamImporter, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_Tools, Menu_PKM_QRCode, Menu_PKM_Compare, Menu_PKM_TradeHistory, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_BoxOrganizer, Menu_PKM_SaveCompare, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_Templates, Menu_PKM_RandomTeam, Menu_PKM_Wallpapers, new System.Windows.Forms.ToolStripSeparator(), Menu_PKM_BackupManager, Menu_PKM_RecentFiles, Menu_PKM_BatchPresets });
             Menu_PKM_SubUtilities.Name = "Menu_PKM_SubUtilities";
             Menu_PKM_SubUtilities.Size = new System.Drawing.Size(180, 22);
             Menu_PKM_SubUtilities.Text = "Utilities";
+            //
+            // Menu_PKM_TradeBotIntegration
+            //
+            Menu_PKM_TradeBotIntegration = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_TradeBotIntegration.Name = "Menu_PKM_TradeBotIntegration";
+            Menu_PKM_TradeBotIntegration.Size = new System.Drawing.Size(220, 22);
+            Menu_PKM_TradeBotIntegration.Text = "Trade Bot Integration";
+            Menu_PKM_TradeBotIntegration.Click += Menu_TradeBotIntegration_Click;
+            //
+            // Menu_PKM_CloudSync
+            //
+            Menu_PKM_CloudSync = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_CloudSync.Name = "Menu_PKM_CloudSync";
+            Menu_PKM_CloudSync.Size = new System.Drawing.Size(220, 22);
+            Menu_PKM_CloudSync.Text = "Pokemon Home Cloud Sync";
+            Menu_PKM_CloudSync.Click += Menu_CloudSync_Click;
+            //
+            // Menu_PKM_VGCTeamImporter
+            //
+            Menu_PKM_VGCTeamImporter = new System.Windows.Forms.ToolStripMenuItem();
+            Menu_PKM_VGCTeamImporter.Name = "Menu_PKM_VGCTeamImporter";
+            Menu_PKM_VGCTeamImporter.Size = new System.Drawing.Size(220, 22);
+            Menu_PKM_VGCTeamImporter.Text = "VGC Team Importer";
+            Menu_PKM_VGCTeamImporter.Click += Menu_VGCTeamImporter_Click;
             //
             // Menu_PKM_SubHelp - Help & Info Submenu
             //
@@ -1467,6 +1491,9 @@ namespace PKHeX.WinForms
         private System.Windows.Forms.ToolStripMenuItem Menu_PKM_AboutDialog;
         private System.Windows.Forms.ToolStripMenuItem Menu_PKM_QRCode;
         private System.Windows.Forms.ToolStripMenuItem Menu_PKM_Compare;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_TradeBotIntegration;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_CloudSync;
+        private System.Windows.Forms.ToolStripMenuItem Menu_PKM_VGCTeamImporter;
         private System.Windows.Forms.ToolStripMenuItem Menu_PKM_TradeHistory;
         private System.Windows.Forms.ToolStripMenuItem Menu_PKM_DiscordRPC;
         private System.Windows.Forms.ToolStripMenuItem Menu_PKM_LivingDex;
