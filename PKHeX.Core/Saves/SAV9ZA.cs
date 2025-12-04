@@ -42,7 +42,8 @@ public sealed class SAV9ZA : SaveFile, ISCBlockArray, ISaveFileRevision, IBoxDet
 
     public string SaveRevisionString => SaveRevision switch
     {
-        0 => "-Base", // Vanilla
+        0 => "-Base", // Vanilla 1.0.0
+        1 => "-v1.0.3", // Update 1.0.3
         _ => throw new ArgumentOutOfRangeException(nameof(SaveRevision)),
     };
 
