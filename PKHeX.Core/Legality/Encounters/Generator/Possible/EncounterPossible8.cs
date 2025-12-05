@@ -48,6 +48,8 @@ public record struct EncounterPossible8(EvoCriteria[] Chain, EncounterTypeGroup 
         StaticVersionSH,
         StaticShared,
         NestSW, NestSH, DistSW, DistSH, DynamaxAdv, Crystal,
+
+        GoEncounter,
     }
 
     public bool MoveNext()
@@ -102,7 +104,7 @@ public record struct EncounterPossible8(EvoCriteria[] Chain, EncounterTypeGroup 
                     return true;
                 Index = 0; State = YieldState.TradeShared; goto case YieldState.TradeShared;
             case YieldState.TradeShared:
-                if (TryGetNext(Encounters8.TradeSWSH))
+                if (TryGetNext(Encounters8.TradeSWSHArray))
                     return true;
                 Index = 0; goto case YieldState.StaticStart;
 
@@ -119,41 +121,41 @@ public record struct EncounterPossible8(EvoCriteria[] Chain, EncounterTypeGroup 
                 throw new ArgumentOutOfRangeException(nameof(Version));
 
             case YieldState.StaticVersionSW:
-                if (TryGetNext(Encounters8.StaticSW))
+                if (TryGetNext(Encounters8.StaticSWArray))
                     return true;
                 Index = 0; State = YieldState.StaticShared; goto case YieldState.StaticShared;
             case YieldState.StaticVersionSH:
-                if (TryGetNext(Encounters8.StaticSH))
+                if (TryGetNext(Encounters8.StaticSHArray))
                     return true;
                 Index = 0; State = YieldState.StaticShared; goto case YieldState.StaticShared;
 
             case YieldState.StaticShared:
-                if (TryGetNext(Encounters8.StaticSWSH))
+                if (TryGetNext(Encounters8.StaticSWSHArray))
                     return true;
                 Index = 0; State = YieldState.NestSW; goto case YieldState.NestSW;
 
             case YieldState.NestSW:
-                if (TryGetNext(Encounters8Nest.Nest_SW))
+                if (TryGetNext(Encounters8Nest.Nest_SWArray))
                     return true;
                 Index = 0; State = YieldState.NestSH; goto case YieldState.NestSH;
             case YieldState.NestSH:
-                if (TryGetNext(Encounters8Nest.Nest_SH))
+                if (TryGetNext(Encounters8Nest.Nest_SHArray))
                     return true;
                 Index = 0; State = YieldState.DistSW; goto case YieldState.DistSW;
             case YieldState.DistSW:
-                if (TryGetNext(Encounters8Nest.Dist_SW))
+                if (TryGetNext(Encounters8Nest.Dist_SWArray))
                     return true;
                 Index = 0; State = YieldState.DistSH; goto case YieldState.DistSH;
             case YieldState.DistSH:
-                if (TryGetNext(Encounters8Nest.Dist_SH))
+                if (TryGetNext(Encounters8Nest.Dist_SHArray))
                     return true;
                 Index = 0; State = YieldState.DynamaxAdv; goto case YieldState.DynamaxAdv;
             case YieldState.DynamaxAdv:
-                if (TryGetNext(Encounters8Nest.DynAdv_SWSH))
+                if (TryGetNext(Encounters8Nest.DynAdv_SWSHArray))
                     return true;
                 Index = 0; State = YieldState.Crystal; goto case YieldState.Crystal;
             case YieldState.Crystal:
-                if (TryGetNext(Encounters8Nest.Crystal_SWSH))
+                if (TryGetNext(Encounters8Nest.Crystal_SWSHArray))
                     return true;
                 Index = 0; goto case YieldState.SlotStart;
 
@@ -166,23 +168,30 @@ public record struct EncounterPossible8(EvoCriteria[] Chain, EncounterTypeGroup 
                 { State = YieldState.SlotSH; goto case YieldState.SlotSH; }
                 throw new ArgumentOutOfRangeException(nameof(Version));
             case YieldState.SlotSW:
-                if (TryGetNext<EncounterArea8, EncounterSlot8>(Encounters8.SlotsSW_Symbol))
+                if (TryGetNext<EncounterArea8, EncounterSlot8>(Encounters8.SlotsSW_SymbolArray))
                     return true;
                 Index = 0; State = YieldState.SlotSWHidden; goto case YieldState.SlotSWHidden;
             case YieldState.SlotSH:
-                if (TryGetNext<EncounterArea8, EncounterSlot8>(Encounters8.SlotsSH_Symbol))
+                if (TryGetNext<EncounterArea8, EncounterSlot8>(Encounters8.SlotsSH_SymbolArray))
                     return true;
                 Index = 0; State = YieldState.SlotSHHidden; goto case YieldState.SlotSHHidden;
             case YieldState.SlotSWHidden:
-                if (TryGetNext<EncounterArea8, EncounterSlot8>(Encounters8.SlotsSW_Hidden))
+                if (TryGetNext<EncounterArea8, EncounterSlot8>(Encounters8.SlotsSW_HiddenArray))
                     return true;
                 Index = 0; goto case YieldState.SlotEnd;
             case YieldState.SlotSHHidden:
-                if (TryGetNext<EncounterArea8, EncounterSlot8>(Encounters8.SlotsSH_Hidden))
+                if (TryGetNext<EncounterArea8, EncounterSlot8>(Encounters8.SlotsSH_HiddenArray))
                     return true;
                 Index = 0; goto case YieldState.SlotEnd;
             case YieldState.SlotEnd:
-                break;
+                if (!Flags.HasFlag(EncounterTypeGroup.Slot))
+                    break;
+                State = YieldState.GoEncounter; goto case YieldState.GoEncounter;
+
+            case YieldState.GoEncounter:
+                if (TryGetNextGO(EncountersGO.SlotsGO))
+                    return true;
+                Index = 0; break;
         }
         return false;
     }
@@ -234,5 +243,26 @@ public record struct EncounterPossible8(EvoCriteria[] Chain, EncounterTypeGroup 
     {
         Current = match;
         return true;
+    }
+
+    private bool TryGetNextGO(EncounterArea8g[] areas)
+    {
+        for (; Index < areas.Length; Index++, SubIndex = 0)
+        {
+            var area = areas[Index];
+            // Check if any evolution matches the species/form
+            foreach (var evo in Chain)
+            {
+                if (area.Species != evo.Species)
+                    continue;
+                if (area.Form != evo.Form && !FormInfo.IsFormChangeable(area.Species, area.Form, evo.Form, EntityContext.Gen8, EntityContext.Gen8))
+                    continue;
+
+                if (TryGetNextSub(area.Slots))
+                    return true;
+                break;
+            }
+        }
+        return false;
     }
 }

@@ -196,12 +196,18 @@ public partial class Main : Form
         var folder = Settings.LocalResources.GetPluginPath();
         if (Plugins.Count != 0)
             return; // already loaded
-        if (!Directory.Exists(folder))
-            return;
 
         try
         {
+            // Load plugins from the configured plugins folder (if it exists) and merged plugins
             PluginLoadResult = PluginLoader.LoadPlugins(folder, Plugins, Settings.Startup.PluginLoadMerged);
+
+            // Also load plugins from MainWindow/Plugins directory
+            var customPluginFolder = Path.Combine(Application.StartupPath, "MainWindow", "Plugins");
+            if (Directory.Exists(customPluginFolder))
+            {
+                var customResult = PluginLoader.LoadPlugins(customPluginFolder, Plugins, Settings.Startup.PluginLoadMerged);
+            }
         }
         catch (InvalidCastException c)
         {

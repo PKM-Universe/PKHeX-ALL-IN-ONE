@@ -48,6 +48,12 @@ public sealed class DrawConfig : IDisposable
     [Category(PKM), LocalizedDescription("Shiny star when not using unicode characters.")]
     public string ShinyDefault { get; set; } = "*";
 
+    [Category(PKM), LocalizedDescription("Primary color for vertical tab selection gradient.")]
+    public Color VerticalSelectPrimary { get; set; } = Color.White;
+
+    [Category(PKM), LocalizedDescription("Secondary color for vertical tab selection gradient.")]
+    public Color VerticalSelectSecondary { get; set; } = Color.LightGray;
+
     #endregion
 
     #region Moves

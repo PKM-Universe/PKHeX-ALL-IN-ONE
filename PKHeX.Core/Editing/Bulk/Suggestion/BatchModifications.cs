@@ -94,7 +94,7 @@ internal static class BatchModifications
     /// <summary>
     /// Sets suggested ribbon data for the Entity.
     /// </summary>
-    /// <remarks>If None, removes all ribbons possible.</remarks>
+    /// <remarks>None removes ribbons, All sets ribbons from all visited generations, otherwise sets ribbons for current version only.</remarks>
     public static ModifyResult SetSuggestedRibbons(BatchInfo info, ReadOnlySpan<char> value)
     {
         if (IsNone(value))
