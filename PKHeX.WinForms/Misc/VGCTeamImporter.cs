@@ -299,7 +299,7 @@ public partial class VGCTeamImporter : Form
                 if (i < SAV.PartyCount || SAV.PartyCount < 6)
                 {
                     var pk = (PKM)lstTeamPreview.Items[i];
-                    SAV.SetPartySlot(pk, i);
+                    SAV.SetPartySlotAtIndex(pk, i);
                     added++;
                 }
             }

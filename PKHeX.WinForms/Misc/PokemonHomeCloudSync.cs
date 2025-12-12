@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -183,18 +184,47 @@ public partial class PokemonHomeCloudSync : Form
         this.Controls.Add(lblInfo);
     }
 
+    private static string SettingsFilePath => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cloudsync_settings.json");
+
     private void LoadSettings()
     {
-        // Load saved API key if exists
-        if (Properties.Settings.Default.CloudSyncApiKey != null)
+        // Load saved settings from file
+        try
         {
-            txtApiKey.Text = Properties.Settings.Default.CloudSyncApiKey;
+            if (File.Exists(SettingsFilePath))
+            {
+                var json = File.ReadAllText(SettingsFilePath);
+                var settings = JsonSerializer.Deserialize<CloudSyncSettings>(json);
+                if (settings != null)
+                {
+                    if (!string.IsNullOrEmpty(settings.ApiKey))
+                        txtApiKey.Text = settings.ApiKey;
+                    if (!string.IsNullOrEmpty(settings.LastSync))
+                        lblLastSync.Text = $"Last Sync: {settings.LastSync}";
+                }
+            }
         }
+        catch { /* Ignore settings load errors */ }
+    }
 
-        if (Properties.Settings.Default.LastCloudSync != null)
+    private void SaveSettings(string? apiKey = null, string? lastSync = null)
+    {
+        try
         {
-            lblLastSync.Text = $"Last Sync: {Properties.Settings.Default.LastCloudSync}";
+            var settings = new CloudSyncSettings
+            {
+                ApiKey = apiKey ?? txtApiKey.Text,
+                LastSync = lastSync ?? DateTime.Now.ToString("g")
+            };
+            File.WriteAllText(SettingsFilePath, JsonSerializer.Serialize(settings));
         }
+        catch { /* Ignore settings save errors */ }
+    }
+
+    private class CloudSyncSettings
+    {
+        public string? ApiKey { get; set; }
+        public string? LastSync { get; set; }
     }
 
     private void LoadLocalBoxes()
@@ -235,8 +265,7 @@ public partial class PokemonHomeCloudSync : Form
                 lblStatus.ForeColor = System.Drawing.Color.Green;
 
                 // Save API key
-                Properties.Settings.Default.CloudSyncApiKey = txtApiKey.Text;
-                Properties.Settings.Default.Save();
+                SaveSettings(txtApiKey.Text);
 
                 btnUploadBox.Enabled = true;
                 btnDownloadBox.Enabled = true;
@@ -353,8 +382,7 @@ public partial class PokemonHomeCloudSync : Form
                 lblStatus.ForeColor = System.Drawing.Color.Green;
                 lblLastSync.Text = $"Last Sync: {DateTime.Now:g}";
 
-                Properties.Settings.Default.LastCloudSync = DateTime.Now.ToString("g");
-                Properties.Settings.Default.Save();
+                SaveSettings(lastSync: DateTime.Now.ToString("g"));
 
                 await LoadCloudBoxes();
 
@@ -477,28 +505,5 @@ public partial class PokemonHomeCloudSync : Form
     private class CloudBoxWithPokemon : CloudBox
     {
         public List<object>? pokemon { get; set; }
-    }
-}
-
-// Add to Settings.settings
-namespace PKHeX.WinForms.Properties
-{
-    partial class Settings
-    {
-        [System.Configuration.UserScopedSetting()]
-        [System.Configuration.DefaultSettingValue("")]
-        public string CloudSyncApiKey
-        {
-            get { return ((string)(this["CloudSyncApiKey"])); }
-            set { this["CloudSyncApiKey"] = value; }
-        }
-
-        [System.Configuration.UserScopedSetting()]
-        [System.Configuration.DefaultSettingValue("")]
-        public string LastCloudSync
-        {
-            get { return ((string)(this["LastCloudSync"])); }
-            set { this["LastCloudSync"] = value; }
-        }
     }
 }
